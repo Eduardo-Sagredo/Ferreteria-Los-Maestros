@@ -1,0 +1,28 @@
+.navbar .nav-link {
+    color: white;
+}
+
+.logo-img {
+    width: 80px;
+    height: auto;
+}
+
+.texto-ferreteria {
+    color: white;
+}
+
+.texto-maestros {
+    color: #ffc107;
+}
+
+.navbar .nav-link {
+    color: white;
+    transition: 0.3s;
+}
+
+.navbar .nav-link:hover {
+    color: #ffc107;
+    background-color: #343a40;
+    border-radius: 6px;
+    transform: translateY(-2px);
+}
