@@ -9,3 +9,8 @@
     display: flex;
     align-items: center;
 }
+
+.logo-img {
+    max-height: 65px; /* Esto restringe el alto sin deformar la imagen */
+    width: auto;
+}
