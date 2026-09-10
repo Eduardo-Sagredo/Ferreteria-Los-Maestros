@@ -1,5 +1,15 @@
+/*NAVBAR*/
+
 .navbar .nav-link {
     color: white;
+    transition: 0.3s;
+}
+
+.navbar .nav-link:hover {
+    color: #ffc107;
+    background-color: #343a40;
+    border-radius: 6px;
+    transform: translateY(-2px);
 }
 
 .logo-img {
@@ -15,14 +25,119 @@
     color: #ffc107;
 }
 
-.navbar .nav-link {
+/*HERO*/
+
+.hero-section {
+    min-height: 550px;
+    padding: 80px 0;
+
+    display: flex;
+    align-items: center;
+
     color: white;
+
+    background-image:
+        linear-gradient(rgba(0, 27, 53, 0.65), rgba(0, 27, 53, 0.65)),
+        url("../img/fondoherr.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero-section h1 {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.hero-section p {
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: white;
+}
+
+.hero-section .btn {
+    font-weight: bold;
+    padding: 10px 25px;
+}
+
+
+
+   /*CATEGORÍAS*/
+
+
+.categorias {
+    background-color: #f4f6f8;
+}
+
+.categorias h2 {
+    color: #001b35;
+    font-weight: bold;
+}
+
+.categorias .card {
+    border: none;
+    border-radius: 12px;
     transition: 0.3s;
 }
 
-.navbar .nav-link:hover {
+.categorias .card:hover {
+    transform: translateY(-5px);
+}
+
+.categorias i {
     color: #ffc107;
-    background-color: #343a40;
-    border-radius: 6px;
-    transform: translateY(-2px);
+}
+
+   /*TABLET*/
+
+@media (max-width: 991px) {
+
+    .logo-img {
+        width: 65px;
+    }
+
+    .hero-section {
+        min-height: 500px;
+        padding: 60px 0;
+        background-position: center;
+    }
+
+    .hero-section h1 {
+        font-size: 40px;
+    }
+
+    .hero-section p {
+        font-size: 17px;
+    }
+}
+
+
+/*TELÉFONO*/
+
+
+@media (max-width: 576px) {
+
+    .logo-img {
+        width: 55px;
+    }
+
+    .hero-section {
+        min-height: 450px;
+        padding: 40px 20px;
+    }
+
+    .hero-section h1 {
+        font-size: 32px;
+    }
+
+    .hero-section p {
+        font-size: 16px;
+    }
+
+    .hero-section .btn {
+        width: 100%;
+    }
 }
