@@ -77,8 +77,7 @@
         </nav>
     
     </header>
-
-    <!-- Contenedor principal para el contenido de cada página -->
+    
     <main class="hero">
         <section class="hero-section">
             <div class="container">
@@ -106,41 +105,122 @@
                 <h2 class="text-center mb-4">Categorías</h2>
                 <div class="row g-4">
                     <div class="col-12 col-md-6 col-lg-3">
-                        <div class="card text-center h-100">
+                        <a href="pages/productos.html?categoria=herramientas"
+                            class="text-decoration-none">
+                            <div class="card categoria-card text-center h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-tools fs-1"></i>
+                                    <h3 class="card-title mt-3">Herramientas</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <a href="pages/productos.html?categoria=construccion"
+                            class="text-decoration-none">
+                            <div class="card categoria-card text-center h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-bricks fs-1"></i>
+                                    <h3 class="card-title mt-3">Construcción</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <a href="pages/productos.html?categoria=electricidad"
+                            class="text-decoration-none">
+                            <div class="card categoria-card text-center h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-lightning-charge fs-1"></i>
+                                    <h3 class="card-title mt-3">Electricidad</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <a href="pages/productos.html?categoria=pinturas"
+                            class="text-decoration-none">
+                            <div class="card categoria-card text-center h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-paint-bucket fs-1"></i>
+                                    <h3 class="card-title mt-3">Pinturas</h3>
+                             </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="productos-destacados py-5">
+            <div class="container">
+                <h2 class="text-center mb-4">Productos destacados</h2>
+                <div class="row g-4">
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="card h-100">
+                            <img src="img/taladro.jpg" class="card-img-top" alt="Taladro inalámbrico">
                             <div class="card-body">
-                                <i class="bi bi-tools fs-1"></i>
-                                <h3 class="card-title mt-3">Herramientas</h3>
+                                <h3 class="card-title">Taladro inalámbrico</h3>
+                                <p class="card-text">
+                                    Taladro para trabajos domésticos y profesionales.
+                                </p>
+
+                                <p class="fw-bold">$59.990</p>
+                                <a href="pages/productos.html" class="btn btn-warning">
+                                    Ver producto
+                                </a>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
-                        <div class="card text-center h-100">
+                        <div class="card h-100">
+                            <img src="img/martillo.png" class="card-img-top" alt="Martillo">
                             <div class="card-body">
-                                <i class="bi bi-bricks fs-1"></i>
-                                <h3 class="card-title mt-3">Construcción</h3>
+                                <h3 class="card-title">Martillo</h3>
+                                <p class="card-text">
+                                    Martillo resistente para trabajos de construcción.
+                                </p>
+
+                                <p class="fw-bold">$12.990</p>
+
+                                <a href="pages/productos.html" class="btn btn-warning">
+                                    Ver producto
+                                </a>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
-                        <div class="card text-center h-100">
+                        <div class="card h-100">
+                            <img src="img/pintura.png" class="card-img-top" alt="Pintura">
                             <div class="card-body">
-                                <i class="bi bi-lightning-charge fs-1"></i>
-                                <h3 class="card-title mt-3">Electricidad</h3>
+                                <h3 class="card-title">Pintura interior</h3>
+                                <p class="card-text">
+                                    Pintura para muros interiores de alta cobertura.
+                                </p>
+                                <p class="fw-bold">$24.990</p>
+                                <a href="pages/productos.html" class="btn btn-warning">
+                                    Ver producto
+                                </a>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-3">
-                        <div class="card text-center h-100">
+                        <div class="card h-100">
+                            <img src="img/cemento.png" class="card-img-top" alt="Cemento">
                             <div class="card-body">
-                                <i class="bi bi-paint-bucket fs-1"></i>
-                                <h3 class="card-title mt-3">Pinturas</h3>
+                                <h3 class="card-title">Saco de cemento</h3>
+                                <p class="card-text">
+                                    Cemento para construcción y reparación.
+                                </p>
+                                <p class="fw-bold">$8.990</p>
+                                <a href="pages/productos.html" class="btn btn-warning">
+                                    Ver producto
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-
+        </section>       
     </main>
 
     <!-- Pie de página informativo -->

@@ -26,7 +26,6 @@
 }
 
 /*HERO*/
-
 .hero-section {
     min-height: 550px;
     padding: 80px 0;
@@ -77,20 +76,26 @@
     font-weight: bold;
 }
 
-.categorias .card {
+.categoria-card {
+    cursor: pointer;
     border: none;
     border-radius: 12px;
     transition: 0.3s;
+    background-color: #001b35;
 }
 
-.categorias .card:hover {
+.categoria-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
-.categorias i {
+.categoria-card h3 {
+    color: white;
+}
+
+.categoria-card i {
     color: #ffc107;
 }
-
    /*TABLET*/
 
 @media (max-width: 991px) {
