@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Historial de Compras | Ferretería Los Maestros</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+        crossorigin="anonymous">
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/tienda.css">
+</head>
+
+<body>
+
+    <header>
+    <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+        <div class="container">
+
+            <a class="navbar-brand" href="../index.html">
+                <img src="../img/logo.png" alt="Logo Ferretería Los Maestros" class="logo-img">
+                <span class="texto-ferreteria">Ferretería</span>
+                <span class="texto-maestros">Los Maestros</span>
+            </a>
+
+            <ul class="navbar-nav">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../index.html">
+                        <i class="bi bi-house-door-fill"></i>
+                        Inicio
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="productos.html">
+                        <i class="bi bi-box-seam"></i>
+                        Productos
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../index.html#sobre-nosotros">
+                        <i class="bi bi-people"></i>
+                        Sobre nosotros
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-receipt"></i>
+                            Mis pedidos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-clock-history"></i>
+                            Historial
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-wallet2"></i>
+                        Cuenta corriente
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-geo-alt"></i>
+                        Ubicación
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+
+                <h2 class="text-center mb-4">Historial de Compras</h2>
+
+                <div class="card shadow">
+                    <div class="card-body p-4">
+
+                        <div class="table-responsive">
+
+                            <table class="table table-striped table-hover">
+
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Pedido</th>
+                                        <th>Productos</th>
+                                        <th>Total</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    <tr>
+                                        <td>08/09/2026</td>
+                                        <td>#1003</td>
+                                        <td>
+                                            2 brochas, 1 galón de pintura
+                                        </td>
+                                        <td>$32.990</td>
+                                        <td>
+                                            <span class="badge bg-success">
+                                                Entregado
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>02/09/2026</td>
+                                        <td>#0998</td>
+                                        <td>
+                                            1 serrucho, 1 cinta métrica
+                                        </td>
+                                        <td>$18.500</td>
+                                        <td>
+                                            <span class="badge bg-success">
+                                                Entregado
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>28/08/2026</td>
+                                        <td>#0985</td>
+                                        <td>
+                                            3 sacos de cemento, 1 pala
+                                        </td>
+                                        <td>$64.990</td>
+                                        <td>
+                                            <span class="badge bg-success">
+                                                Entregado
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>20/08/2026</td>
+                                        <td>#0972</td>
+                                        <td>
+                                            1 taladro, 1 juego de brocas
+                                        </td>
+                                        <td>$89.990</td>
+                                        <td>
+                                            <span class="badge bg-success">
+                                                Entregado
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Pie de página informativo -->
+    <footer>
+        <p>&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+
+</body>
+
+</html>
