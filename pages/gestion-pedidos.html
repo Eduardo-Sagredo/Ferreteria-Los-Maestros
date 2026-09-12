@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- Configuración para diseño responsive exigida en la rúbrica -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferretería Los Maestros - Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/tienda.css">
+</head>
+<body>
+    <!-- Cabecera y Menú de navegación -->
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+            <div class="container">
+                <a class="navbar-brand" href="../index.html">
+                    <img src="../img/logo.png" alt="Logo Ferretería Los Maestros" class="logo-img">
+                    <span class="texto-ferreteria">Ferretería</span>
+                    <span class="texto-maestros">Los Maestros</span>
+                </a>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="principal.html">
+                            <i class="bi bi-house-door-fill"></i>
+                            Inicio
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion-productos.html">
+                            <i class="bi bi-box-seam"></i>
+                            Productos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="inventario.html">
+                            <i class="bi bi-card-checklist"></i>
+                            Inventario
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-receipt"></i>
+                            Pedidos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-person"></i>
+                            Usuarios
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-file-bar-graph"></i>
+                            Reportes
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+    
+    </header>
+
+    <!-- Contenedor principal para el contenido de cada página -->
+    <main>
+        <section>
+            <h1 class="mx-2 my-2 fs-2">
+                Gestión de pedidos
+            </h1>
+            
+                <div class="container my-5">
+                
+
+            
+            <!-- Barra de Búsqueda y Filtros -->
+            <div class="row g-3 mb-4">
+    <!-- Buscador de texto -->
+                <div class="col-md-12 col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 rounded-start-3 text-secondary">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" id="input-busqueda" class="form-control border-start-0 rounded-end-3 shadow-none" placeholder="Buscar por número o cliente...">
+                    </div>
+                </div>
+
+    <!-- Filtro de Estados -->
+                <div class="col-md-6 col-lg-3">
+                    <select id="filtro-estado" class="form-select rounded-3 shadow-none text-secondary">
+                        <option value="todos" selected>Todos los estados</option>
+                        <option value="Disponible">Pendiente</option>
+                        <option value="Stock bajo">Confirmado</option>
+                        <option value="Sin stock">Preparando</option>
+                        <option value="Sin stock">Listo para retiro</option>
+                        <option value="Sin stock">En despacho</option>
+                        <option value="Sin stock">Entregado</option>
+                    </select>
+                </div>
+
+            </div>
+            </div>
+
+        </section>
+        
+        <section>
+            <div class="container">
+            <div class="table-responsive bg-white rounded-3 shadow-sm border" style="border-color: var(--color-header)!important;">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-secondary" style="font-size: 0.85rem; letter-spacing: 0.5px;">
+                        <tr>
+                            <th class="py-3 px-4 fw-medium border-bottom-0">N.°</th>
+                            <th class="py-3 fw-medium border-bottom-0">CLIENTE</th>
+                            <th class="py-3 fw-medium border-bottom-0">FECHA</th>
+                            <th class="py-3 fw-medium border-bottom-0">TOTAL</th>
+                            <th class="py-3 text-center fw-medium border-bottom-0">ENTREGA</th>
+                            <th class="py-3 text-center fw-medium border-bottom-0">ESTADO</th>
+                            <th class="py-3 text-center fw-medium border-bottom-0">ACCIÓN</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody id="tbody-productos" class="border-top-0">
+                    </tbody>
+        
+                </table>
+            </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- Pie de página informativo -->
+    <footer>
+        <p>&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Vinculación del script principal vacío -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/tienda.js"></script>
+
+</body>
+</html>
