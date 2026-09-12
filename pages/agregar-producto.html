@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- Configuración para diseño responsive exigida en la rúbrica -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferretería Los Maestros - Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/tienda.css">
+</head>
+<body>
+    <!-- Cabecera y Menú de navegación -->
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+            <div class="container">
+                <a class="navbar-brand" href="../index.html">
+                    <img src="../img/logo.png" alt="Logo Ferretería Los Maestros" class="logo-img">
+                    <span class="texto-ferreteria">Ferretería</span>
+                    <span class="texto-maestros">Los Maestros</span>
+                </a>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="principal.html">
+                            <i class="bi bi-house-door-fill"></i>
+                            Inicio
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion-productos.html">
+                            <i class="bi bi-box-seam"></i>
+                            Productos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sobre-nosotros">
+                            <i class="bi bi-card-checklist"></i>
+                            Inventario
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-receipt"></i>
+                            Pedidos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-person"></i>
+                            Usuarios
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-file-bar-graph"></i>
+                            Reportes
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+    
+    </header>
+
+    <!-- Contenedor principal para el contenido de cada página -->
+    <main>
+        <section>
+            <!-- Contenedor del Formulario -->
+            <div class="card my-5 border-0 shadow-sm rounded-4 p-4 mx-auto" style="border: 1px solid #e2e8f0 !important; max-width: 800px;">
+    
+    <!-- Es importante que usemos la etiqueta form para poder capturar el evento 'submit' en JS -->
+                <form id="form-nuevo-producto">
+                    <div class="row g-4">
+            
+            <!-- Código -->
+                        <div class="col-md-6">
+                            <label for="codigo" class="form-label fw-medium text-dark">Código *</label>
+                            <input type="text" class="form-control shadow-none" id="codigo" placeholder="PROD-XXX" required>
+                        </div>
+            
+            <!-- Nombre -->
+                        <div class="col-md-6">
+                            <label for="nombre" class="form-label fw-medium text-dark">Nombre *</label>
+                            <input type="text" class="form-control shadow-none" id="nombre" required>
+                        </div>
+            
+            <!-- Categoría -->
+                        <div class="col-md-6">
+                            <label for="categoria" class="form-label fw-medium text-dark">Categoría *</label>
+                            <select class="form-select shadow-none" id="categoria" required>
+                                <option value="Construcción" selected>Construcción</option>
+                                <option value="Herramientas">Herramientas</option>
+                                <option value="Eléctricas">Eléctricas</option>
+                                <option value="Gásfitería">Gásfitería</option>
+                            </select>
+                        </div>
+            
+            <!-- Precio -->
+                        <div class="col-md-6">
+                            <label for="precio" class="form-label fw-medium text-dark">Precio *</label>
+                            <input type="number" class="form-control shadow-none" id="precio" value="0" min="0" required>
+                        </div>
+            
+            <!-- Stock -->
+                        <div class="col-md-6">
+                            <label for="stock" class="form-label fw-medium text-dark">Stock *</label>
+                            <input type="number" class="form-control shadow-none" id="stock" value="0" min="0" required>
+                        </div>
+            
+            <!-- Stock mínimo -->
+                        <div class="col-md-6">
+                            <label for="stock-minimo" class="form-label fw-medium text-dark">Stock mínimo *</label>
+                            <input type="number" class="form-control shadow-none" id="stock-minimo" value="0" min="0" required>
+                        </div>
+            
+            <!-- Descripción (Ocupa las dos columnas: col-12) -->
+                        <div class="col-12">
+                            <label for="descripcion" class="form-label fw-medium text-dark">Descripción</label>
+                            <textarea class="form-control shadow-none" id="descripcion" rows="3"></textarea>
+                        </div>
+            
+            <!-- URL de imagen (Ocupa las dos columnas: col-12) -->
+                        <div class="col-12">
+                            <label for="url-imagen" class="form-label fw-medium text-dark">URL de imagen</label>
+                            <input type="url" class="form-control shadow-none" id="url-imagen" placeholder="https://...">
+                        </div>
+            
+            <!-- Botones de acción -->
+                        <div class="col-12 mt-5">
+                            <div class="row g-3">
+                    <!-- Botón Cancelar -->
+                                <div class="col-6">
+                        <!-- El history.back() devuelve al usuario a la tabla de productos sin recargar -->
+                                <button type="button" class="btn btn-outline-secondary w-100 py-2 rounded-3 fw-medium" onclick="window.history.back()">
+                                    Cancelar
+                                </button>
+                            </div>
+                    
+                    <!-- Botón Guardar -->
+                            <div class="col-6">
+                        <!-- 'submit' activa las validaciones HTML (required) antes de enviar -->
+                                <button type="submit" class="btn w-100 py-2 rounded-3 fw-medium text-white shadow-sm" style="background-color: #d97706;">
+                                    Guardar producto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pie de página informativo -->
+    <footer>
+        <p>&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Vinculación del script principal vacío -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/tienda.js"></script>
+
+</body>
+</html>
