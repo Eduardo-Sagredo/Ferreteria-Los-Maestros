@@ -5,6 +5,8 @@ const errorCorreo = document.getElementById("errorCorreo");
 const contrasena = document.getElementById("contrasena");
 const errorContrasena = document.getElementById("errorContrasena");
 
+const mensajeExito = document.getElementById("mensajeExito");
+
 
 function validarCorreo() {
 
@@ -75,6 +77,7 @@ contrasena.addEventListener("input", validarContrasena);
 formulario.addEventListener("submit", function(event) {
 
     event.preventDefault();
+    mensajeExito.textContent = "";
 
     errorCorreo.textContent = "";
     errorContrasena.textContent = "";
@@ -114,6 +117,10 @@ formulario.addEventListener("submit", function(event) {
     else if (valorContrasena.length < 4 || valorContrasena.length > 10) {
         errorContrasena.textContent =
             "La contraseña debe tener entre 4 y 10 caracteres.";
+    }
+
+    if (errorCorreo.textContent === "" && errorContrasena.textContent === "") {
+        mensajeExito.textContent = "Inicio de sesión validado correctamente.";
     }
 
 });
