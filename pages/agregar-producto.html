@@ -37,28 +37,28 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#sobre-nosotros">
+                        <a class="nav-link" href="inventario.html">
                             <i class="bi bi-card-checklist"></i>
                             Inventario
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="gestion-pedidos.html">
                             <i class="bi bi-receipt"></i>
                             Pedidos
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="gestion-usuarios.html">
                             <i class="bi bi-person"></i>
                             Usuarios
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="gestion-reportes.html">
                             <i class="bi bi-file-bar-graph"></i>
                             Reportes
                         </a>
@@ -75,27 +75,28 @@
         <section>
             <!-- Contenedor del Formulario -->
             <div class="card my-5 border-0 shadow-sm rounded-4 p-4 mx-auto" style="border: 1px solid #e2e8f0 !important; max-width: 800px;">
+
+                <h2 id="titulo-formulario" class="h4 mb-4 text-dark fw-bold">Agregar Producto</h2>
     
-    <!-- Es importante que usemos la etiqueta form para poder capturar el evento 'submit' en JS -->
-                <form id="form-nuevo-producto">
+                <form id="form-producto">
                     <div class="row g-4">
             
             <!-- Código -->
                         <div class="col-md-6">
-                            <label for="codigo" class="form-label fw-medium text-dark">Código *</label>
-                            <input type="text" class="form-control shadow-none" id="codigo" placeholder="PROD-XXX" required>
+                            <label for="input-codigo" class="form-label fw-medium text-dark">Código *</label>
+                            <input type="text" class="form-control shadow-none" id="input-codigo" placeholder="PROD-XXX" required>
                         </div>
             
             <!-- Nombre -->
                         <div class="col-md-6">
-                            <label for="nombre" class="form-label fw-medium text-dark">Nombre *</label>
-                            <input type="text" class="form-control shadow-none" id="nombre" required>
+                            <label for="input-nombre" class="form-label fw-medium text-dark">Nombre *</label>
+                            <input type="text" class="form-control shadow-none" id="input-nombre" required>
                         </div>
             
             <!-- Categoría -->
                         <div class="col-md-6">
-                            <label for="categoria" class="form-label fw-medium text-dark">Categoría *</label>
-                            <select class="form-select shadow-none" id="categoria" required>
+                            <label for="input-categoria" class="form-label fw-medium text-dark">Categoría *</label>
+                            <select class="form-select shadow-none" id="input-categoria" required>
                                 <option value="Construcción" selected>Construcción</option>
                                 <option value="Herramientas">Herramientas</option>
                                 <option value="Eléctricas">Eléctricas</option>
@@ -105,32 +106,32 @@
             
             <!-- Precio -->
                         <div class="col-md-6">
-                            <label for="precio" class="form-label fw-medium text-dark">Precio *</label>
-                            <input type="number" class="form-control shadow-none" id="precio" value="0" min="0" required>
+                            <label for="input-precio" class="form-label fw-medium text-dark">Precio *</label>
+                            <input type="number" class="form-control shadow-none" id="input-precio" value="0" min="0" required>
                         </div>
             
             <!-- Stock -->
                         <div class="col-md-6">
-                            <label for="stock" class="form-label fw-medium text-dark">Stock *</label>
-                            <input type="number" class="form-control shadow-none" id="stock" value="0" min="0" required>
+                            <label for="input-stock" class="form-label fw-medium text-dark">Stock *</label>
+                            <input type="number" class="form-control shadow-none" id="input-stock" value="0" min="0" required>
                         </div>
             
             <!-- Stock mínimo -->
                         <div class="col-md-6">
-                            <label for="stock-minimo" class="form-label fw-medium text-dark">Stock mínimo *</label>
-                            <input type="number" class="form-control shadow-none" id="stock-minimo" value="0" min="0" required>
+                            <label for="input-stock-minimo" class="form-label fw-medium text-dark">Stock mínimo *</label>
+                            <input type="number" class="form-control shadow-none" id="input-stock-minimo" value="0" min="0" required>
                         </div>
             
-            <!-- Descripción (Ocupa las dos columnas: col-12) -->
+            <!-- Descripción -->
                         <div class="col-12">
-                            <label for="descripcion" class="form-label fw-medium text-dark">Descripción</label>
-                            <textarea class="form-control shadow-none" id="descripcion" rows="3"></textarea>
+                            <label for="input-descripcion" class="form-label fw-medium text-dark">Descripción</label>
+                            <textarea class="form-control shadow-none" id="input-descripcion" rows="3"></textarea>
                         </div>
             
-            <!-- URL de imagen (Ocupa las dos columnas: col-12) -->
+            <!-- URL de imagen-->
                         <div class="col-12">
-                            <label for="url-imagen" class="form-label fw-medium text-dark">URL de imagen</label>
-                            <input type="url" class="form-control shadow-none" id="url-imagen" placeholder="https://...">
+                            <label for="input-url-imagen" class="form-label fw-medium text-dark">URL de imagen</label>
+                            <input type="url" class="form-control shadow-none" id="input-url-imagen" placeholder="https://...">
                         </div>
             
             <!-- Botones de acción -->
@@ -169,6 +170,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="../js/main.js"></script>
     <script src="../js/tienda.js"></script>
+    <script src="../js/database.js"></script>
+    <script src="../js/form-producto.js"></script> 
 
 </body>
 </html>

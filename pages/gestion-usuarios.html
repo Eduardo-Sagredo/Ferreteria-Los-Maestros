@@ -44,21 +44,21 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="gestion-pedidos.html">
                             <i class="bi bi-receipt"></i>
                             Pedidos
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="gestion-usuarios.html">
                             <i class="bi bi-person"></i>
                             Usuarios
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="gestion-reportes.html">
                             <i class="bi bi-file-bar-graph"></i>
                             Reportes
                         </a>
@@ -95,17 +95,17 @@
                         <span class="input-group-text bg-white border-end-0 rounded-start-3 text-secondary">
                             <i class="bi bi-search"></i>
                         </span>
-                        <input type="text" id="input-busqueda" class="form-control border-start-0 rounded-end-3 shadow-none" placeholder="Buscar usuario...">
+                        <input type="text" id="buscador-usuarios" class="form-control border-start-0 rounded-end-3 shadow-none" placeholder="Buscar usuario...">
                     </div>
                 </div>
 
-    <!-- Filtro de Categorías -->
+    <!-- Filtro de rol -->
                 <div class="col-md-6 col-lg-3">
-                    <select id="filtro-categoria" class="form-select rounded-3 shadow-none text-secondary">
-                        <option value="todas" selected>Todos los roles</option>
-                        <option value="Herramientas">Administrador</option>
-                        <option value="Eléctricas">Vendedor</option>
-                        <option value="Construcción">Cliente</option>
+                    <select id="filtro-rol" class="form-select rounded-3 shadow-none text-secondary">
+                        <option value="todos" selected>Todos los roles</option>
+                        <option value="Administrador">Administrador</option>
+                        <option value="Vendedor">Vendedor</option>
+                        <option value="Cliente">Cliente</option>
                     </select>
                 </div>
 
@@ -113,8 +113,8 @@
                 <div class="col-md-6 col-lg-3">
                     <select id="filtro-estado" class="form-select rounded-3 shadow-none text-secondary">
                         <option value="todos" selected>Todos los estados</option>
-                        <option value="Disponible">Activo</option>
-                        <option value="Stock bajo">Inactivo</option>
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
                     </select>
                 </div>
 
@@ -137,7 +137,7 @@
                         </tr>
                     </thead>
         
-                    <tbody id="tbody-productos" class="border-top-0">
+                    <tbody id="tabla-usuarios" class="border-top-0">
                     </tbody>
         
                 </table>
@@ -156,6 +156,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="../js/main.js"></script>
     <script src="../js/tienda.js"></script>
+    <script src="../js/database.js"></script>
+    <script src="../js/operaciones.js"></script>
 
 </body>
 </html>

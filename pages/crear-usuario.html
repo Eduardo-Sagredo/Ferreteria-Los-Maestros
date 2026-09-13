@@ -44,21 +44,21 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="gestion-pedidos.html">
                             <i class="bi bi-receipt"></i>
                             Pedidos
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="gestion-usuarios.html">
                             <i class="bi bi-person"></i>
                             Usuarios
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="gestion-reportes.html">
                             <i class="bi bi-file-bar-graph"></i>
                             Reportes
                         </a>
@@ -78,37 +78,39 @@
 
         <section>
             <div class="card mt-5 border-0 shadow-sm rounded-4 p-4 mx-auto" style="border: 1px solid #e2e8f0 !important; max-width: 600px;">
-                <form id="form-nuevo-usuario">
+                <h2 id="titulo-formulario" class="h4 mb-4 text-dark fw-bold">Crear usuario</h2>
+
+                <form id="form-usuario">
                     <div class="row g-4">
             
             <!-- Nombre completo -->
                         <div class="col-12">
-                            <label for="nombre-usuario" class="form-label fw-medium text-dark">Nombre completo *</label>
-                            <input type="text" class="form-control shadow-none rounded-3" id="nombre-usuario" required>
+                            <label for="input-nombre" class="form-label fw-medium text-dark">Nombre completo *</label>
+                            <input type="text" class="form-control shadow-none rounded-3" id="input-nombre" required>
                         </div>
             
             <!-- Correo -->
                         <div class="col-12">
-                            <label for="correo-usuario" class="form-label fw-medium text-dark">Correo *</label>
-                            <input type="email" class="form-control shadow-none rounded-3" id="correo-usuario" required>
+                            <label for="input-correo" class="form-label fw-medium text-dark">Correo *</label>
+                            <input type="email" class="form-control shadow-none rounded-3" id="input-correo" required>
                         </div>
             
             <!-- Contraseña -->
                         <div class="col-12">
-                            <label for="password-usuario" class="form-label fw-medium text-dark">Contraseña *</label>
-                            <input type="password" class="form-control shadow-none rounded-3" id="password-usuario" required>
+                            <label for="input-password" class="form-label fw-medium text-dark">Contraseña *</label>
+                            <input type="password" class="form-control shadow-none rounded-3" id="input-password" required>
                         </div>
             
             <!-- Confirmar contraseña -->
                         <div class="col-12">
-                            <label for="confirmar-password" class="form-label fw-medium text-dark">Confirmar contraseña *</label>
-                            <input type="password" class="form-control shadow-none rounded-3" id="confirmar-password" required>
+                            <label for="input-confirmar-password" class="form-label fw-medium text-dark">Confirmar contraseña *</label>
+                            <input type="password" class="form-control shadow-none rounded-3" id="input-confirmar-password" required>
                         </div>
             
             <!-- Rol -->
                         <div class="col-12">
-                            <label for="rol-usuario" class="form-label fw-medium text-dark">Rol *</label>
-                            <select class="form-select shadow-none rounded-3" id="rol-usuario" required>
+                            <label for="input-rol" class="form-label fw-medium text-dark">Rol *</label>
+                            <select class="form-select shadow-none rounded-3" id="input-rol" required>
                                 <option value="Cliente" selected>Cliente</option>
                                 <option value="Vendedor">Vendedor</option>
                                 <option value="Administrador">Administrador</option>
@@ -150,6 +152,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="../js/main.js"></script>
     <script src="../js/tienda.js"></script>
+    <script src="../js/database.js"></script>
+    <script src="../js/form-usuario.js"></script>
 
 </body>
 </html>

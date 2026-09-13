@@ -37,28 +37,28 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#sobre-nosotros">
+                        <a class="nav-link" href="inventario.html">
                             <i class="bi bi-card-checklist"></i>
                             Inventario
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="gestion-pedidos.html">
                             <i class="bi bi-receipt"></i>
                             Pedidos
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="gestion-usuarios.html">
                             <i class="bi bi-person"></i>
                             Usuarios
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="gestion-reportes.html">
                             <i class="bi bi-file-bar-graph"></i>
                             Reportes
                         </a>
@@ -90,7 +90,7 @@
                             </h3>
                         </div>
 
-                        <ul id="contenedor-alertas" class="list-group list-group-flush">
+                        <ul id="lista-alertas-sin-stock" class="list-group list-group-flush">
                         </ul>
                 
                     </div>
@@ -106,7 +106,7 @@
                             </h3>
                         </div>
 
-                        <ul id="contenedor-pedidos" class="list-group list-group-flush">
+                        <ul id="lista-alertas-stock-bajo" class="list-group list-group-flush">
                         </ul>
                 
                     </div>
@@ -127,7 +127,7 @@
                         <span class="input-group-text bg-white border-end-0 rounded-start-3 text-secondary">
                             <i class="bi bi-search"></i>
                         </span>
-                        <input type="text" id="input-busqueda" class="form-control border-start-0 rounded-end-3 shadow-none" placeholder="Buscar...">
+                        <input type="text" id="buscador-productos" class="form-control border-start-0 rounded-end-3 shadow-none" placeholder="Buscar...">
                     </div>
                 </div>
 
@@ -162,7 +162,7 @@
                         </tr>
                     </thead>
         
-                    <tbody id="tbody-productos" class="border-top-0">
+                    <tbody id="tabla-inventario" class="border-top-0">
                     </tbody>
         
                 </table>
@@ -175,11 +175,6 @@
     <footer>
         <p>&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
     </footer>
-
-    <!-- Vinculación del script principal vacío -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <script src="../js/main.js"></script>
-    <script src="../js/tienda.js"></script>
 
     <!-- Modal para Actualizar Stock -->
     <div class="modal fade" id="modalActualizarStock" tabindex="-1" aria-hidden="true">
@@ -196,7 +191,7 @@
                 <div class="modal-body pt-3">
                 <!-- Caja gris con info del producto -->
                     <div class="bg-light rounded-3 p-3 mb-4" style="border: 1px solid #f8fafc;">
-                        <h4 id="modal-nombre-producto" class="h6 text-dark mb-0 fw-normal">Nombre Producto</h4>
+                        <h4 id="modal-nombre-prod" class="h6 text-dark mb-0 fw-normal">Nombre Producto</h4>
                         <p id="modal-codigo-producto" class="text-secondary font-monospace small mb-2">CÓDIGO</p>
                         <p class="text-secondary small mb-0">Stock actual: <span id="modal-stock-actual" class="text-dark fw-medium">0</span></p>
                         <p class="text-secondary small mb-0">Stock mínimo: <span id="modal-stock-minimo" class="text-dark fw-medium">0</span></p>
@@ -204,7 +199,7 @@
 
                 <!-- Input Nuevo Stock -->
                     <label for="input-nuevo-stock" class="form-label fw-medium text-dark">Nuevo stock</label>
-                    <input type="number" class="form-control shadow-none rounded-3" id="input-nuevo-stock" min="0">
+                    <input type="number" class="form-control shadow-none rounded-3" id="modal-input-stock" min="0">
                 
                 <!-- Campo oculto vital para saber qué producto estamos guardando -->
                     <input type="hidden" id="modal-codigo-oculto">
@@ -225,6 +220,12 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/tienda.js"></script>
+    <script src="../js/database.js"></script>
+    <script src="../js/productos.js"></script>
 
 </body>
 </html>
