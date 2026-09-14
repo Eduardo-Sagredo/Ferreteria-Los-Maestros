@@ -111,20 +111,157 @@
         </nav>
     
     </header>
-
-    <!-- Contenedor principal para el contenido de cada página -->
-    <main>
+    
+    <main class="hero">
         <section class="hero-section">
-            <h2>Bienvenido a Ferretería Los Maestros</h2>
-            <p>Encuentra los mejores materiales de construcción y herramientas.</p>
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-12 col-lg-6">
+                        <span class="text-warning fw-bold text-uppercase" style="letter-spacing: 2px; font-size: 0.85rem;">
+                            Ferretería Los Maestros • La Serena
+                        </span>
+                        <h1>
+                            Todo lo que necesitas para tu obra en un solo lugar
+                        </h1>
+                        <p>
+                            Encuentra herramientas, materiales de construcción
+                            y productos de ferretería para todos tus proyectos.
+                        </p>
+                        <a href="pages/productos.html" class="btn btn-warning">
+                            Ver productos
+                        </a>
+                    </div>
+                </div>
+            </div>
         </section>
-        
-        <!-- Las demás secciones irán aquí -->
+        <section class="categorias py-5">
+            <div class="container">
+                <h2 class="text-center mb-4">Categorías</h2>
+                <div class="row g-4">
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <a href="pages/productos.html?categoria=herramientas"
+                            class="text-decoration-none">
+                            <div class="card categoria-card text-center h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-tools fs-1"></i>
+                                    <h3 class="card-title mt-3">Herramientas</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <a href="pages/productos.html?categoria=construccion"
+                            class="text-decoration-none">
+                            <div class="card categoria-card text-center h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-bricks fs-1"></i>
+                                    <h3 class="card-title mt-3">Construcción</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <a href="pages/productos.html?categoria=electricidad"
+                            class="text-decoration-none">
+                            <div class="card categoria-card text-center h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-lightning-charge fs-1"></i>
+                                    <h3 class="card-title mt-3">Electricidad</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <a href="pages/productos.html?categoria=pinturas"
+                            class="text-decoration-none">
+                            <div class="card categoria-card text-center h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-paint-bucket fs-1"></i>
+                                    <h3 class="card-title mt-3">Pinturas</h3>
+                             </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="productos-destacados py-5">
+            <div class="container">
+                <h2 class="text-center mb-4">Productos destacados</h2>
+                <div class="row g-4">
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="card h-100">
+                            <img src="img/taladro.jpg" class="card-img-top" alt="Taladro inalámbrico">
+                            <div class="card-body">
+                                <h3 class="card-title">Taladro inalámbrico</h3>
+                                <p class="card-text">
+                                    Taladro para trabajos domésticos y profesionales.
+                                </p>
+
+                                <p class="fw-bold">$59.990</p>
+                                <a href="pages/detalle-producto.html?id=1" class="btn btn-warning">
+                                    Ver producto
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="card h-100">
+                            <img src="img/martillo.png" class="card-img-top" alt="Martillo">
+                            <div class="card-body">
+                                <h3 class="card-title">Martillo</h3>
+                                <p class="card-text">
+                                    Martillo resistente para trabajos de construcción.
+                                </p>
+
+                                <p class="fw-bold">$12.990</p>
+
+                                <a href="pages/detalle-producto.html?id=2" class="btn btn-warning">
+                                    Ver producto
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="card h-100">
+                            <img src="img/pintura.png" class="card-img-top" alt="Pintura">
+                            <div class="card-body">
+                                <h3 class="card-title">Pintura interior</h3>
+                                <p class="card-text">
+                                    Pintura para muros interiores de alta cobertura.
+                                </p>
+                                <p class="fw-bold">$24.990</p>
+                                <a href="pages/detalle-producto.html?id=16" class="btn btn-warning">
+                                    Ver producto
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="card h-100">
+                            <img src="img/cemento.png" class="card-img-top" alt="Cemento">
+                            <div class="card-body">
+                                <h3 class="card-title">Saco de cemento</h3>
+                                <p class="card-text">
+                                    Cemento para construcción y reparación.
+                                </p>
+                                <p class="fw-bold">$8.990</p>
+                                <a href="pages/detalle-producto.html?id=6" class="btn btn-warning">
+                                    Ver producto
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>       
     </main>
 
     <!-- Pie de página informativo -->
-    <footer>
-        <p>&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
+    <footer class="footer-tienda">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
+        </div>
     </footer>
 
     <!-- Vinculación del script principal vacío -->
