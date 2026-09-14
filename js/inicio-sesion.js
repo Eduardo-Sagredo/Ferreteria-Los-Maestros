@@ -88,6 +88,12 @@ formulario.addEventListener("submit", function(event) {
         errorCorreo.textContent = "El correo es obligatorio.";
     }
 
+    else if (valorCorreo.length > 100) {
+        errorCorreo.textContent =
+            "El correo no puede superar los 100 caracteres.";
+    return false;
+    }
+
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valorCorreo)) {
         errorCorreo.textContent = "Ingrese un correo electrónico válido.";
     }
