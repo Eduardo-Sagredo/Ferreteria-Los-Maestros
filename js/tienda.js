@@ -462,9 +462,16 @@ if (detalleProducto) {
         const btnAgregarDetalle = document.getElementById("btnAgregarDetalle");
 
         if (btnAgregarDetalle) {
-            btnAgregarDetalle.addEventListener("click", function() {
+            btnAgregarDetalle.addEventListener("click", function () {
+
                 const campoCantidad = document.getElementById("cantidadProducto");
                 const cantidad = Number(campoCantidad.value);
+
+                if (campoCantidad.value === "" || cantidad < 1) {
+                    mostrarMensaje("La cantidad mínima es 1.", true);
+                    campoCantidad.value = 1;
+                    return;
+                }
 
                 if (cantidad > producto.stock) {
                     mostrarMensaje("La cantidad supera el stock disponible.", true);
@@ -475,15 +482,8 @@ if (detalleProducto) {
                 agregarAlCarrito(producto.id, cantidad);
             });
         }
-    } else {
-        detalleProducto.innerHTML = `
-            <div class="alert alert-warning text-center">
-                No se encontró el producto solicitado.
-            </div>
-        `;
     }
 }
-
 //carrito
 
 const listaCarrito = document.getElementById("listaCarrito");
