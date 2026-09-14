@@ -25,8 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 2. REPORTES: KPIs ---
-    // --- 2. REPORTES: KPIs ---
-    // Buscamos usando los IDs exactos de tu HTML (resumen-ventas, etc.)
     const kpiVentas = document.getElementById('resumen-ventas') || document.getElementById('kpi-ventas');
     
     if(kpiVentas) {
@@ -49,23 +47,31 @@ document.addEventListener('DOMContentLoaded', () => {
         if(kpiClientes) kpiClientes.innerText = clientesActivos;
     }
 
-    // --- 3. REPORTES: RANKINGS ---
+  // --- 3. REPORTES: RANKINGS ---
     const listaClientes = document.getElementById('lista-top-clientes');
     if(listaClientes) {
-        const comprasPorCliente = pedidos.reduce((acc, p) => {
+        // Solución: Obtenemos los pedidos explícitamente aquí dentro para evitar errores de ReferenceError
+        const pedidosParaClientes = MockDB.getTabla('pedidos') || [];
+        
+        const comprasPorCliente = pedidosParaClientes.reduce((acc, p) => {
             if(p.cliente) acc[p.cliente] = (acc[p.cliente] || 0) + 1;
             return acc;
         }, {});
+        
         const topClientes = Object.entries(comprasPorCliente).sort((a, b) => b[1] - a[1]).slice(0, 5);
         listaClientes.innerHTML = topClientes.map((c, i) => `<li class="list-group-item d-flex justify-content-between py-3"><span class="text-dark"><strong class="me-3" style="color: #d97706;">${i + 1}</strong> ${c[0]}</span><span class="text-secondary small">${c[1]} compras</span></li>`).join('');
     }
 
     const listaProductos = document.getElementById('lista-top-productos');
     if(listaProductos) {
-        const ventasPorProducto = pedidos.flatMap(p => p.productos || []).reduce((acc, prod) => {
+        // Solución: Obtenemos los pedidos nuevamente aquí
+        const pedidosParaProductos = MockDB.getTabla('pedidos') || [];
+        
+        const ventasPorProducto = pedidosParaProductos.flatMap(p => p.productos || []).reduce((acc, prod) => {
             if(prod.nombre) acc[prod.nombre] = (acc[prod.nombre] || 0) + prod.cant;
             return acc;
         }, {});
+        
         const topProductos = Object.entries(ventasPorProducto).sort((a, b) => b[1] - a[1]).slice(0, 5);
         listaProductos.innerHTML = topProductos.map((p, i) => `<li class="list-group-item d-flex justify-content-between py-3"><span class="text-dark"><strong class="me-3" style="color: #d97706;">${i + 1}</strong> ${p[0]}</span><span class="text-secondary small">${p[1]} uds.</span></li>`).join('');
     }

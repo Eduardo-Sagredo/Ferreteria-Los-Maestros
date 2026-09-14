@@ -1,22 +1,25 @@
-let productos = MockDB.getTabla('productos');
-
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Render Inicial
-    if (document.getElementById('tabla-productos')) renderTablaProductos(productos);
-    if (document.getElementById('tabla-inventario')) renderTablaInventario(productos);
-    renderAlertasInventario(productos);
+    // Obtenemos los datos de forma segura solo cuando carga la página
+    const productosBase = MockDB.getTabla('productos');
 
-    // 2. Eventos de Filtros
+    if (document.getElementById('tabla-productos')) renderTablaProductos(productosBase);
+    if (document.getElementById('tabla-inventario')) renderTablaInventario(productosBase);
+    renderAlertasInventario(productosBase);
+
+    // Eventos de Filtros
     document.getElementById('buscador-productos')?.addEventListener('input', aplicarFiltrosProd);
     document.getElementById('filtro-categoria')?.addEventListener('change', aplicarFiltrosProd);
     document.getElementById('filtro-estado')?.addEventListener('change', aplicarFiltrosProd);
 
     function aplicarFiltrosProd() {
+        // Obtenemos una copia fresca para filtrar, evitando variables globales
+        const prods = MockDB.getTabla('productos'); 
+        
         const txt = document.getElementById('buscador-productos')?.value.toLowerCase() || '';
         const cat = document.getElementById('filtro-categoria')?.value || 'todas';
         const est = document.getElementById('filtro-estado')?.value || 'todos';
 
-        const filtrados = productos.filter(p => {
+        const filtrados = prods.filter(p => {
             const coincideTxt = p.nombre.toLowerCase().includes(txt) || p.codigo.toLowerCase().includes(txt);
             const coincideCat = cat === 'todas' || p.categoria === cat;
             const coincideEst = est === 'todos' || p.estado === est;
@@ -29,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- FUNCIONES DE RENDERIZADO ---
-
 function renderAlertasInventario(datos) {
     const listaSinStock = document.getElementById('lista-alertas-sin-stock');
     if (listaSinStock) {
@@ -54,7 +56,7 @@ function renderAlertasInventario(datos) {
 
 function renderTablaProductos(datos) {
     const tbody = document.getElementById('tabla-productos');
-    if(!tbody) return; // Seguridad si no existe en la página
+    if(!tbody) return; 
     
     tbody.innerHTML = datos.map(p => {
         const estiloPildora = p.estado === 'Sin stock' ? 'background-color: #fca5a5; color: #7f1d1d;' : (p.estado === 'Stock bajo' ? 'background-color: #fde047; color: #1E293B;' : 'background-color: #86efac; color: #14532d;');
@@ -76,7 +78,7 @@ function renderTablaProductos(datos) {
 
 function renderTablaInventario(datos) {
     const tbody = document.getElementById('tabla-inventario');
-    if(!tbody) return; // Seguridad si no existe en la página
+    if(!tbody) return; 
     
     tbody.innerHTML = datos.map(p => {
         const estiloPildora = p.estado === 'Sin stock' ? 'background-color: #fca5a5; color: #7f1d1d;' : (p.estado === 'Stock bajo' ? 'background-color: #fde047; color: #1E293B;' : 'background-color: #86efac; color: #14532d;');
@@ -93,25 +95,17 @@ function renderTablaInventario(datos) {
     }).join('');
 }
 
-// --- FUNCIONES GLOBALES (CRUD Y MODAL) ---
-
+// --- FUNCIONES GLOBALES ---
 window.editarProducto = (id) => window.location.href = `agregar-producto.html?edit=${id}`;
-
 window.eliminarProducto = (id) => {
-    if(confirm('¿Seguro que deseas eliminar este producto?')) { 
-        MockDB.eliminarRegistro('productos', id); 
-        location.reload(); 
-    }
+    if(confirm('¿Seguro que deseas eliminar este producto?')) { MockDB.eliminarRegistro('productos', id); location.reload(); }
 };
 
 let idProdSel = null;
-
-// Abrir el Modal de Stock
 window.abrirModalStock = function(id, nombre, stock) {
     idProdSel = id;
     const prod = MockDB.getTabla('productos').find(p => p.id == id);
     
-    // Buscar los elementos usando ambos IDs posibles (por si alguno quedó antiguo en tu HTML)
     const nombreEl = document.getElementById('modal-nombre-prod') || document.getElementById('modal-nombre-producto');
     const inputEl = document.getElementById('modal-input-stock') || document.getElementById('input-nuevo-stock');
     
@@ -128,14 +122,10 @@ window.abrirModalStock = function(id, nombre, stock) {
         if(stMinEl) stMinEl.innerText = prod.stockMinimo;
     }
     
-    // Abrir modal usando Bootstrap
     const modalElement = document.getElementById('modalActualizarStock');
-    if(modalElement) {
-        new bootstrap.Modal(modalElement).show();
-    }
+    if(modalElement) new bootstrap.Modal(modalElement).show();
 };
 
-// Guardar el Stock (Soporta ambos nombres que pudiste haberle puesto al botón en el HTML)
 window.guardarNuevoStock = window.guardarStockModal = function() {
     const inputEl = document.getElementById('modal-input-stock') || document.getElementById('input-nuevo-stock');
     if(inputEl && idProdSel !== null) {
