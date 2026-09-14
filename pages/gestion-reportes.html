@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/tienda.css">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <!-- Cabecera y Menú de navegación -->
     <header>
         <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
@@ -71,7 +71,7 @@
     </header>
 
     <!-- Contenedor principal para el contenido de cada página -->
-    <main class="container my-5">
+    <main class="container my-5 cflex-grow-1">
         <div class="mt-2 mx-2">
             <h1>
                 Reportes
@@ -171,8 +171,10 @@
     </main>
 
     <!-- Pie de página informativo -->
-    <footer>
-        <p>&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
+     <footer class="footer-tienda">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
+        </div>
     </footer>
 
     <!-- Vinculación del script principal vacío -->
