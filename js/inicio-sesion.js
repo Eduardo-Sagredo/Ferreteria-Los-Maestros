@@ -1,11 +1,9 @@
 const formulario = document.getElementById("formInicioSesion");
 
 const correo = document.getElementById("correo");
-
 const errorCorreo = document.getElementById("errorCorreo");
 
 const contrasena = document.getElementById("contrasena");
-
 const errorContrasena = document.getElementById("errorContrasena");
 
 const mensajeExito = document.getElementById("mensajeExito");
@@ -19,21 +17,32 @@ function validarCorreo() {
 
     if (valorCorreo === "") {
 
-        errorCorreo.textContent = "El correo es obligatorio.";
+        errorCorreo.textContent =
+            "El correo es obligatorio.";
 
         return false;
-    }
 
+    }
+    else if (valorCorreo.length > 100) {
+
+        errorCorreo.textContent =
+            "El correo no puede superar los 100 caracteres.";
+
+        return false;
+
+    }
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valorCorreo)) {
 
-        errorCorreo.textContent = "Ingrese un correo electrónico válido.";
+        errorCorreo.textContent =
+            "Ingrese un correo electrónico válido.";
 
         return false;
-    }
 
+    }
     else {
 
-        const dominio = valorCorreo.split("@")[1].toLowerCase();
+        const dominio =
+            valorCorreo.split("@")[1].toLowerCase();
 
         const dominiosPermitidos = [
             "duoc.cl",
@@ -44,10 +53,43 @@ function validarCorreo() {
         if (!dominiosPermitidos.includes(dominio)) {
 
             errorCorreo.textContent =
-                "Solo se permiten correos @duoc.cl, @profesor.duoc.cl o @gmail.com.";
+                "Solo se permiten correos @duoc.cl, @profesor.duoc.cl o @Gmail.com.";
 
             return false;
+
         }
+
+    }
+
+    return true;
+}
+
+
+function validarContrasena() {
+
+    errorContrasena.textContent = "";
+
+    const valorContrasena =
+        contrasena.value.trim();
+
+    if (valorContrasena === "") {
+
+        errorContrasena.textContent =
+            "La contraseña es obligatoria.";
+
+        return false;
+
+    }
+    else if (
+        valorContrasena.length < 4 ||
+        valorContrasena.length > 10
+    ) {
+
+        errorContrasena.textContent =
+            "La contraseña debe tener entre 4 y 10 caracteres.";
+
+        return false;
+
     }
 
     return true;
@@ -56,117 +98,102 @@ function validarCorreo() {
 
 correo.addEventListener("input", validarCorreo);
 
-
-function validarContrasena() {
-
-    errorContrasena.textContent = "";
-
-    const valorContrasena = contrasena.value.trim();
-
-    if (valorContrasena === "") {
-
-        errorContrasena.textContent = "La contraseña es obligatoria.";
-
-        return false;
-    }
-
-    else if (valorContrasena.length < 4 || valorContrasena.length > 10) {
-
-        errorContrasena.textContent =
-            "La contraseña debe tener entre 4 y 10 caracteres.";
-
-        return false;
-    }
-
-    return true;
-}
-
-
 contrasena.addEventListener("input", validarContrasena);
 
 
-formulario.addEventListener("submit", function(event) {
+formulario.addEventListener("submit", function (event) {
 
     event.preventDefault();
 
     mensajeExito.textContent = "";
 
-    errorCorreo.textContent = "";
+    const correoValido =
+        validarCorreo();
 
-    errorContrasena.textContent = "";
+    const contrasenaValida =
+        validarContrasena();
 
 
-    const valorCorreo = correo.value.trim();
+    if (!correoValido || !contrasenaValida) {
 
-    if (valorCorreo === "") {
+        return;
 
-        errorCorreo.textContent = "El correo es obligatorio.";
     }
 
-    else if (valorCorreo.length > 100) {
+
+    const usuariosGuardados =
+        JSON.parse(localStorage.getItem("usuarios")) || [];
+
+
+    const correoIngresado =
+        correo.value.trim().toLowerCase();
+
+    const contrasenaIngresada =
+        contrasena.value.trim();
+
+
+    const usuarioEncontrado =
+        usuariosGuardados.find(function (usuario) {
+
+            return usuario.correo &&
+                usuario.correo.toLowerCase() === correoIngresado;
+
+        });
+
+
+    if (!usuarioEncontrado) {
 
         errorCorreo.textContent =
-            "El correo no puede superar los 100 caracteres.";
-    }
+            "No existe un usuario registrado con este correo.";
 
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valorCorreo)) {
+        return;
 
-        errorCorreo.textContent =
-            "Ingrese un correo electrónico válido.";
-    }
-
-    else {
-
-        const dominio = valorCorreo.split("@")[1].toLowerCase();
-
-        const dominiosPermitidos = [
-            "duoc.cl",
-            "profesor.duoc.cl",
-            "gmail.com"
-        ];
-
-        if (!dominiosPermitidos.includes(dominio)) {
-
-            errorCorreo.textContent =
-                "Solo se permiten correos @duoc.cl, @profesor.duoc.cl o @gmail.com.";
-        }
     }
 
 
-    const valorContrasena = contrasena.value.trim();
-
-    if (valorContrasena === "") {
+    if (usuarioEncontrado.contrasena !== contrasenaIngresada) {
 
         errorContrasena.textContent =
-            "La contraseña es obligatoria.";
-    }
+            "La contraseña ingresada es incorrecta.";
 
-    else if (valorContrasena.length < 4 || valorContrasena.length > 10) {
+        return;
 
-        errorContrasena.textContent =
-            "La contraseña debe tener entre 4 y 10 caracteres.";
     }
 
 
-    if (errorCorreo.textContent === "" &&
-        errorContrasena.textContent === "") {
+    const usuarioActivo = {
 
-        mensajeExito.textContent =
-            "Inicio de sesión validado correctamente.";
+        rut: usuarioEncontrado.rut,
+        nombre: usuarioEncontrado.nombre,
+        apellidos: usuarioEncontrado.apellidos,
+        correo: usuarioEncontrado.correo
 
-
-        const usuarioSesion = {
-            correo: valorCorreo
-        };
+    };
 
 
-        localStorage.setItem(
-            "usuarioSesion",
-            JSON.stringify(usuarioSesion)
-        );
+    localStorage.setItem(
+        "usuarioActivo",
+        JSON.stringify(usuarioActivo)
+    );
 
 
-        window.location.href = "../index.html";
-    }
+    const usuarioSesion = {
+
+        correo: usuarioEncontrado.correo
+
+    };
+
+
+    localStorage.setItem(
+        "usuarioSesion",
+        JSON.stringify(usuarioSesion)
+    );
+
+
+    mensajeExito.textContent =
+        "Inicio de sesión validado correctamente.";
+
+
+    window.location.href = "../index.html";
 
 });

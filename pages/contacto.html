@@ -14,9 +14,10 @@
 
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/tienda.css">
+
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
     <header>
 
@@ -123,7 +124,7 @@
 
                         <li class="nav-item">
 
-                            <a class="nav-link" href="contacto.html">
+                            <a class="nav-link active" href="contacto.html">
 
                                 <i class="bi bi-envelope-fill"></i>
 
@@ -180,11 +181,11 @@
     </header>
 
 
-    <main class="container my-5">
+    <main class="container my-5 flex-grow-1">
 
         <div class="row justify-content-center">
 
-            <div class="col-12 col-md-8 col-lg-6">
+            <div class="col-12 col-md-8 col-lg-5">
 
                 <div class="card shadow">
 
@@ -204,7 +205,7 @@
 
                                 </label>
 
-                                <input type="text" class="form-control" id="nombre" name="nombre"
+                                <input type="text" class="form-control" id="nombre" name="nombre" maxlength="100"
                                     placeholder="Ingrese su nombre">
 
                                 <div id="errorNombre" class="text-danger mt-1">
@@ -221,7 +222,7 @@
 
                                 </label>
 
-                                <input type="email" class="form-control" id="correo" name="correo"
+                                <input type="email" class="form-control" id="correo" name="correo" maxlength="100"
                                     placeholder="ejemplo@duoc.cl">
 
                                 <div id="errorCorreo" class="text-danger mt-1">
@@ -246,7 +247,7 @@
                                 </label>
 
                                 <textarea class="form-control" id="comentario" name="comentario" rows="5"
-                                    placeholder="Escriba su comentario"></textarea>
+                                    maxlength="500" placeholder="Escriba su comentario"></textarea>
 
                                 <div id="errorComentario" class="text-danger mt-1">
                                 </div>
@@ -287,12 +288,15 @@
     </main>
 
 
-    <footer>
+    <footer class="footer-tienda mt-5">
 
-        <p>
-            &copy; 2026 Ferretería Los Maestros.
-            Todos los derechos reservados.
-        </p>
+        <div class="container text-center">
+
+            <p class="mb-0">
+                &copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.
+            </p>
+
+        </div>
 
     </footer>
 

@@ -17,7 +17,7 @@
 
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
     <header>
 
@@ -181,7 +181,7 @@
     </header>
 
 
-    <main class="container my-5">
+    <main class="container my-5 flex-grow-1">
 
         <div class="row justify-content-center">
 
@@ -195,12 +195,12 @@
                             Confirmar Pedido
                         </h2>
 
-                        <form id="formPedido" novalidate>
+                        <form id="formConfirmarPedido" novalidate>
 
                             <div class="mb-4">
 
                                 <label class="form-label fw-bold">
-                                    Seleccione el tipo de entrega
+                                    Tipo de entrega
                                 </label>
 
                                 <div class="form-check mb-2">
@@ -229,13 +229,13 @@
 
                                 </div>
 
-                                <div id="errorEntrega" class="text-danger mt-2">
+                                <div id="errorTipoEntrega" class="text-danger mt-2">
                                 </div>
 
                             </div>
 
 
-                            <div class="mb-3 d-none" id="contenedorDireccion">
+                            <div id="contenedorDireccion" class="mb-4 d-none">
 
                                 <label for="direccion" class="form-label">
 
@@ -243,8 +243,8 @@
 
                                 </label>
 
-                                <input type="text" class="form-control" id="direccion" name="direccion"
-                                    placeholder="Ingrese la dirección de despacho">
+                                <input type="text" class="form-control" id="direccion" name="direccion" maxlength="150"
+                                    placeholder="Ingrese su dirección">
 
                                 <div id="errorDireccion" class="text-danger mt-1">
                                 </div>
@@ -256,29 +256,47 @@
 
                                 <div class="card-body">
 
-                                    <h5>
+                                    <h5 class="mb-3">
                                         Resumen del pedido
                                     </h5>
 
-                                    <p class="mb-1">
+                                    <div class="d-flex justify-content-between mb-2">
 
-                                        <strong>
-                                            Productos:
-                                        </strong>
+                                        <span>
+                                            Taladro inalámbrico
+                                        </span>
 
-                                        3
+                                        <span>
+                                            $59.990
+                                        </span>
 
-                                    </p>
+                                    </div>
 
-                                    <p class="mb-0">
+                                    <div class="d-flex justify-content-between mb-2">
 
-                                        <strong>
-                                            Total:
-                                        </strong>
+                                        <span>
+                                            Martillo
+                                        </span>
 
-                                        $75.990
+                                        <span>
+                                            $12.990
+                                        </span>
 
-                                    </p>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="d-flex justify-content-between fw-bold">
+
+                                        <span>
+                                            Total
+                                        </span>
+
+                                        <span>
+                                            $72.980
+                                        </span>
+
+                                    </div>
 
                                 </div>
 
@@ -312,15 +330,12 @@
     </main>
 
 
-    <footer class="footer-tienda">
+    <footer class="footer-tienda mt-5">
 
         <div class="container text-center">
 
             <p class="mb-0">
-
-                &copy; 2026 Ferretería Los Maestros.
-                Todos los derechos reservados.
-
+                &copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.
             </p>
 
         </div>
