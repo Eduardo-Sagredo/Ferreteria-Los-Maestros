@@ -1,36 +1,45 @@
-const formulario = document.getElementById("formPedido");
+const formulario = document.getElementById("formConfirmarPedido");
 
 const retiro = document.getElementById("retiro");
 const despacho = document.getElementById("despacho");
 
-const contenedorDireccion = document.getElementById("contenedorDireccion");
-const direccion = document.getElementById("direccion");
+const contenedorDireccion =
+    document.getElementById("contenedorDireccion");
 
-const errorEntrega = document.getElementById("errorEntrega");
-const errorDireccion = document.getElementById("errorDireccion");
+const direccion =
+    document.getElementById("direccion");
 
-const mensajeExito = document.getElementById("mensajeExito");
+const errorTipoEntrega =
+    document.getElementById("errorTipoEntrega");
+
+const errorDireccion =
+    document.getElementById("errorDireccion");
+
+const mensajeExito =
+    document.getElementById("mensajeExito");
 
 
-// Si selecciona retiro en tienda
+// Retiro en tienda
 retiro.addEventListener("change", function() {
 
     contenedorDireccion.classList.add("d-none");
 
     direccion.value = "";
+
+    errorTipoEntrega.textContent = "";
     errorDireccion.textContent = "";
-    errorEntrega.textContent = "";
     mensajeExito.textContent = "";
 
 });
 
 
-// Si selecciona despacho a domicilio
+// Despacho a domicilio
 despacho.addEventListener("change", function() {
 
     contenedorDireccion.classList.remove("d-none");
 
-    errorEntrega.textContent = "";
+    errorTipoEntrega.textContent = "";
+    errorDireccion.textContent = "";
     mensajeExito.textContent = "";
 
 });
@@ -40,37 +49,46 @@ despacho.addEventListener("change", function() {
 direccion.addEventListener("input", function() {
 
     errorDireccion.textContent = "";
+    mensajeExito.textContent = "";
 
-    if (direccion.value.trim() === "") {
+    if (
+        despacho.checked &&
+        direccion.value.trim() === ""
+    ) {
+
         errorDireccion.textContent =
             "La dirección es obligatoria para el despacho a domicilio.";
+
     }
 
 });
 
 
-// Validar al confirmar pedido
+// Confirmar pedido
 formulario.addEventListener("submit", function(event) {
 
     event.preventDefault();
 
-    errorEntrega.textContent = "";
+    errorTipoEntrega.textContent = "";
     errorDireccion.textContent = "";
     mensajeExito.textContent = "";
 
 
-    // No seleccionó tipo de entrega
+    // No seleccionó ningún tipo de entrega
     if (!retiro.checked && !despacho.checked) {
 
-        errorEntrega.textContent =
+        errorTipoEntrega.textContent =
             "Debe seleccionar un tipo de entrega.";
 
         return;
     }
 
 
-    // Seleccionó despacho pero no ingresó dirección
-    if (despacho.checked && direccion.value.trim() === "") {
+    // Despacho sin dirección
+    if (
+        despacho.checked &&
+        direccion.value.trim() === ""
+    ) {
 
         errorDireccion.textContent =
             "La dirección es obligatoria para el despacho a domicilio.";
@@ -79,7 +97,7 @@ formulario.addEventListener("submit", function(event) {
     }
 
 
-    // Todo correcto
+    // Pedido válido
     mensajeExito.textContent =
         "Pedido confirmado correctamente.";
 
