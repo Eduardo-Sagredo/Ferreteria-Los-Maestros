@@ -25,7 +25,6 @@ function haySesionIniciada() {
 function cerrarSesion() {
 
     localStorage.removeItem("usuarioSesion");
-
 }
 
 
@@ -54,7 +53,28 @@ function actualizarMenuSesion() {
 }
 
 
+function protegerPaginaPrivada() {
+
+    const paginaActual =
+        window.location.pathname.split("/").pop();
+
+    const paginasPrivadas = [
+        "mis-pedidos.html",
+        "historial.html",
+        "cuenta-corriente.html"
+    ];
+
+    if (paginasPrivadas.includes(paginaActual) &&
+        !haySesionIniciada()) {
+
+        window.location.href = "inicio-sesion.html";
+    }
+}
+
+
 document.addEventListener("DOMContentLoaded", function() {
+
+    protegerPaginaPrivada();
 
     actualizarMenuSesion();
 
