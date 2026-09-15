@@ -7,136 +7,160 @@
 
     <title>Confirmar Pedido | Ferretería Los Maestros</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
         rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
         crossorigin="anonymous">
 
-    <link rel="stylesheet"
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <!-- CSS -->
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/tienda.css">
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
+    <!-- HEADER -->
     <header>
-    <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
-        <div class="container">
 
-            <a class="navbar-brand" href="../index.html">
-                <img src="../img/logo.png" alt="Logo Ferretería Los Maestros" class="logo-img">
-                <span class="texto-ferreteria">Ferretería</span>
-                <span class="texto-maestros">Los Maestros</span>
-            </a>
+        <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
 
-            <!-- Botón hamburguesa para pantallas pequeñas -->
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarPrincipal"
-                aria-controls="navbarPrincipal"
-                aria-expanded="false"
-                aria-label="Mostrar menú">
+            <div class="container">
 
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <!-- Logo -->
+                <a class="navbar-brand" href="../index.html">
 
-            <!-- Menú de navegación -->
-            <div class="collapse navbar-collapse" id="navbarPrincipal">
+                    <img
+                        src="../img/logo.png"
+                        alt="Logo Ferretería Los Maestros"
+                        class="logo-img">
 
-                <ul class="navbar-nav ms-auto">
+                    <span class="texto-ferreteria">Ferretería</span>
+                    <span class="texto-maestros">Los Maestros</span>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.html">
-                            <i class="bi bi-house-door-fill"></i>
-                            Inicio
-                        </a>
-                    </li>
+                </a>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="productos.html">
-                            <i class="bi bi-box-seam"></i>
-                            Productos
-                        </a>
-                    </li>
+                <!-- Botón hamburguesa -->
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarPrincipal"
+                    aria-controls="navbarPrincipal"
+                    aria-expanded="false"
+                    aria-label="Mostrar menú">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.html#sobre-nosotros">
-                            <i class="bi bi-people"></i>
-                            Sobre nosotros
-                        </a>
-                    </li>
+                    <span class="navbar-toggler-icon"></span>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="mis-pedidos.html">
-                            <i class="bi bi-receipt"></i>
-                            Mis pedidos
-                        </a>
-                    </li>
+                </button>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="historial.html">
-                            <i class="bi bi-clock-history"></i>
-                            Historial
-                        </a>
-                    </li>
+                <!-- Navegación -->
+                <div class="collapse navbar-collapse" id="navbarPrincipal">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="cuenta-corriente.html">
-                            <i class="bi bi-wallet2"></i>
-                            Cuenta corriente
-                        </a>
-                    </li>
+                    <ul class="navbar-nav ms-auto">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="contacto.html">
-                            <i class="bi bi-envelope-fill"></i>
-                            Contacto
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../index.html">
+                                <i class="bi bi-house-door-fill"></i>
+                                Inicio
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="inicio-sesion.html">
-                            <i class="bi bi-box-arrow-in-right"></i>
-                            Iniciar sesión
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="productos.html">
+                                <i class="bi bi-box-seam"></i>
+                                Productos
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-geo-alt"></i>
-                            Ubicación
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="nosotros.html">
+                                <i class="bi bi-people"></i>
+                                Sobre nosotros
+                            </a>
+                        </li>
 
-                </ul>
+                        <li class="nav-item">
+                            <a class="nav-link" href="mis-pedidos.html">
+                                <i class="bi bi-receipt"></i>
+                                Mis pedidos
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="historial.html">
+                                <i class="bi bi-clock-history"></i>
+                                Historial
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="cuenta-corriente.html">
+                                <i class="bi bi-wallet2"></i>
+                                Cuenta corriente
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="contacto.html">
+                                <i class="bi bi-envelope-fill"></i>
+                                Contacto
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="inicio-sesion.html">
+                                <i class="bi bi-box-arrow-in-right"></i>
+                                Iniciar sesión
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="ubicacion.html">
+                                <i class="bi bi-geo-alt"></i>
+                                Ubicación
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
 
             </div>
 
-        </div>
-    </nav>
+        </nav>
+
     </header>
 
-    <main class="container my-5">
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container my-5 flex-grow-1">
 
         <div class="row justify-content-center">
+
             <div class="col-12 col-md-8 col-lg-6">
 
                 <div class="card shadow">
+
                     <div class="card-body p-4">
 
-                        <h2 class="text-center mb-4">Confirmar Pedido</h2>
+                        <h2 class="text-center mb-4">
+                            Confirmar Pedido
+                        </h2>
 
-                        <form id="formPedido" novalidate>
+                        <form id="formConfirmarPedido" novalidate>
 
                             <!-- Tipo de entrega -->
                             <div class="mb-4">
 
                                 <label class="form-label fw-bold">
-                                    Seleccione el tipo de entrega
+                                    Tipo de entrega
                                 </label>
 
                                 <div class="form-check mb-2">
@@ -148,8 +172,12 @@
                                         id="retiro"
                                         value="retiro">
 
-                                    <label class="form-check-label" for="retiro">
+                                    <label
+                                        class="form-check-label"
+                                        for="retiro">
+
                                         Retiro en tienda
+
                                     </label>
 
                                 </div>
@@ -163,22 +191,35 @@
                                         id="despacho"
                                         value="despacho">
 
-                                    <label class="form-check-label" for="despacho">
+                                    <label
+                                        class="form-check-label"
+                                        for="despacho">
+
                                         Despacho a domicilio
+
                                     </label>
 
                                 </div>
 
-                                <div id="errorEntrega" class="text-danger mt-2"></div>
+                                <div
+                                    id="errorTipoEntrega"
+                                    class="text-danger mt-2">
+                                </div>
 
                             </div>
 
 
                             <!-- Dirección -->
-                            <div class="mb-3 d-none" id="contenedorDireccion">
+                            <div
+                                id="contenedorDireccion"
+                                class="mb-4 d-none">
 
-                                <label for="direccion" class="form-label">
+                                <label
+                                    for="direccion"
+                                    class="form-label">
+
                                     Dirección de despacho
+
                                 </label>
 
                                 <input
@@ -186,9 +227,13 @@
                                     class="form-control"
                                     id="direccion"
                                     name="direccion"
-                                    placeholder="Ingrese la dirección de despacho">
+                                    maxlength="150"
+                                    placeholder="Ingrese su dirección">
 
-                                <div id="errorDireccion" class="text-danger mt-1"></div>
+                                <div
+                                    id="errorDireccion"
+                                    class="text-danger mt-1">
+                                </div>
 
                             </div>
 
@@ -198,15 +243,47 @@
 
                                 <div class="card-body">
 
-                                    <h5>Resumen del pedido</h5>
+                                    <h5 class="mb-3">
+                                        Resumen del pedido
+                                    </h5>
 
-                                    <p class="mb-1">
-                                        <strong>Productos:</strong> 3
-                                    </p>
+                                    <div class="d-flex justify-content-between mb-2">
 
-                                    <p class="mb-0">
-                                        <strong>Total:</strong> $75.990
-                                    </p>
+                                        <span>
+                                            Taladro inalámbrico
+                                        </span>
+
+                                        <span>
+                                            $59.990
+                                        </span>
+
+                                    </div>
+
+                                    <div class="d-flex justify-content-between mb-2">
+
+                                        <span>
+                                            Martillo
+                                        </span>
+
+                                        <span>
+                                            $12.990
+                                        </span>
+
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="d-flex justify-content-between fw-bold">
+
+                                        <span>
+                                            Total
+                                        </span>
+
+                                        <span>
+                                            $72.980
+                                        </span>
+
+                                    </div>
 
                                 </div>
 
@@ -216,13 +293,18 @@
                             <!-- Botón -->
                             <div class="d-grid">
 
-                                <button type="submit" class="btn btn-dark">
+                                <button
+                                    type="submit"
+                                    class="btn btn-dark">
+
                                     Confirmar pedido
+
                                 </button>
 
                             </div>
 
 
+                            <!-- Mensaje de éxito -->
                             <div
                                 id="mensajeExito"
                                 class="text-success text-center mt-3">
@@ -231,24 +313,38 @@
                         </form>
 
                     </div>
+
                 </div>
 
             </div>
+
         </div>
 
     </main>
 
-    <!-- Pie de página informativo -->
-     <footer class="footer-tienda">
+
+    <!-- FOOTER -->
+    <footer class="footer-tienda mt-5">
+
         <div class="container text-center">
-            <p class="mb-0">&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
+
+            <p class="mb-0">
+                &copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.
+            </p>
+
         </div>
+
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
 
+    <!-- Bootstrap -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous">
+    </script>
+
+    <!-- JavaScript Confirmar Pedido -->
     <script src="../js/confirmar-pedido.js"></script>
 
 </body>

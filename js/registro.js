@@ -148,24 +148,61 @@ contrasena.addEventListener("input", validarContrasena);
 
 formulario.addEventListener("submit", function(event) {
 
-    event.preventDefault();
+        event.preventDefault();
 
-    mensajeExito.textContent = "";
+        mensajeExito.textContent = "";
 
-    const rutValido = validarRut();
-    const nombreValido = validarNombre();
-    const apellidosValidos = validarApellidos();
-    const correoValido = validarCorreo();
-    const contrasenaValida = validarContrasena();
+        const rutValido = validarRut();
+        const nombreValido = validarNombre();
+        const apellidosValidos = validarApellidos();
+        const correoValido = validarCorreo();
+        const contrasenaValida = validarContrasena();
 
-    if (
-        rutValido &&
-        nombreValido &&
-        apellidosValidos &&
-        correoValido &&
-        contrasenaValida
-    ) {
-        mensajeExito.textContent = "Registro realizado correctamente.";
-    }
+        if (
+            rutValido &&
+            nombreValido &&
+            apellidosValidos &&
+            correoValido &&
+            contrasenaValida
+        ) {
+
+            const usuariosGuardados =
+                JSON.parse(localStorage.getItem("usuarios")) || [];
+
+            const correoIngresado = correo.value.trim().toLowerCase();
+
+            const usuarioExistente = usuariosGuardados.some(function(usuario) {
+
+                return usuario.correo &&
+                    usuario.correo.toLowerCase() === correoIngresado;
+
+            });
+
+            if (usuarioExistente) {
+                errorCorreo.textContent =
+                    "Ya existe un usuario registrado con este correo.";
+                return;
+            }
+
+            const nuevoUsuario = {
+                rut: rut.value.trim(),
+                nombre: nombre.value.trim(),
+                apellidos: apellidos.value.trim(),
+                correo: correoIngresado,
+                contrasena: contrasena.value.trim()
+            };
+
+            usuariosGuardados.push(nuevoUsuario);
+
+            localStorage.setItem(
+                "usuarios",
+                JSON.stringify(usuariosGuardados)
+            );
+
+            mensajeExito.textContent =
+                "Registro realizado correctamente.";
+
+            formulario.reset();
+        }
 
 });
