@@ -26,5 +26,36 @@ function cerrarSesion() {
 
     localStorage.removeItem("usuarioSesion");
 
-    window.location.href = "../index.html";
 }
+
+
+function actualizarMenuSesion() {
+
+    const opcionesPrivadas =
+        document.querySelectorAll(".opcion-privada");
+
+    if (haySesionIniciada()) {
+
+        opcionesPrivadas.forEach(function(opcion) {
+
+            opcion.style.display = "";
+
+        });
+
+    } else {
+
+        opcionesPrivadas.forEach(function(opcion) {
+
+            opcion.style.display = "none";
+
+        });
+
+    }
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    actualizarMenuSesion();
+
+});
