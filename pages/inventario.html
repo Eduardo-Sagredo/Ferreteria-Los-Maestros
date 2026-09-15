@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- Configuración para diseño responsive exigida en la rúbrica -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferretería Los Maestros - Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/tienda.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Cabecera y Menú de navegación -->
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+            <div class="container">
+                <a class="navbar-brand" href="../index.html">
+                    <img src="../img/logo.png" alt="Logo Ferretería Los Maestros" class="logo-img">
+                    <span class="texto-ferreteria">Ferretería</span>
+                    <span class="texto-maestros">Los Maestros</span>
+                </a>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="principal.html">
+                            <i class="bi bi-house-door-fill"></i>
+                            Inicio
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion-productos.html">
+                            <i class="bi bi-box-seam"></i>
+                            Productos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="inventario.html">
+                            <i class="bi bi-card-checklist"></i>
+                            Inventario
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion-pedidos.html">
+                            <i class="bi bi-receipt"></i>
+                            Pedidos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion-usuarios.html">
+                            <i class="bi bi-person"></i>
+                            Usuarios
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion-reportes.html">
+                            <i class="bi bi-file-bar-graph"></i>
+                            Reportes
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+    
+    </header>
+
+    <!-- Contenedor principal para el contenido de cada página -->
+    <main class="flex-grow-1">
+        
+
+        <section class="container mt-5">
+            <h1 class="mb" style="color: #1E293B;">Inventario</h1>
+            <h3 class="fs-6 mb-3">Gesitión de stock de productos</h3>
+    
+            <div class="row justify-content-center g-4">
+
+        <!-- Tarjeta 1: Alertas de Inventario -->
+                <div class="col-md-6 col-lg-5">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden" style="border: 1px solid #fecdd3 !important;">
+                
+                        <div class="card-header d-flex justify-content-between align-items-center py-3 border-bottom" style="background-color: #fff1f2;">
+                            <h3 class="h6 m-0 fw-medium" style="color: #f43f5e">
+                                Sin stock
+                            </h3>
+                        </div>
+
+                        <ul id="lista-alertas-sin-stock" class="list-group list-group-flush">
+                        </ul>
+                
+                    </div>
+                </div>
+
+        <!-- Tarjeta 2: Pedidos recientes -->
+                <div class="col-md-6 col-lg-5">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden" style="border: 1px solid #fef08a !important;">
+                
+                        <div class="card-header d-flex justify-content-between align-items-center py-3 border-bottom" style="background-color: #fefce8;">
+                            <h3 class="h6 m-0 fw-medium" style="color: #d97706;">
+                                Stock Bajo
+                            </h3>
+                        </div>
+
+                        <ul id="lista-alertas-stock-bajo" class="list-group list-group-flush">
+                        </ul>
+                
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section>
+            <div class="container my-5">
+
+            
+            <!-- Barra de Búsqueda y Filtros -->
+            <div class="row g-3 mb-4">
+    <!-- Buscador de texto -->
+                <div class="col-md-12 col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 rounded-start-3 text-secondary">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" id="buscador-productos" class="form-control border-start-0 rounded-end-3 shadow-none" placeholder="Buscar...">
+                    </div>
+                </div>
+
+
+    <!-- Filtro de Estados -->
+                <div class="col-md-6 col-lg-3">
+                    <select id="filtro-estado" class="form-select rounded-3 shadow-none text-secondary">
+                        <option value="todos" selected>Todos los estados</option>
+                        <option value="Disponible">Disponible</option>
+                        <option value="Stock bajo">Stock bajo</option>
+                        <option value="Sin stock">Sin stock</option>
+                    </select>
+                </div>
+
+            </div>
+            </div>
+
+        </section>
+
+        <section>
+            <div class="container">
+            <div class="table-responsive bg-white rounded-3 shadow-sm border" style="border-color: var(--color-header)!important;">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-secondary" style="font-size: 0.85rem; letter-spacing: 0.5px;">
+                        <tr>
+                            <th class="py-3 px-4 fw-medium border-bottom-0">CÓDIGO</th>
+                            <th class="py-3 fw-medium border-bottom-0">PRODUCTO</th>
+                            <th class="py-3 fw-medium border-bottom-0">STOCK ACTUAL</th>
+                            <th class="py-3 fw-medium border-bottom-0">STOCK MÍNIMO</th>
+                            <th class="py-3 text-center fw-medium border-bottom-0">ESTADO</th>
+                            <th class="py-3 text-center fw-medium border-bottom-0">ACCIÓN</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody id="tabla-inventario" class="border-top-0">
+                    </tbody>
+        
+                </table>
+            </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pie de página informativo -->
+    <footer class="footer-tienda mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Modal para Actualizar Stock -->
+    <div class="modal fade" id="modalActualizarStock" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow rounded-4">
+            
+            <!-- Cabecera -->
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title text-dark fw-medium">Actualizar stock</h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            
+            <!-- Cuerpo -->
+                <div class="modal-body pt-3">
+                <!-- Caja gris con info del producto -->
+                    <div class="bg-light rounded-3 p-3 mb-4" style="border: 1px solid #f8fafc;">
+                        <h4 id="modal-nombre-prod" class="h6 text-dark mb-0 fw-normal">Nombre Producto</h4>
+                        <p id="modal-codigo-producto" class="text-secondary font-monospace small mb-2">CÓDIGO</p>
+                        <p class="text-secondary small mb-0">Stock actual: <span id="modal-stock-actual" class="text-dark fw-medium">0</span></p>
+                        <p class="text-secondary small mb-0">Stock mínimo: <span id="modal-stock-minimo" class="text-dark fw-medium">0</span></p>
+                    </div>
+
+                <!-- Input Nuevo Stock -->
+                    <label for="input-nuevo-stock" class="form-label fw-medium text-dark">Nuevo stock</label>
+                    <input type="number" class="form-control shadow-none rounded-3" id="modal-input-stock" min="0">
+                
+                <!-- Campo oculto vital para saber qué producto estamos guardando -->
+                    <input type="hidden" id="modal-codigo-oculto">
+                </div>
+            
+            <!-- Footer con Botones -->
+                <div class="modal-footer border-top-0 pt-0">
+                    <div class="row w-100 g-2 m-0">
+                        <div class="col-6 p-0 pe-1">
+                            <button type="button" class="btn btn-outline-secondary w-100 rounded-3 fw-medium" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                        <div class="col-6 p-0 ps-1">
+                            <button type="button" class="btn w-100 rounded-3 fw-medium text-white shadow-sm" style="background-color: #d97706;" onclick="guardarStockModal()">Actualizar</button>
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/tienda.js"></script>
+    <script src="../js/database.js"></script>
+    <script src="../js/productos.js"></script>
+
+</body>
+</html>

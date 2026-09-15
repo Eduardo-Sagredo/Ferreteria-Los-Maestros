@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- Configuración para diseño responsive exigida en la rúbrica -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferretería Los Maestros - Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/tienda.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Cabecera y Menú de navegación -->
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+            <div class="container">
+                <a class="navbar-brand" href="../index.html">
+                    <img src="../img/logo.png" alt="Logo Ferretería Los Maestros" class="logo-img">
+                    <span class="texto-ferreteria">Ferretería</span>
+                    <span class="texto-maestros">Los Maestros</span>
+                </a>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="principal.html">
+                            <i class="bi bi-house-door-fill"></i>
+                            Inicio
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion-productos.html">
+                            <i class="bi bi-box-seam"></i>
+                            Productos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="inventario.html">
+                            <i class="bi bi-card-checklist"></i>
+                            Inventario
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion-pedidos.html">
+                            <i class="bi bi-receipt"></i>
+                            Pedidos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion-usuarios.html">
+                            <i class="bi bi-person"></i>
+                            Usuarios
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion-reportes.html">
+                            <i class="bi bi-file-bar-graph"></i>
+                            Reportes
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+    
+    </header>
+
+    <!-- Contenedor principal para el contenido de cada página -->
+    <main class="container my-5 cflex-grow-1">
+        <div class="mt-2 mx-2">
+            <h1>
+                Reportes
+            </h1>
+            <h3 class="fs-6">
+                Datos estadisticos
+            </h3>
+        </div>
+        <section class="container mt-5">
+    
+            <div class="row justify-content-center g-4">
+
+        <!-- Tarjeta 1: Clientes mas frecuentes -->
+                <div class="col-md-6 col-lg-5">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden" style="border: 1px solid #e2e8f0 !important;">
+                
+                        <div class="card-header d-flex justify-content-between align-items-center py-3 border-bottom" style="background-color: #fefce8;">
+                            <div>
+                                <h3 class="fs-6" style="color: var(--color-primary);">
+                                    Clientes más frecuentes
+                                </h3>
+                                <h3 class="fs-6" style="font-family: var(--fuente-para-textos-pequenos);">
+                                    Ranking por cantidad de compras
+                                </h3>
+                            </div>
+                        </div>
+
+                        <ul id="lista-top-clientes" class="list-group list-group-flush">
+                        </ul>
+                
+                    </div>
+                </div>
+
+        <!-- Tarjeta 2: Productos mas vendidos -->
+                <div class="col-md-6 col-lg-5">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden" style="border: 1px solid #e2e8f0 !important;">
+                
+                        <div class="card-header d-flex justify-content-between align-items-center py-3 border-bottom" style="background-color: #f8fafc;">
+                            <div>
+                                <h3 class="fs-6">
+                                    Productos más vendidos
+                                </h3>
+                                <h3 class="fs-6" style="font-family: var(--fuente-para-textos-pequenos);">
+                                    Ranking por unidades vendidas
+                                </h3>
+                            </div>
+                        </div>
+
+                        <ul id="lista-top-productos" class="list-group list-group-flush">
+                        </ul>
+                
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="mt-5">
+            <!-- Tarjeta de Resumen de Rendimiento -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4" style="border: 1px solid #e2e8f0 !important;">
+                <div class="card-header bg-white py-3 border-bottom-0 rounded-top-4">
+                    <h2 class="h6 m-0 fw-normal text-dark" style="font-size: 1.1rem;">Resumen de rendimiento</h2>
+                </div>
+    
+                <div class="card-body p-0">
+                    <div class="row g-0 border-top text-center" style="border-color: #e2e8f0 !important;">
+            
+            <!-- Total Ventas -->
+                        <div class="col-6 col-md-3 py-4 border-end" style="border-color: #e2e8f0 !important;">
+                            <div id="resumen-ventas" class="fs-2 mb-1" style="color: #d97706; font-weight: 400;">$0</div>
+                            <div class="text-secondary small">Total ventas (mes)</div>
+                        </div>
+            
+            <!-- Pedidos Completados -->
+                        <div class="col-6 col-md-3 py-4 border-end" style="border-color: #e2e8f0 !important;">
+                            <div id="resumen-pedidos" class="fs-2 mb-1" style="color: #d97706; font-weight: 400;">0</div>
+                            <div class="text-secondary small">Pedidos completados</div>
+                        </div>
+            
+            <!-- Ticket Promedio -->
+                        <div class="col-6 col-md-3 py-4 border-end" style="border-color: #e2e8f0 !important;">
+                            <div id="resumen-ticket" class="fs-2 mb-1" style="color: #d97706; font-weight: 400;">$0</div>
+                            <div class="text-secondary small">Ticket promedio</div>
+                        </div>
+            
+            <!-- Clientes Activos (Sin borde derecho porque es el último) -->
+                        <div class="col-6 col-md-3 py-4">
+                            <div id="resumen-clientes" class="fs-2 mb-1" style="color: #d97706; font-weight: 400;">0</div>
+                            <div class="text-secondary small">Clientes activos</div>
+                        </div>
+            
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pie de página informativo -->
+     <footer class="footer-tienda">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Vinculación del script principal vacío -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/tienda.js"></script>
+    <script src="../js/database.js"></script>
+    <script src="../js/dashboard.js"></script>
+
+</body>
+</html>

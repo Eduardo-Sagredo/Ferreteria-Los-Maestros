@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- Configuración para diseño responsive exigida en la rúbrica -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferretería Los Maestros - Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/tienda.css">
+</head>
+<body>
+    <!-- Cabecera y Menú de navegación -->
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+            <div class="container">
+                <a class="navbar-brand" href="../index.html">
+                    <img src="../img/logo.png" alt="Logo Ferretería Los Maestros" class="logo-img">
+                    <span class="texto-ferreteria">Ferretería</span>
+                    <span class="texto-maestros">Los Maestros</span>
+                </a>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="principal.html">
+                            <i class="bi bi-house-door-fill"></i>
+                            Inicio
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion-productos.html">
+                            <i class="bi bi-box-seam"></i>
+                            Productos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="inventario.html">
+                            <i class="bi bi-card-checklist"></i>
+                            Inventario
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion-pedidos.html">
+                            <i class="bi bi-receipt"></i>
+                            Pedidos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion-usuarios.html">
+                            <i class="bi bi-person"></i>
+                            Usuarios
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion-reportes.html">
+                            <i class="bi bi-file-bar-graph"></i>
+                            Reportes
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+    
+    </header>
+
+    <!-- Contenedor principal para el contenido de cada página -->
+    <main>
+        <section>
+            <!-- Contenedor del Formulario -->
+            <div class="card my-5 border-0 shadow-sm rounded-4 p-4 mx-auto" style="border: 1px solid #e2e8f0 !important; max-width: 800px;">
+
+                <h2 id="titulo-formulario" class="h4 mb-4 text-dark fw-bold">Agregar Producto</h2>
+    
+                <form id="form-producto">
+                    <div class="row g-4">
+            
+            <!-- Código -->
+                        <div class="col-md-6">
+                            <label for="input-codigo" class="form-label fw-medium text-dark">Código *</label>
+                            <input type="text" class="form-control shadow-none" id="input-codigo" placeholder="PROD-XXX" required>
+                        </div>
+            
+            <!-- Nombre -->
+                        <div class="col-md-6">
+                            <label for="input-nombre" class="form-label fw-medium text-dark">Nombre *</label>
+                            <input type="text" class="form-control shadow-none" id="input-nombre" required>
+                        </div>
+            
+            <!-- Categoría -->
+                        <div class="col-md-6">
+                            <label for="input-categoria" class="form-label fw-medium text-dark">Categoría *</label>
+                            <select class="form-select shadow-none" id="input-categoria" required>
+                                <option value="Construcción" selected>Construcción</option>
+                                <option value="Herramientas">Herramientas</option>
+                                <option value="Eléctricas">Eléctricas</option>
+                                <option value="Gásfitería">Gásfitería</option>
+                            </select>
+                        </div>
+            
+            <!-- Precio -->
+                        <div class="col-md-6">
+                            <label for="input-precio" class="form-label fw-medium text-dark">Precio *</label>
+                            <input type="number" class="form-control shadow-none" id="input-precio" value="0" min="0" required>
+                        </div>
+            
+            <!-- Stock -->
+                        <div class="col-md-6">
+                            <label for="input-stock" class="form-label fw-medium text-dark">Stock *</label>
+                            <input type="number" class="form-control shadow-none" id="input-stock" value="0" min="0" required>
+                        </div>
+            
+            <!-- Stock mínimo -->
+                        <div class="col-md-6">
+                            <label for="input-stock-minimo" class="form-label fw-medium text-dark">Stock mínimo *</label>
+                            <input type="number" class="form-control shadow-none" id="input-stock-minimo" value="0" min="0" required>
+                        </div>
+            
+            <!-- Descripción -->
+                        <div class="col-12">
+                            <label for="input-descripcion" class="form-label fw-medium text-dark">Descripción</label>
+                            <textarea class="form-control shadow-none" id="input-descripcion" rows="3"></textarea>
+                        </div>
+            
+            <!-- URL de imagen-->
+                        <div class="col-12">
+                            <label for="input-url-imagen" class="form-label fw-medium text-dark">URL de imagen</label>
+                            <input type="url" class="form-control shadow-none" id="input-url-imagen" placeholder="https://...">
+                        </div>
+            
+            <!-- Botones de acción -->
+                        <div class="col-12 mt-5">
+                            <div class="row g-3">
+                    <!-- Botón Cancelar -->
+                                <div class="col-6">
+                        <!-- El history.back() devuelve al usuario a la tabla de productos sin recargar -->
+                                <button type="button" class="btn btn-outline-secondary w-100 py-2 rounded-3 fw-medium" onclick="window.history.back()">
+                                    Cancelar
+                                </button>
+                            </div>
+                    
+                    <!-- Botón Guardar -->
+                            <div class="col-6">
+                        <!-- 'submit' activa las validaciones HTML (required) antes de enviar -->
+                                <button type="submit" class="btn w-100 py-2 rounded-3 fw-medium text-white shadow-sm" style="background-color: #d97706;">
+                                    Guardar producto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pie de página informativo -->
+     <footer class="footer-tienda">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Vinculación del script principal vacío -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/tienda.js"></script>
+    <script src="../js/database.js"></script>
+    <script src="../js/form-producto.js"></script> 
+
+</body>
+</html>
