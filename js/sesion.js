@@ -25,6 +25,16 @@ function haySesionIniciada() {
 function cerrarSesion() {
 
     localStorage.removeItem("usuarioSesion");
+
+    if (window.location.pathname.includes("/pages/")) {
+
+        window.location.href = "../index.html";
+
+    } else {
+
+        window.location.href = "index.html";
+
+    }
 }
 
 
@@ -33,20 +43,39 @@ function actualizarMenuSesion() {
     const opcionesPrivadas =
         document.querySelectorAll(".opcion-privada");
 
+    const opcionesConSesion =
+        document.querySelectorAll(".opcion-con-sesion");
+
+    const opcionesSinSesion =
+        document.querySelectorAll(".opcion-sin-sesion");
+
+
     if (haySesionIniciada()) {
 
-        opcionesPrivadas.forEach(function(opcion) {
-
+        opcionesPrivadas.forEach(function (opcion) {
             opcion.style.display = "";
+        });
 
+        opcionesConSesion.forEach(function (opcion) {
+            opcion.style.display = "";
+        });
+
+        opcionesSinSesion.forEach(function (opcion) {
+            opcion.style.display = "none";
         });
 
     } else {
 
-        opcionesPrivadas.forEach(function(opcion) {
-
+        opcionesPrivadas.forEach(function (opcion) {
             opcion.style.display = "none";
+        });
 
+        opcionesConSesion.forEach(function (opcion) {
+            opcion.style.display = "none";
+        });
+
+        opcionesSinSesion.forEach(function (opcion) {
+            opcion.style.display = "";
         });
 
     }
@@ -61,7 +90,8 @@ function protegerPaginaPrivada() {
     const paginasPrivadas = [
         "mis-pedidos.html",
         "historial.html",
-        "cuenta-corriente.html"
+        "cuenta-corriente.html",
+        "confirmar-pedido.html"
     ];
 
     if (paginasPrivadas.includes(paginaActual) &&
@@ -72,10 +102,25 @@ function protegerPaginaPrivada() {
 }
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
     protegerPaginaPrivada();
 
     actualizarMenuSesion();
+
+    const botonCerrarSesion =
+        document.getElementById("btnCerrarSesion");
+
+    if (botonCerrarSesion !== null) {
+
+        botonCerrarSesion.addEventListener("click", function (event) {
+
+            event.preventDefault();
+
+            cerrarSesion();
+
+        });
+
+    }
 
 });

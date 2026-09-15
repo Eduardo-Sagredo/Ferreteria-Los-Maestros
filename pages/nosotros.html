@@ -1,105 +1,205 @@
 <!doctype html>
-<html lang="en">
-  <head>
+<html lang="es">
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Sobre Nosotros</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/styles-nosotros.css">
     <link rel="stylesheet" href="../css/tienda.css">
-  </head>
-  <body>
-        <header>
+</head>
+
+<body>
+
+    <header>
+
         <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+
             <div class="container">
+
                 <a class="navbar-brand" href="../index.html">
+
                     <img src="../img/logo.png" alt="Logo Ferretería Los Maestros" class="logo-img">
-                    <span class="texto-ferreteria">Ferretería</span>
-                    <span class="texto-maestros">Los Maestros</span>
+
+                    <span class="texto-ferreteria">
+                        Ferretería
+                    </span>
+
+                    <span class="texto-maestros">
+                        Los Maestros
+                    </span>
+
                 </a>
 
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.html">
-                            <i class="bi bi-house-door-fill"></i>
-                        Inicio
-                        </a>
-                    </li>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPrincipal"
+                    aria-controls="navbarPrincipal" aria-expanded="false" aria-label="Mostrar menú">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="productos.html">
-                            <i class="bi bi-box-seam"></i>
-                            Productos
-                        </a>
-                    </li>
+                    <span class="navbar-toggler-icon"></span>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="bi bi-people"></i>
-                            Sobre nosotros
-                        </a>
-                    </li>
+                </button>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="mis-pedidos.html">
-                            <i class="bi bi-receipt"></i>
-                            Mis pedidos
-                        </a>
-                    </li>
+                <div class="collapse navbar-collapse" id="navbarPrincipal">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="historial.html">
-                            <i class="bi bi-clock-history"></i>
-                            Historial
-                        </a>
-                    </li>
+                    <ul class="navbar-nav ms-auto">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="cuenta-corriente.html">
-                            <i class="bi bi-wallet2"></i>
-                            Cuenta corriente
-                        </a>
-                    </li>
+                        <li class="nav-item">
 
-                    <li class="nav-item">
+                            <a class="nav-link" href="../index.html">
+
+                                <i class="bi bi-house-door-fill"></i>
+
+                                Inicio
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="productos.html">
+
+                                <i class="bi bi-box-seam"></i>
+
+                                Productos
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="nosotros.html">
+
+                                <i class="bi bi-people"></i>
+
+                                Sobre nosotros
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item opcion-privada">
+
+                            <a class="nav-link" href="mis-pedidos.html">
+
+                                <i class="bi bi-receipt"></i>
+
+                                Mis pedidos
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item opcion-privada">
+
+                            <a class="nav-link" href="historial.html">
+
+                                <i class="bi bi-clock-history"></i>
+
+                                Historial
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item opcion-privada">
+
+                            <a class="nav-link" href="cuenta-corriente.html">
+
+                                <i class="bi bi-wallet2"></i>
+
+                                Cuenta corriente
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+
                             <a class="nav-link" href="contacto.html">
+
                                 <i class="bi bi-envelope-fill"></i>
-                                    Contacto
-                            </a>
-                    </li>
 
-                    <li class="nav-item">
+                                Contacto
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item opcion-sin-sesion">
+
                             <a class="nav-link" href="inicio-sesion.html">
-                                <i class="bi bi-box-arrow-in-right"></i>
-                                Iniciar sesión
-                            </a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="ubicacion.html">
-                            <i class="bi bi-geo-alt"></i>
-                            Ubicación
-                        </a>
-                    </li>
-                </ul>
+                                <i class="bi bi-box-arrow-in-right"></i>
+
+                                Iniciar sesión
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item opcion-con-sesion">
+
+                            <a class="nav-link" href="#" id="btnCerrarSesion">
+
+                                <i class="bi bi-box-arrow-right"></i>
+
+                                Cerrar sesión
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="ubicacion.html">
+
+                                <i class="bi bi-geo-alt"></i>
+
+                                Ubicación
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
             </div>
+
         </nav>
+
     </header>
 
+
     <section class="hero-nosotros">
+
         <div class="container text-white">
+
             <span class="text-warning fw-bold text-uppercase" style="letter-spacing: 2px; font-size: 0.85rem;">
+
                 Ferretería Los Maestros • La Serena
+
             </span>
+
             <h1 class="display-4 fw-bold mt-2">
                 Nuestra Historia
             </h1>
-            <p class="fs-5 mt-3 col-md-8">
-                Más de dos décadas construyendo confianza y entregando soluciones para tus proyectos.
-            </p>
 
+            <p class="fs-5 mt-3 col-md-8">
+
+                Más de dos décadas construyendo confianza y entregando soluciones para tus proyectos.
+
+            </p>
 
         </div>
 
@@ -107,90 +207,168 @@
 
 
     <section class="nosotros-contenido container my-5">
+
         <div class="row align-items-center">
 
             <div class="col-md-7 pe-md-5">
-        
-                <div class="py-1 px-3 rounded-pill d-inline-block mb-2" style="background-color: rgba(245, 158, 11, 0.25);">
-                    <h2 class="m-0 fs-6 fw-bold" style="font-family: var(--fuente-para-textos-pequenos); color: #b45309; letter-spacing: 2px;">
-                    NUESTRA HISTORIA
+
+                <div class="py-1 px-3 rounded-pill d-inline-block mb-2"
+                    style="background-color: rgba(245, 158, 11, 0.25);">
+
+                    <h2 class="m-0 fs-6 fw-bold"
+                        style="font-family: var(--fuente-para-textos-pequenos); color: #b45309; letter-spacing: 2px;">
+
+                        NUESTRA HISTORIA
+
                     </h2>
-                </div>
-        
-                <h3 class="text-start mb-3">¿Quiénes somos?</h3>
-            
-                <div style="text-align: justify;">
-                    <p>Fundada hace 22 años en la hermosa ciudad de La Serena, Región de Coquimbo, <strong>Ferretería Los Maestros</strong> nació como un pequeño emprendimiento familiar con una misión clara: convertirse en el aliado principal de los trabajadores de la construcción y las familias de nuestra región.</p>
-                    <p>Hoy en día, somos un negocio consolidado, atendido directamente por sus dueños y nuestro equipo de planta, quienes se esfuerzan diariamente por entregar una atención cercana, experta y personalizada.</p>
+
                 </div>
 
-            
-                <div class="py-1 px-3 rounded-pill d-inline-block mt-4 mb-2" style="background-color: var(--color-header)">
-                    <h2 class="m-0 fs-6 fw-bold" style="font-family: var(--fuente-para-textos-pequenos); color: var(--color-accent); letter-spacing: 2px;">
-                    LO QUE NOS MUEVE
-                    </h2>
-                </div>
-            
-                <h3 class="text-start mb-3">Nuestro Compromiso</h3>
-            
+                <h3 class="text-start mb-3">
+                    ¿Quiénes somos?
+                </h3>
+
                 <div style="text-align: justify;">
-                    <p>Entendemos que el tiempo es fundamental en cualquier obra. Por eso, nos especializamos en ofrecer un catálogo robusto de más de 800 referencias, que incluye materiales de construcción, herramientas eléctricas y manuales, insumos de gasfitería, electricidad y artículos de ferretería general.</p>
-                    <p>Ya seas un maestro contratista que busca abastecerse en volumen, o un cliente particular mejorando su hogar, en Ferretería Los Maestros encontrarás la asesoría y los productos que necesitas para que tu proyecto sea un éxito.</p>
+
+                    <p>
+                        Fundada hace 22 años en la hermosa ciudad de La Serena,
+                        Región de Coquimbo,
+                        <strong>Ferretería Los Maestros</strong>
+                        nació como un pequeño emprendimiento familiar con una misión clara:
+                        convertirse en el aliado principal de los trabajadores de la construcción
+                        y las familias de nuestra región.
+                    </p>
+
+                    <p>
+                        Hoy en día, somos un negocio consolidado, atendido directamente por sus
+                        dueños y nuestro equipo de planta, quienes se esfuerzan diariamente por
+                        entregar una atención cercana, experta y personalizada.
+                    </p>
+
+                </div>
+
+                <div class="py-1 px-3 rounded-pill d-inline-block mt-4 mb-2"
+                    style="background-color: var(--color-header)">
+
+                    <h2 class="m-0 fs-6 fw-bold"
+                        style="font-family: var(--fuente-para-textos-pequenos); color: var(--color-accent); letter-spacing: 2px;">
+
+                        LO QUE NOS MUEVE
+
+                    </h2>
+
+                </div>
+
+                <h3 class="text-start mb-3">
+                    Nuestro Compromiso
+                </h3>
+
+                <div style="text-align: justify;">
+
+                    <p>
+                        Entendemos que el tiempo es fundamental en cualquier obra.
+                        Por eso, nos especializamos en ofrecer un catálogo robusto de más de
+                        800 referencias, que incluye materiales de construcción, herramientas
+                        eléctricas y manuales, insumos de gasfitería, electricidad y artículos
+                        de ferretería general.
+                    </p>
+
+                    <p>
+                        Ya seas un maestro contratista que busca abastecerse en volumen,
+                        o un cliente particular mejorando su hogar, en Ferretería Los Maestros
+                        encontrarás la asesoría y los productos que necesitas para que tu
+                        proyecto sea un éxito.
+                    </p>
+
                 </div>
 
             </div>
 
-        
             <div class="col-md-5 mt-5 mt-md-0">
-                <img src="../img/imagen-nosotros.jpg" alt="Interior de Ferretería Los Maestros" class="img-fluid rounded shadow">
+
+                <img src="../img/imagen-nosotros.jpg" alt="Interior de Ferretería Los Maestros"
+                    class="img-fluid rounded shadow">
+
             </div>
 
         </div>
+
     </section>
+
 
     <section class="my-5">
+
         <aside class="container">
-        
+
             <div class="row justify-content-center text-center">
-            
+
                 <div class="col-md-8">
-                
-                    <div class="py-1 px-3 rounded-pill d-inline-block mb-3" style="background-color: rgba(245, 158, 11, 0.25);">
-                        <h2 class="m-0 fs-6 fw-bold" style="font-family: var(--fuente-para-textos-pequenos); color: #b45309; letter-spacing: 2px;">
+
+                    <div class="py-1 px-3 rounded-pill d-inline-block mb-3"
+                        style="background-color: rgba(245, 158, 11, 0.25);">
+
+                        <h2 class="m-0 fs-6 fw-bold"
+                            style="font-family: var(--fuente-para-textos-pequenos); color: #b45309; letter-spacing: 2px;">
+
                             EN ACCIÓN
+
                         </h2>
+
                     </div>
-                
-                    <h3 class="mb-3">Conoce más sobre nuestras herramientas</h3>
-                
+
+                    <h3 class="mb-3">
+                        Conoce más sobre nuestras herramientas
+                    </h3>
+
                     <p class="mb-4" style="text-align: justify;">
-                    Descubre en este video la calidad y resistencia de las herramientas eléctricas que ofrecemos en nuestro catálogo para facilitar tu trabajo diario.
+
+                        Descubre en este video la calidad y resistencia de las herramientas
+                        eléctricas que ofrecemos en nuestro catálogo para facilitar tu trabajo diario.
+
                     </p>
-                
+
                     <div class="d-flex justify-content-center">
-                        <iframe width="560" 
-                                height="315" 
-                                src="https://www.youtube.com/embed/HzPoQA5R8OI?si=QPiQWO3EoiXdz6d0" 
-                                title="YouTube video player" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                referrerpolicy="strict-origin-when-cross-origin" 
-                                allowfullscreen>
+
+                        <iframe width="560" height="315"
+                            src="https://www.youtube.com/embed/HzPoQA5R8OI?si=QPiQWO3EoiXdz6d0"
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
                         </iframe>
+
                     </div>
+
                 </div>
+
             </div>
+
         </aside>
+
     </section>
 
-     <footer class="footer-tienda">
-        <div class="container text-center">
-            <p class="mb-0">&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
-        </div>
-    </footer>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-  </body>
 
-  
+    <footer class="footer-tienda">
+
+        <div class="container text-center">
+
+            <p class="mb-0">
+
+                &copy; 2026 Ferretería Los Maestros.
+                Todos los derechos reservados.
+
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
+        </script>
+
+    <script src="../js/sesion.js"></script>
+
+</body>
+
 </html>
