@@ -1,0 +1,25 @@
+/*Variables de diseño (Color, tipografia, etc)*/
+
+:root{
+/*colores*/
+--color-primary: #B45309; /* Color principal para marca y botones de acción */
+--color-primary-dark: #92400E; /* Estados hover o presionado de botones principales */
+--color-accent: #F59E0B; /* Elementos destacados (etiquetas, alertas, insignias) */
+--color-surface: #F8FAFC; /* Fondos de página, paneles y tarjetas de producto */
+--color-header: #1E293B; /* Texto oscuro principal o fondo de barra superior */
+--color-header-dark: #0F172A; /* Texto secundario muy oscuro o fondos de pie de página */
+--color-border: #E2E8F0; /* Contornos de formularios, tarjetas y líneas divisorias */
+
+
+
+/*tipografia*/
+--fuente-principal: 'Inter', system-ui, sans-serif;
+--fuente-para-titulos: 'Work Sans', system-ui, sans-serif;
+--fuente-para-textos-pequenos: 'JetBrains Mono', monospace;
+}
+
+body {
+    background-color: var(--color-surface);
+    color: var(--color-header);
+    font-family: var(--fuente-principal);
+}
