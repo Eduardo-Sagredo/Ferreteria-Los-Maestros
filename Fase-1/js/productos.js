@@ -133,3 +133,13 @@ window.guardarNuevoStock = window.guardarStockModal = function() {
         location.reload(); 
     }
 };
+
+// Si administrador y vendedor están abiertos en pestañas distintas,
+// los cambios en productos se reflejan automáticamente sin recargar manualmente.
+window.addEventListener('storage', function (event) {
+    if (event.key !== 'db_productos') return;
+    const datos = MockDB.getTabla('productos');
+    if (document.getElementById('tabla-productos')) renderTablaProductos(datos);
+    if (document.getElementById('tabla-inventario')) renderTablaInventario(datos);
+    renderAlertasInventario(datos);
+});

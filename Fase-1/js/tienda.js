@@ -1,261 +1,53 @@
 console.log("JavaScript de la tienda funcionando");
 
 
-// Lista de productos
+// Lista de productos: UNA SOLA FUENTE DE DATOS.
+// Administrador, vendedor y tienda pública leen la misma tabla de MockDB.
+let productos = MockDB.getTabla('productos').map(function (producto) {
+    return {
+        ...producto,
+        stock: Number(producto.stockActual || 0),
+        imagen: resolverImagenProducto(producto.imagen),
+        descripcion: producto.descripcion || ''
+    };
+});
 
-const productos = [
-
-    {
-        id: 1,
-        nombre: "Taladro inalámbrico Bauker 20V",
-        categoria: "herramientas",
-        precio: 59990,
-        stock: 8,
-        imagen: "../img/taladro.jpg",
-        descripcion: "Taladro inalámbrico para perforar y atornillar en trabajos domésticos y de obra."
-    },
-
-    {
-        id: 2,
-        nombre: "Martillo Bauker 16 oz",
-        categoria: "herramientas",
-        precio: 12990,
-        stock: 12,
-        imagen: "../img/martillo.png",
-        descripcion: "Martillo de uña resistente, ideal para trabajos de carpintería y construcción."
-    },
-
-    {
-        id: 3,
-        nombre: "Esmeril angular Bosch",
-        categoria: "herramientas",
-        precio: 49990,
-        stock: 7,
-        imagen: "../img/esmeril-bosch.png",
-        descripcion: "Esmeril angular para corte y desbaste de diferentes materiales."
-    },
-
-    {
-        id: 4,
-        nombre: "Sierra circular Makita",
-        categoria: "herramientas",
-        precio: 89990,
-        stock: 5,
-        imagen: "../img/sierra-makita.png",
-        descripcion: "Sierra circular para realizar cortes rectos en madera y tableros."
-    },
-
-    {
-        id: 5,
-        nombre: "Juego de destornilladores Stanley",
-        categoria: "herramientas",
-        precio: 19990,
-        stock: 18,
-        imagen: "../img/destornilladores-stanley.png",
-        descripcion: "Set de destornilladores para reparaciones y trabajos de montaje."
-    },
-
-    {
-        id: 6,
-        nombre: "Cemento Melón 25 kg",
-        categoria: "construccion",
-        precio: 8990,
-        stock: 20,
-        imagen: "../img/cemento.png",
-        descripcion: "Cemento multiuso para trabajos de hormigón, albañilería y terminaciones."
-    },
-
-    {
-        id: 7,
-        nombre: "Cemento Polpaico 25 kg",
-        categoria: "construccion",
-        precio: 8490,
-        stock: 25,
-        imagen: "../img/cemento-polpaico.png",
-        descripcion: "Cemento para obras generales, reparaciones y trabajos de albañilería."
-    },
-
-    {
-        id: 8,
-        nombre: "Yeso Volcán 25 kg",
-        categoria: "construccion",
-        precio: 9990,
-        stock: 14,
-        imagen: "../img/yeso-volcan.png",
-        descripcion: "Yeso para terminaciones interiores, reparaciones y nivelación de superficies."
-    },
-
-    {
-        id: 9,
-        nombre: "Plancha yeso cartón Volcán",
-        categoria: "construccion",
-        precio: 10990,
-        stock: 30,
-        imagen: "../img/plancha-volcan.png",
-        descripcion: "Plancha de yeso cartón para tabiques, cielos y revestimientos interiores."
-    },
-
-    {
-        id: 10,
-        nombre: "Mortero Presec 25 kg",
-        categoria: "construccion",
-        precio: 7990,
-        stock: 16,
-        imagen: "../img/mortero-presec.png",
-        descripcion: "Mortero multiuso para pegar, reparar y nivelar en trabajos de construcción."
-    },
-
-    {
-        id: 11,
-        nombre: "Interruptor automático Schneider 16A",
-        categoria: "electricidad",
-        precio: 8990,
-        stock: 15,
-        imagen: "../img/automatico-schneider.png",
-        descripcion: "Interruptor automático para protección de circuitos eléctricos domiciliarios."
-    },
-
-    {
-        id: 12,
-        nombre: "Enchufe doble Legrand",
-        categoria: "electricidad",
-        precio: 5490,
-        stock: 25,
-        imagen: "../img/enchufe-legrand.png",
-        descripcion: "Enchufe doble para instalaciones eléctricas interiores."
-    },
-
-    {
-        id: 13,
-        nombre: "Cable eléctrico Nexans 2.5 mm",
-        categoria: "electricidad",
-        precio: 18990,
-        stock: 10,
-        imagen: "../img/cable-nexans.png",
-        descripcion: "Cable eléctrico de 2,5 mm para instalaciones y circuitos domiciliarios."
-    },
-
-    {
-        id: 14,
-        nombre: "Ampolleta LED Philips 12W",
-        categoria: "electricidad",
-        precio: 3990,
-        stock: 30,
-        imagen: "../img/ampolleta-philips.png",
-        descripcion: "Ampolleta LED de bajo consumo para iluminación interior."
-    },
-
-    {
-        id: 15,
-        nombre: "Tubo conduit Tigre 20 mm",
-        categoria: "electricidad",
-        precio: 2990,
-        stock: 40,
-        imagen: "../img/tubo-tigre.png",
-        descripcion: "Tubo conduit para proteger y ordenar cableado eléctrico."
-    },
-
-    {
-        id: 16,
-        nombre: "Pintura Ceresita Esmalte al Agua",
-        categoria: "pinturas",
-        precio: 24990,
-        stock: 6,
-        imagen: "../img/pintura.png",
-        descripcion: "Esmalte al agua multisuperficie para uso interior y exterior."
-    },
-
-    {
-        id: 17,
-        nombre: "Látex interior Sipa",
-        categoria: "pinturas",
-        precio: 19990,
-        stock: 9,
-        imagen: "../img/pintura-sipa.png",
-        descripcion: "Pintura látex para muros y cielos interiores de alta cobertura."
-    },
-
-    {
-        id: 18,
-        nombre: "Esmalte sintético Tricolor",
-        categoria: "pinturas",
-        precio: 16990,
-        stock: 11,
-        imagen: "../img/pintura-tricolor.png",
-        descripcion: "Esmalte sintético para proteger y decorar distintas superficies."
-    },
-
-    {
-        id: 19,
-        nombre: "Anticorrosivo Chilcorrofin",
-        categoria: "pinturas",
-        precio: 22990,
-        stock: 7,
-        imagen: "../img/chilcorrofin.png",
-        descripcion: "Pintura anticorrosiva para protección de superficies metálicas."
-    },
-
-    {
-        id: 20,
-        nombre: "Látex interior Sherwin-Williams",
-        categoria: "pinturas",
-        precio: 27990,
-        stock: 0,
-        imagen: "../img/sherwin-williams.png",
-        descripcion: "Pintura látex interior de terminación mate para muros y cielos."
+function resolverImagenProducto(imagen) {
+    if (!imagen) {
+        return window.location.pathname.includes('/pages/') ? '../img/logo.png' : 'img/logo.png';
     }
 
-];
+    if (/^(https?:|data:|blob:)/i.test(imagen)) {
+        return imagen;
+    }
 
+    if (imagen.startsWith('../') || imagen.startsWith('img/')) {
+        // Normaliza rutas guardadas antiguamente.
+        const nombre = imagen.split('/').pop();
+        return window.location.pathname.includes('/pages/') ? '../img/' + nombre : 'img/' + nombre;
+    }
 
-// Guardar stock
-
-function guardarStock() {
-
-    const stockActual = {};
-
-    productos.forEach(function (producto) {
-
-        stockActual[producto.id] = producto.stock;
-
-    });
-
-
-    localStorage.setItem(
-        "stockFerreteria",
-        JSON.stringify(stockActual)
-    );
-
+    return window.location.pathname.includes('/pages/') ? '../img/' + imagen : 'img/' + imagen;
 }
 
+// Guarda los cambios de stock directamente en db_productos.
+function guardarStock() {
+    const productosDB = MockDB.getTabla('productos');
 
-// Cargar stock guardado
+    productos.forEach(function (productoVista) {
+        const productoDB = productosDB.find(function (p) {
+            return p.id === productoVista.id;
+        });
 
-const stockGuardado =
-    localStorage.getItem("stockFerreteria");
-
-
-if (stockGuardado) {
-
-    const stockProductos =
-        JSON.parse(stockGuardado);
-
-
-    productos.forEach(function (producto) {
-
-        if (stockProductos[producto.id] !== undefined) {
-
-            producto.stock =
-                stockProductos[producto.id];
-
+        if (productoDB) {
+            productoDB.stockActual = productoVista.stock;
+            productoDB.estado = productoDB.stockActual <= 0
+                ? 'Sin stock'
+                : (productoDB.stockActual <= productoDB.stockMinimo ? 'Stock bajo' : 'Disponible');
         }
-
     });
 
-} else {
-
-    guardarStock();
-
+    MockDB.setTabla('productos', productosDB);
 }
 
 
@@ -264,13 +56,13 @@ if (stockGuardado) {
 let carrito = [];
 
 const carritoGuardado =
-    localStorage.getItem("carritoFerreteria");
+    MockDB.getDato("carritoFerreteria", null);
 
 
 if (carritoGuardado) {
 
     carrito =
-        JSON.parse(carritoGuardado);
+        carritoGuardado;
 
 }
 
@@ -302,9 +94,9 @@ function buscarProductoPorId(id) {
 
 function guardarCarrito() {
 
-    localStorage.setItem(
+    MockDB.setDato(
         "carritoFerreteria",
-        JSON.stringify(carrito)
+        carrito
     );
 
     actualizarContadorCarrito();
@@ -482,6 +274,38 @@ function agregarAlCarrito(idProducto, cantidad) {
 
 }
 
+
+// Productos destacados de la página de inicio.
+// Se generan desde MockDB para que editar/eliminar desde administrador se refleje aquí.
+const contenedorDestacados = document.getElementById('productosDestacados');
+
+function mostrarProductosDestacados() {
+    if (!contenedorDestacados) return;
+
+    const destacados = productos.slice(0, 4);
+
+    if (destacados.length === 0) {
+        contenedorDestacados.innerHTML = '<div class="col-12 text-center"><p>No hay productos disponibles.</p></div>';
+        return;
+    }
+
+    contenedorDestacados.innerHTML = destacados.map(function (producto) {
+        return `
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card h-100">
+                    <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
+                    <div class="card-body d-flex flex-column">
+                        <h3 class="card-title">${producto.nombre}</h3>
+                        <p class="card-text">${producto.descripcion || 'Producto disponible en Ferretería Los Maestros.'}</p>
+                        <p class="fw-bold">$${producto.precio.toLocaleString('es-CL')}</p>
+                        <a href="pages/detalle-producto.html?id=${producto.id}" class="btn btn-warning mt-auto">Ver producto</a>
+                    </div>
+                </div>
+            </div>`;
+    }).join('');
+}
+
+mostrarProductosDestacados();
 
 // Catalogo
 

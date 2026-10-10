@@ -1,12 +1,6 @@
 function obtenerUsuarioSesion() {
 
-    const usuario = localStorage.getItem("usuarioSesion");
-
-    if (usuario === null) {
-        return null;
-    }
-
-    return JSON.parse(usuario);
+    return MockDB.getDato("usuarioSesion", null);
 }
 
 
@@ -24,7 +18,8 @@ function haySesionIniciada() {
 
 function cerrarSesion() {
 
-    localStorage.removeItem("usuarioSesion");
+    MockDB.eliminarDato("usuarioSesion");
+    MockDB.eliminarDato("usuarioActivo");
 
     if (window.location.pathname.includes("/pages/")) {
 
