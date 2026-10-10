@@ -1,0 +1,40 @@
+.hero-section {
+  min-height: 550px;
+  display: flex;
+  align-items: center;
+  padding: 80px 0;
+  color: white;
+
+  background-image:
+    linear-gradient(
+      rgba(0, 27, 53, 0.65),
+      rgba(0, 27, 53, 0.65)
+    ),
+    url("/img/fondoherr.png");
+
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-section h1 {
+  font-size: 48px;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.hero-section p {
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+@media (max-width: 576px) {
+  .hero-section {
+    min-height: 450px;
+    padding: 50px 20px;
+  }
+
+  .hero-section h1 {
+    font-size: 32px;
+  }
+}
