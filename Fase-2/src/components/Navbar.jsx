@@ -1,11 +1,14 @@
+import { Link } from 'react-router-dom'
+
 function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
 
-        <a
+        {/* Logo y nombre */}
+        <Link
           className="navbar-brand d-flex align-items-center gap-2 fw-bold"
-          href="/"
+          to="/"
         >
           <img
             src="/img/logo.png"
@@ -14,8 +17,9 @@ function Navbar() {
           />
 
           <span>Ferretería Los Maestros</span>
-        </a>
+        </Link>
 
+        {/* Botón menú celular */}
         <button
           className="navbar-toggler"
           type="button"
@@ -28,6 +32,7 @@ function Navbar() {
           <span className="navbar-toggler-icon"></span>
         </button>
 
+        {/* Menú */}
         <div
           className="collapse navbar-collapse"
           id="navbarPrincipal"
@@ -35,39 +40,45 @@ function Navbar() {
           <ul className="navbar-nav ms-auto">
 
             <li className="nav-item">
-              <a className="nav-link" href="/">
-                <i className="bi bi-house-door-fill"></i> Inicio
-              </a>
+              <Link className="nav-link" to="/">
+                <i className="bi bi-house-door-fill"></i>
+                {' '}Inicio
+              </Link>
             </li>
 
             <li className="nav-item">
-              <a className="nav-link" href="/productos">
-                <i className="bi bi-box-seam"></i> Productos
-              </a>
+              <Link className="nav-link" to="/productos">
+                <i className="bi bi-box-seam"></i>
+                {' '}Productos
+              </Link>
             </li>
 
             <li className="nav-item">
               <a className="nav-link" href="/sobre-nosotros">
-                <i className="bi bi-people-fill"></i> Sobre nosotros
+                <i className="bi bi-people-fill"></i>
+                {' '}Sobre nosotros
               </a>
             </li>
 
             <li className="nav-item">
               <a className="nav-link" href="/contacto">
-                <i className="bi bi-envelope-fill"></i> Contacto
+                <i className="bi bi-envelope-fill"></i>
+                {' '}Contacto
               </a>
             </li>
 
             <li className="nav-item">
               <a className="nav-link" href="/ubicacion">
-                <i className="bi bi-geo-alt-fill"></i> Ubicación
+                <i className="bi bi-geo-alt-fill"></i>
+                {' '}Ubicación
               </a>
             </li>
 
             <li className="nav-item">
-              <a className="nav-link" href="/carrito">
-                <i className="bi bi-cart-fill"></i> Carrito
-              </a>
+              <Link className="nav-link" to="/carrito">
+                <i className="bi bi-cart-fill"></i>
+                {' '}Carrito
+              </Link>
             </li>
 
           </ul>
