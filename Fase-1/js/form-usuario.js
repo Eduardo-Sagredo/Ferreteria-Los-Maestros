@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // 2. Validación de identidad al editar
             if (idEdit && usuarioOriginal) {
                 // Si es un usuario semilla antiguo sin password, asumimos '123456'
-                const passOriginal = usuarioOriginal.password || '123456'; 
+                const passOriginal = usuarioOriginal.contrasena || usuarioOriginal.password || '123456'; 
                 if (pass1Value !== passOriginal) {
                     alert('Edición denegada: La contraseña ingresada no coincide con la original de esta cuenta.');
                     return;
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 nombre: inputNombre ? inputNombre.value : '',
                 correo: inputCorreo ? inputCorreo.value : '',
                 rol: inputRol ? inputRol.value : 'Cliente',
-                password: pass1Value, // Guardamos la contraseña validada
+                contrasena: pass1Value, // Guardamos la contraseña con el mismo nombre usado por el login
                 estado: idEdit && usuarioOriginal ? usuarioOriginal.estado : 'Activo' // Mantiene su estado original
             };
 
