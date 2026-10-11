@@ -3,8 +3,17 @@ function Navbar() {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
 
-        <a className="navbar-brand" href="/">
-          Ferretería Los Maestros
+        <a
+          className="navbar-brand d-flex align-items-center gap-2 fw-bold"
+          href="/"
+        >
+          <img
+            src="/img/logo.png"
+            alt="Logo Ferretería Los Maestros"
+            className="logo-navbar"
+          />
+
+          <span>Ferretería Los Maestros</span>
         </a>
 
         <button
@@ -34,6 +43,24 @@ function Navbar() {
             <li className="nav-item">
               <a className="nav-link" href="/productos">
                 <i className="bi bi-box-seam"></i> Productos
+              </a>
+            </li>
+
+            <li className="nav-item">
+              <a className="nav-link" href="/sobre-nosotros">
+                <i className="bi bi-people-fill"></i> Sobre nosotros
+              </a>
+            </li>
+
+            <li className="nav-item">
+              <a className="nav-link" href="/contacto">
+                <i className="bi bi-envelope-fill"></i> Contacto
+              </a>
+            </li>
+
+            <li className="nav-item">
+              <a className="nav-link" href="/ubicacion">
+                <i className="bi bi-geo-alt-fill"></i> Ubicación
               </a>
             </li>
 

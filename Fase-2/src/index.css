@@ -1,3 +1,69 @@
+/*
+   ESTILOS GENERALES
+*/
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff;
+  color: #212529;
+}
+
+
+/*
+   NAVBAR
+*/
+
+.navbar {
+  min-height: 70px;
+}
+
+.navbar-brand {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.navbar-brand:hover {
+  color: #ffc107;
+}
+
+.logo-navbar {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.navbar .nav-link {
+  color: #d9d9d9;
+  margin-left: 8px;
+  transition: 0.3s;
+}
+
+.navbar .nav-link:hover {
+  color: #ffc107;
+  transform: translateY(-2px);
+}
+
+.navbar .nav-link i {
+  margin-right: 4px;
+}
+
+
+/*
+   HERO HOME
+*/
+
 .hero-section {
   min-height: 550px;
   display: flex;
@@ -14,6 +80,7 @@
 
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
 }
 
 .hero-section h1 {
@@ -21,20 +88,184 @@
   font-weight: bold;
   margin-top: 15px;
   margin-bottom: 20px;
+  color: white;
 }
 
 .hero-section p {
   font-size: 18px;
   margin-bottom: 25px;
+  color: white;
 }
 
+.hero-section .btn {
+  font-weight: bold;
+  padding: 10px 25px;
+}
+
+.etiqueta-home {
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+}
+
+
+/*
+   CATEGORÍAS
+*/
+
+.categorias {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  background-color: #f4f6f8;
+}
+
+.categorias h2 {
+  color: #001b35;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.categoria-card {
+  height: 100%;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.categoria-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.categoria-card i {
+  color: #ffc107;
+}
+
+.categoria-card h3 {
+  color: #212529;
+  font-size: 20px;
+}
+
+
+/*
+   PRODUCTOS DESTACADOS
+*/
+
+.productos-destacados {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.productos-destacados h2 {
+  color: #001b35;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.producto-home-img {
+  height: 220px;
+  object-fit: contain;
+  padding: 15px;
+}
+
+.productos-destacados .card {
+  transition: 0.3s;
+}
+
+.productos-destacados .card:hover {
+  transform: translateY(-5px);
+}
+
+
+/*
+   FOOTER
+*/
+
+footer {
+  background-color: #212529;
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+}
+
+footer p {
+  margin: 0;
+}
+
+
+/*
+   RESPONSIVE TABLET
+*/
+
+@media (max-width: 991px) {
+
+  .navbar .nav-link {
+    margin-left: 0;
+    padding: 10px 0;
+  }
+
+  .logo-navbar {
+    width: 45px;
+    height: 45px;
+  }
+
+  .hero-section {
+    min-height: 500px;
+    padding: 60px 20px;
+  }
+
+  .hero-section h1 {
+    font-size: 40px;
+  }
+
+  .hero-section p {
+    font-size: 17px;
+  }
+}
+
+
+/*
+   RESPONSIVE CELULAR
+*/
+
 @media (max-width: 576px) {
+
+  .navbar-brand {
+    font-size: 1rem;
+  }
+
+  .logo-navbar {
+    width: 40px;
+    height: 40px;
+  }
+
   .hero-section {
     min-height: 450px;
-    padding: 50px 20px;
+    padding: 40px 20px;
   }
 
   .hero-section h1 {
     font-size: 32px;
+  }
+
+  .hero-section p {
+    font-size: 16px;
+  }
+
+  .hero-section .btn {
+    width: 100%;
+  }
+
+  .categorias {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .productos-destacados {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .producto-home-img {
+    height: 180px;
   }
 }
