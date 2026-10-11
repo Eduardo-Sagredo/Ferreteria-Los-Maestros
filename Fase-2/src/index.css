@@ -269,3 +269,42 @@ footer p {
     height: 180px;
   }
 }
+
+/*
+   CATÁLOGO DE PRODUCTOS
+*/
+
+.producto-card {
+  border: none;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.producto-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.producto-img {
+  height: 220px;
+  object-fit: contain;
+  padding: 15px;
+}
+
+.producto-card .badge {
+  width: fit-content;
+  font-size: 0.9rem;
+}
+
+
+/*
+   RESPONSIVE CATÁLOGO
+*/
+
+@media (max-width: 576px) {
+
+  .producto-img {
+    height: 180px;
+  }
+
+}
