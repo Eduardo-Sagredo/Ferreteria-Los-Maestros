@@ -6,26 +6,46 @@ import MockDB from '../services/MockDB.js'
 function Productos() {
   const [productos, setProductos] = useState([])
   const [busqueda, setBusqueda] = useState('')
+  const [mensaje, setMensaje] = useState('')
+  const [mensajeError, setMensajeError] = useState(false)
+
   const [searchParams] = useSearchParams()
 
-  const categoriaSeleccionada = searchParams.get('categoria')
+  const categoriaSeleccionada =
+    searchParams.get('categoria')
 
   useEffect(() => {
-    const productosGuardados = MockDB.getTabla('productos')
+    const productosGuardados =
+      MockDB.getTabla('productos')
+
     setProductos(productosGuardados)
   }, [])
 
-  const productosFiltrados = productos.filter((producto) => {
-    const coincideBusqueda = producto.nombre
-      .toLowerCase()
-      .includes(busqueda.toLowerCase())
+  function mostrarMensaje(texto, esError) {
+    setMensaje(texto)
+    setMensajeError(esError)
+  }
 
-    const coincideCategoria =
-      !categoriaSeleccionada ||
-      producto.categoria === categoriaSeleccionada
+  const productosFiltrados =
+    productos.filter((producto) => {
 
-    return coincideBusqueda && coincideCategoria
-  })
+      const coincideBusqueda =
+        producto.nombre
+          .toLowerCase()
+          .includes(
+            busqueda.toLowerCase()
+          )
+
+      const coincideCategoria =
+        !categoriaSeleccionada ||
+        producto.categoria ===
+          categoriaSeleccionada
+
+      return (
+        coincideBusqueda &&
+        coincideCategoria
+      )
+    })
 
   return (
     <main className="catalogo-section">
@@ -60,7 +80,9 @@ function Productos() {
                 placeholder="Buscar producto..."
                 value={busqueda}
                 onChange={(evento) =>
-                  setBusqueda(evento.target.value)
+                  setBusqueda(
+                    evento.target.value
+                  )
                 }
               />
 
@@ -109,18 +131,41 @@ function Productos() {
 
         </div>
 
+        {mensaje !== '' && (
+          <div
+            className={
+              mensajeError
+                ? 'alert alert-danger'
+                : 'alert alert-success'
+            }
+          >
+            {mensaje}
+          </div>
+        )}
+
         <div className="row g-4">
 
           {productosFiltrados.length > 0 ? (
 
-            productosFiltrados.map((producto) => (
-              <div
-                className="col-12 col-md-6 col-lg-3"
-                key={producto.id}
-              >
-                <ProductoCard producto={producto} />
-              </div>
-            ))
+            productosFiltrados.map(
+              (producto) => (
+
+                <div
+                  className="col-12 col-md-6 col-lg-3"
+                  key={producto.id}
+                >
+
+                  <ProductoCard
+                    producto={producto}
+                    mostrarMensaje={
+                      mostrarMensaje
+                    }
+                  />
+
+                </div>
+
+              )
+            )
 
           ) : (
 

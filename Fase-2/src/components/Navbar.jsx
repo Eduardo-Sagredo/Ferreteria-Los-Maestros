@@ -1,17 +1,63 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import MockDB from '../services/MockDB.js'
 
 function Navbar() {
   const navigate = useNavigate()
 
-  const [sesionIniciada, setSesionIniciada] = useState(
-    MockDB.getDato('usuarioSesion') !== null
-  )
+  const [sesionIniciada, setSesionIniciada] =
+    useState(
+      MockDB.getDato('usuarioSesion') !== null
+    )
+
+  const [cantidadCarrito, setCantidadCarrito] =
+    useState(0)
+
+  function actualizarCantidadCarrito() {
+
+    const carrito =
+      MockDB.getCarrito()
+
+    const cantidad =
+      carrito.reduce(
+        (total, item) =>
+          total + item.cantidad,
+        0
+      )
+
+    setCantidadCarrito(
+      cantidad
+    )
+  }
+
+  useEffect(() => {
+
+    actualizarCantidadCarrito()
+
+    window.addEventListener(
+      'carritoActualizado',
+      actualizarCantidadCarrito
+    )
+
+    return () => {
+
+      window.removeEventListener(
+        'carritoActualizado',
+        actualizarCantidadCarrito
+      )
+    }
+
+  }, [])
 
   function cerrarSesion() {
-    MockDB.eliminarDato('usuarioSesion')
-    MockDB.eliminarDato('usuarioActivo')
+
+    MockDB.eliminarDato(
+      'usuarioSesion'
+    )
+
+    MockDB.eliminarDato(
+      'usuarioActivo'
+    )
 
     setSesionIniciada(false)
 
@@ -23,12 +69,14 @@ function Navbar() {
       className="navbar navbar-expand-lg bg-dark border-bottom border-body"
       data-bs-theme="dark"
     >
+
       <div className="container">
 
         <Link
           className="navbar-brand d-flex align-items-center"
           to="/"
         >
+
           <img
             src="/img/logo.png"
             alt="Logo Ferretería Los Maestros"
@@ -42,6 +90,7 @@ function Navbar() {
           <span className="texto-maestros">
             Los Maestros
           </span>
+
         </Link>
 
         <button
@@ -53,108 +102,202 @@ function Navbar() {
           aria-expanded="false"
           aria-label="Mostrar menú"
         >
+
           <span className="navbar-toggler-icon"></span>
+
         </button>
 
         <div
           className="collapse navbar-collapse"
           id="navbarPrincipal"
         >
+
           <ul className="navbar-nav ms-auto">
 
             <li className="nav-item">
-              <Link className="nav-link" to="/">
+
+              <Link
+                className="nav-link"
+                to="/"
+              >
+
                 <i className="bi bi-house-door-fill"></i>{' '}
                 Inicio
+
               </Link>
+
             </li>
 
             <li className="nav-item">
-              <Link className="nav-link" to="/productos">
+
+              <Link
+                className="nav-link"
+                to="/productos"
+              >
+
                 <i className="bi bi-box-seam"></i>{' '}
                 Productos
+
               </Link>
+
             </li>
 
             <li className="nav-item">
-              <a className="nav-link" href="/sobre-nosotros">
+
+              <Link
+                className="nav-link d-flex align-items-center gap-1"
+                to="/carrito"
+              >
+
+                <i className="bi bi-cart"></i>
+
+                Carrito
+
+                {cantidadCarrito > 0 && (
+
+                  <span className="contador-carrito">
+                    {cantidadCarrito}
+                  </span>
+
+                )}
+
+              </Link>
+
+            </li>
+
+            <li className="nav-item">
+
+              <a
+                className="nav-link"
+                href="/sobre-nosotros"
+              >
+
                 <i className="bi bi-people"></i>{' '}
                 Sobre nosotros
+
               </a>
+
             </li>
 
             {sesionIniciada && (
               <>
+
                 <li className="nav-item">
-                  <a className="nav-link" href="/mis-pedidos">
+
+                  <a
+                    className="nav-link"
+                    href="/mis-pedidos"
+                  >
+
                     <i className="bi bi-receipt"></i>{' '}
                     Mis pedidos
+
                   </a>
+
                 </li>
 
                 <li className="nav-item">
-                  <a className="nav-link" href="/historial">
+
+                  <a
+                    className="nav-link"
+                    href="/historial"
+                  >
+
                     <i className="bi bi-clock-history"></i>{' '}
                     Historial
+
                   </a>
+
                 </li>
 
                 <li className="nav-item">
-                  <a className="nav-link" href="/cuenta-corriente">
+
+                  <a
+                    className="nav-link"
+                    href="/cuenta-corriente"
+                  >
+
                     <i className="bi bi-wallet2"></i>{' '}
                     Cuenta corriente
+
                   </a>
+
                 </li>
+
               </>
             )}
 
             <li className="nav-item">
-              <a className="nav-link" href="/contacto">
+
+              <a
+                className="nav-link"
+                href="/contacto"
+              >
+
                 <i className="bi bi-envelope-fill"></i>{' '}
                 Contacto
+
               </a>
+
             </li>
 
             {!sesionIniciada && (
+
               <li className="nav-item">
-                <a className="nav-link" href="/inicio-sesion">
+
+                <a
+                  className="nav-link"
+                  href="/inicio-sesion"
+                >
+
                   <i className="bi bi-box-arrow-in-right"></i>{' '}
                   Iniciar sesión
+
                 </a>
+
               </li>
+
             )}
 
             {sesionIniciada && (
+
               <li className="nav-item">
+
                 <button
                   type="button"
                   className="nav-link btn btn-link"
                   onClick={cerrarSesion}
                 >
+
                   <i className="bi bi-box-arrow-right"></i>{' '}
                   Cerrar sesión
+
                 </button>
+
               </li>
+
             )}
 
             <li className="nav-item">
-              <a className="nav-link" href="/ubicacion">
+
+              <a
+                className="nav-link"
+                href="/ubicacion"
+              >
+
                 <i className="bi bi-geo-alt"></i>{' '}
                 Ubicación
-              </a>
-            </li>
 
-            <li className="nav-item">
-              <Link className="nav-link" to="/carrito">
-                <i className="bi bi-cart-fill"></i>{' '}
-                Carrito
-              </Link>
+              </a>
+
             </li>
 
           </ul>
+
         </div>
 
       </div>
+
     </nav>
   )
 }
