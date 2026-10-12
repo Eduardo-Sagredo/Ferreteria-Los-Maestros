@@ -20,15 +20,40 @@ export const AppProvider = ({ children }) => {
     localStorage.setItem('db_productos_react', JSON.stringify(productos));
   }, [productos]);
 
-  // Aquí irán tus funciones de tienda.js (agregarAlCarrito, actualizarStock, etc)
+  // --- FUNCIONES CRUD PARA PRODUCTOS ---
+
   const actualizarStockProducto = (id, nuevoStock) => {
     setProductos(prev => prev.map(p => 
       p.id === id ? { ...p, stockActual: nuevoStock } : p
     ));
   };
 
+  const eliminarProducto = (id) => {
+    setProductos(prev => prev.filter(p => p.id !== id));
+  };
+
+  const agregarProducto = (nuevoProducto) => {
+    // Generamos un ID temporal con Date.now() para simular una base de datos real
+    setProductos(prev => [...prev, { ...nuevoProducto, id: Date.now() }]);
+  };
+
+  const editarProducto = (id, datosActualizados) => {
+    setProductos(prev => prev.map(p => 
+      p.id === id ? { ...p, ...datosActualizados } : p
+    ));
+  };
+
   return (
-    <AppContext.Provider value={{ productos, setProductos, pedidos, setPedidos, actualizarStockProducto }}>
+    <AppContext.Provider value={{ 
+      productos, 
+      setProductos, 
+      pedidos, 
+      setPedidos, 
+      actualizarStockProducto,
+      eliminarProducto,
+      agregarProducto,
+      editarProducto
+    }}>
       {children}
     </AppContext.Provider>
   );

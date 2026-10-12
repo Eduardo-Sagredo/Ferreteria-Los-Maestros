@@ -36,7 +36,7 @@ export const AdminDashboard = () => {
                                 </li>
 
                                 <li className="nav-item">
-                                    <Link className="nav-link" to="gestion-productos.html">
+                                    <Link className="nav-link" to="/admin/productos">
                                         <i className="bi bi-box-seam"></i>
                                         Productos
                                     </Link>

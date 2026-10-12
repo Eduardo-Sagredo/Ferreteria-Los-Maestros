@@ -5,6 +5,7 @@ import { AppProvider } from './context/AppContext';
 
 // 2. Importas los componentes del Administrador
 import { AdminDashboard } from './components/admin/AdminDashboard';
+import { GestionProductos } from './components/admin/GestionProductos';
 
 // Componente temporal para el inicio público
 const InicioPublico = () => {
@@ -28,18 +29,14 @@ function App() {
     <AppProvider>
       <BrowserRouter>
         <Routes>
-          {/* RUTA PÚBLICA (El inicio temporal con el botón) */}
-          <Route path="/" element={<AdminDashboard />} />
 
-          {/* MÓDULO ADMINISTRADOR (Rutas Anidadas) */}
-          <Route path="/admin" element={<AdminDashboard />}>
-            {/* El "index" significa que al entrar a "/admin" se mostrará este componente por defecto */}
-            <Route index element={<AdminDashboard />} />
-            
-            {/* Aquí irás agregando las demás rutas del admin a medida que las migres */}
-            {/* <Route path="productos" element={<GestionProductos />} /> */}
-            {/* <Route path="inventario" element={<GestionInventario />} /> */}
-          </Route>
+          <Route path="/" element={<InicioPublico />} />
+
+          <Route path="/admin/productos" element={<GestionProductos />} />
+
+          <Route path="/admin" element={<AdminDashboard />} />
+
+
         </Routes>
       </BrowserRouter>
     </AppProvider>
