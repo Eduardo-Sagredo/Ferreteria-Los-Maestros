@@ -1,52 +1,70 @@
-function ProductoCard({ producto }) {
+import { Link } from 'react-router-dom'
 
+function ProductoCard({ producto }) {
   const sinStock = producto.stockActual <= 0
 
   return (
-    <div className="card h-100 shadow-sm producto-card">
+    <div className="card h-100 producto-card">
 
-      <img
-        src={producto.imagen}
-        className="card-img-top producto-img"
-        alt={producto.nombre}
-      />
+      <div className="producto-imagen-contenedor">
+
+        <img
+          src={producto.imagen}
+          alt={producto.nombre}
+          className="producto-img"
+        />
+
+      </div>
 
       <div className="card-body d-flex flex-column">
 
-        <h5 className="card-title">
-          {producto.nombre}
-        </h5>
-
-        <p className="text-muted">
+        <p className="producto-categoria">
           {producto.categoria}
         </p>
 
-        <p className="card-text">
-          {producto.descripcion}
-        </p>
+        <h5 className="producto-nombre">
+          {producto.nombre}
+        </h5>
 
-        <p className="fw-bold fs-5">
+        <p className="producto-precio">
           ${producto.precio.toLocaleString('es-CL')}
         </p>
 
         {sinStock ? (
-          <span className="badge bg-danger mb-3">
+
+          <p className="producto-sin-stock">
             Sin stock
-          </span>
+          </p>
+
         ) : (
-          <span className="badge bg-success mb-3">
+
+          <p className="producto-stock">
             Stock: {producto.stockActual}
-          </span>
+          </p>
+
         )}
 
-        <button
-          className="btn btn-warning mt-auto"
-          disabled={sinStock}
-        >
-          {sinStock
-            ? 'Producto sin stock'
-            : 'Agregar al carrito'}
-        </button>
+        <div className="d-flex gap-2 mt-auto">
+
+          <Link
+            to={`/producto/${producto.id}`}
+            className="btn btn-warning producto-btn-ver"
+          >
+            Ver producto
+          </Link>
+
+          <button
+            className="btn btn-dark producto-btn-agregar"
+            disabled={sinStock}
+          >
+            <i className="bi bi-cart"></i>{' '}
+
+            {sinStock
+              ? 'Sin stock'
+              : 'Agregar'}
+          </button>
+
+        </div>
 
       </div>
 
