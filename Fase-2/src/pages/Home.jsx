@@ -1,4 +1,26 @@
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import MockDB from '../services/MockDB.js'
+
 function Home() {
+  const [productosDestacados, setProductosDestacados] = useState([])
+
+  useEffect(() => {
+    const productos = MockDB.getTabla('productos')
+
+    /*
+       PRODUCTOS DESTACADOS
+    */
+    const destacados = productos.filter(
+      (producto) =>
+        producto.id === 1 ||
+        producto.id === 16 ||
+        producto.id === 4
+    )
+
+    setProductosDestacados(destacados)
+  }, [])
+
   return (
     <main>
 
@@ -22,9 +44,12 @@ function Home() {
                 y productos de ferretería para todos tus proyectos.
               </p>
 
-              <a href="/productos" className="btn btn-warning">
+              <Link
+                to="/productos"
+                className="btn btn-warning"
+              >
                 Ver productos
-              </a>
+              </Link>
 
             </div>
 
@@ -44,59 +69,98 @@ function Home() {
           <div className="row g-4">
 
             <div className="col-12 col-md-6 col-lg-3">
-              <div className="card categoria-card text-center">
-                <div className="card-body">
 
-                  <i className="bi bi-tools fs-1"></i>
+              <Link
+                to="/productos?categoria=herramientas"
+                className="text-decoration-none"
+              >
+                <div className="card categoria-card text-center">
 
-                  <h3 className="mt-3">
-                    Herramientas
-                  </h3>
+                  <div className="card-body">
+
+                    <i className="bi bi-tools fs-1"></i>
+
+                    <h3 className="mt-3">
+                      Herramientas
+                    </h3>
+
+                  </div>
 
                 </div>
-              </div>
+              </Link>
+
             </div>
 
+
             <div className="col-12 col-md-6 col-lg-3">
-              <div className="card categoria-card text-center">
-                <div className="card-body">
 
-                  <i className="bi bi-bricks fs-1"></i>
+              <Link
+                to="/productos?categoria=construccion"
+                className="text-decoration-none"
+              >
+                <div className="card categoria-card text-center">
 
-                  <h3 className="mt-3">
-                    Construcción
-                  </h3>
+                  <div className="card-body">
+
+                    <i className="bi bi-bricks fs-1"></i>
+
+                    <h3 className="mt-3">
+                      Construcción
+                    </h3>
+
+                  </div>
 
                 </div>
-              </div>
+              </Link>
+
             </div>
 
+
             <div className="col-12 col-md-6 col-lg-3">
-              <div className="card categoria-card text-center">
-                <div className="card-body">
 
-                  <i className="bi bi-lightning-charge fs-1"></i>
+              <Link
+                to="/productos?categoria=electricidad"
+                className="text-decoration-none"
+              >
+                <div className="card categoria-card text-center">
 
-                  <h3 className="mt-3">
-                    Electricidad
-                  </h3>
+                  <div className="card-body">
+
+                    <i className="bi bi-lightning-charge fs-1"></i>
+
+                    <h3 className="mt-3">
+                      Electricidad
+                    </h3>
+
+                  </div>
 
                 </div>
-              </div>
+              </Link>
+
             </div>
 
+
             <div className="col-12 col-md-6 col-lg-3">
-              <div className="card categoria-card text-center">
-                <div className="card-body">
 
-                  <i className="bi bi-paint-bucket fs-1"></i>
+              <Link
+                to="/productos?categoria=pinturas"
+                className="text-decoration-none"
+              >
+                <div className="card categoria-card text-center">
 
-                  <h3 className="mt-3">
-                    Pinturas
-                  </h3>
+                  <div className="card-body">
+
+                    <i className="bi bi-paint-bucket fs-1"></i>
+
+                    <h3 className="mt-3">
+                      Pinturas
+                    </h3>
+
+                  </div>
 
                 </div>
-              </div>
+              </Link>
+
             </div>
 
           </div>
@@ -107,6 +171,7 @@ function Home() {
 
       {/* PRODUCTOS DESTACADOS */}
       <section className="productos-destacados">
+
         <div className="container">
 
           <h2 className="text-center">
@@ -115,86 +180,65 @@ function Home() {
 
           <div className="row g-4">
 
-            <div className="col-12 col-md-4">
-              <div className="card h-100 shadow-sm">
+            {productosDestacados.map((producto) => (
 
-                <img
-                  src="/img/taladro.jpg"
-                  className="card-img-top producto-home-img"
-                  alt="Taladro"
-                />
+              <div
+                className="col-12 col-md-4"
+                key={producto.id}
+              >
 
-                <div className="card-body">
-                  <h3 className="h5">
-                    Taladro
-                  </h3>
+                <div className="card h-100 shadow-sm">
 
-                  <p>
-                    Herramienta ideal para trabajos de construcción.
-                  </p>
+                  <img
+                    src={producto.imagen}
+                    className="card-img-top producto-home-img"
+                    alt={producto.nombre}
+                  />
+
+                  <div className="card-body">
+
+                    <h3 className="h5">
+                      {producto.nombre}
+                    </h3>
+
+                    <p>
+                      {producto.descripcion}
+                    </p>
+
+                    <p className="fw-bold">
+                      ${producto.precio.toLocaleString('es-CL')}
+                    </p>
+
+                    <Link
+                      to={`/producto/${producto.id}`}
+                      className="btn btn-warning"
+                    >
+                      Ver producto
+                    </Link>
+
+                  </div>
+
                 </div>
 
               </div>
-            </div>
 
-
-            <div className="col-12 col-md-4">
-              <div className="card h-100 shadow-sm">
-
-                <img
-                  src="/img/pintura.png"
-                  className="card-img-top producto-home-img"
-                  alt="Pintura"
-                />
-
-                <div className="card-body">
-                  <h3 className="h5">
-                    Pintura
-                  </h3>
-
-                  <p>
-                    Pinturas para interior y exterior.
-                  </p>
-                </div>
-
-              </div>
-            </div>
-
-
-            <div className="col-12 col-md-4">
-              <div className="card h-100 shadow-sm">
-
-                <img
-                  src="/img/sierra-makita.png"
-                  className="card-img-top producto-home-img"
-                  alt="Sierra Makita"
-                />
-
-                <div className="card-body">
-                  <h3 className="h5">
-                    Sierra Makita
-                  </h3>
-
-                  <p>
-                    Equipo para cortes precisos y trabajos profesionales.
-                  </p>
-                </div>
-
-              </div>
-            </div>
+            ))}
 
           </div>
 
           <div className="text-center mt-4">
-            <a
-              href="/productos"
+
+            <Link
+              to="/productos"
               className="btn btn-warning"
             >
               Ver todos los productos
-            </a>
+            </Link>
+
           </div>
 
         </div>
+
       </section>
 
     </main>

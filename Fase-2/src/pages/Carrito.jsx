@@ -3,44 +3,139 @@ import { Link } from 'react-router-dom'
 import MockDB from '../services/MockDB.js'
 
 function Carrito() {
-  const [carrito, setCarrito] = useState([])
-  const [productos, setProductos] = useState([])
-  const [metodoPago, setMetodoPago] = useState('')
+  const [carrito, setCarrito] =
+    useState([])
 
-  const [mensaje, setMensaje] = useState('')
-  const [mensajeError, setMensajeError] = useState(false)
+  const [productos, setProductos] =
+    useState([])
+
+  const [metodoPago, setMetodoPago] =
+    useState('')
+
+  const [mensaje, setMensaje] =
+    useState('')
+
+  const [mensajeError, setMensajeError] =
+    useState(false)
 
   useEffect(() => {
-    setCarrito(MockDB.getCarrito())
-    setProductos(MockDB.getTabla('productos'))
+
+    const productosGuardados =
+      MockDB.getTabla('productos')
+
+    const carritoGuardado =
+      MockDB.getCarrito()
+
+    /*
+       QUITAR PRODUCTOS
+       QUE YA NO EXISTEN
+    */
+    const carritoValido =
+      carritoGuardado.filter(
+        (item) =>
+          productosGuardados.some(
+            (producto) =>
+              producto.id ===
+              item.id
+          )
+      )
+
+    if (
+      carritoValido.length !==
+      carritoGuardado.length
+    ) {
+
+      MockDB.guardarCarrito(
+        carritoValido
+      )
+    }
+
+    setProductos(
+      productosGuardados
+    )
+
+    setCarrito(
+      carritoValido
+    )
+
   }, [])
 
-  function mostrarMensaje(texto, esError) {
-    setMensaje(texto)
-    setMensajeError(esError)
-  }
+  /*
+     MOSTRAR MENSAJE
+  */
+  function mostrarMensaje(
+    texto,
+    esError
+  ) {
 
-  function obtenerProducto(id) {
-    return productos.find(
-      (producto) => producto.id === id
+    setMensaje(texto)
+
+    setMensajeError(
+      esError
     )
   }
 
-  function actualizarCarrito(nuevoCarrito) {
-    setCarrito(nuevoCarrito)
-    MockDB.guardarCarrito(nuevoCarrito)
+  /*
+     BUSCAR PRODUCTO
+  */
+  function obtenerProducto(id) {
+
+    return productos.find(
+      (producto) =>
+        producto.id === id
+    )
   }
 
-  function cambiarCantidad(idProducto, nuevaCantidad) {
-    const producto = obtenerProducto(idProducto)
+  /*
+     ACTUALIZAR CARRITO
+  */
+  function actualizarCarrito(
+    nuevoCarrito
+  ) {
+
+    setCarrito(
+      nuevoCarrito
+    )
+
+    MockDB.guardarCarrito(
+      nuevoCarrito
+    )
+  }
+
+  /*
+     CAMBIAR CANTIDAD
+  */
+  function cambiarCantidad(
+    idProducto,
+    nuevaCantidad
+  ) {
+
+    const producto =
+      obtenerProducto(
+        idProducto
+      )
 
     if (!producto) {
       return
     }
 
-    let cantidad = Number(nuevaCantidad)
+    if (
+      producto.stockActual <= 0
+    ) {
+
+      mostrarMensaje(
+        'Este producto ya no tiene stock disponible.',
+        true
+      )
+
+      return
+    }
+
+    let cantidad =
+      Number(nuevaCantidad)
 
     if (cantidad < 1) {
+
       cantidad = 1
 
       mostrarMensaje(
@@ -49,8 +144,13 @@ function Carrito() {
       )
     }
 
-    if (cantidad > producto.stockActual) {
-      cantidad = producto.stockActual
+    if (
+      cantidad >
+      producto.stockActual
+    ) {
+
+      cantidad =
+        producto.stockActual
 
       mostrarMensaje(
         'La cantidad no puede superar el stock disponible.',
@@ -58,26 +158,47 @@ function Carrito() {
       )
     }
 
-    const carritoActualizado = carrito.map((item) => {
-      if (item.id === idProducto) {
-        return {
-          ...item,
-          cantidad: cantidad
+    const carritoActualizado =
+      carrito.map(
+        (item) => {
+
+          if (
+            item.id === idProducto
+          ) {
+
+            return {
+              ...item,
+              cantidad:
+                cantidad
+            }
+          }
+
+          return item
         }
-      }
+      )
 
-      return item
-    })
-
-    actualizarCarrito(carritoActualizado)
+    actualizarCarrito(
+      carritoActualizado
+    )
   }
 
-  function eliminarProducto(idProducto) {
-    const carritoActualizado = carrito.filter(
-      (item) => item.id !== idProducto
-    )
+  /*
+     ELIMINAR DEL CARRITO
+  */
+  function eliminarProducto(
+    idProducto
+  ) {
 
-    actualizarCarrito(carritoActualizado)
+    const carritoActualizado =
+      carrito.filter(
+        (item) =>
+          item.id !==
+          idProducto
+      )
+
+    actualizarCarrito(
+      carritoActualizado
+    )
 
     mostrarMensaje(
       'Producto eliminado del carrito.',
@@ -85,52 +206,83 @@ function Carrito() {
     )
   }
 
+  /*
+     REALIZAR COMPRA
+  */
   function realizarCompra() {
-    if (carrito.length === 0) {
-      mostrarMensaje(
-        'El carrito está vacío.',
-        true
+
+    const resultado =
+      MockDB.realizarCompra(
+        metodoPago
       )
-
-      return
-    }
-
-    if (metodoPago === '') {
-      mostrarMensaje(
-        'Selecciona un método de pago.',
-        true
-      )
-
-      return
-    }
-
-    actualizarCarrito([])
-
-    setMetodoPago('')
 
     mostrarMensaje(
-      'Compra realizada correctamente.',
-      false
+      resultado.mensaje,
+      !resultado.exito
     )
+
+    if (resultado.exito) {
+
+      setCarrito(
+        MockDB.getCarrito()
+      )
+
+      setProductos(
+        MockDB.getTabla(
+          'productos'
+        )
+      )
+
+      setMetodoPago('')
+    } else {
+
+      /*
+         RECARGAR STOCK
+         ACTUAL
+      */
+      setProductos(
+        MockDB.getTabla(
+          'productos'
+        )
+      )
+    }
   }
 
-  const cantidadTotal = carrito.reduce(
-    (total, item) => total + item.cantidad,
-    0
-  )
+  /*
+     TOTAL DE UNIDADES
+  */
+  const cantidadTotal =
+    carrito.reduce(
+      (total, item) =>
+        total +
+        item.cantidad,
+      0
+    )
 
-  const totalCarrito = carrito.reduce(
-    (total, item) => {
-      const producto = obtenerProducto(item.id)
+  /*
+     TOTAL EN DINERO
+  */
+  const totalCarrito =
+    carrito.reduce(
+      (total, item) => {
 
-      if (!producto) {
-        return total
-      }
+        const producto =
+          obtenerProducto(
+            item.id
+          )
 
-      return total + producto.precio * item.cantidad
-    },
-    0
-  )
+        if (!producto) {
+          return total
+        }
+
+        return (
+          total +
+          producto.precio *
+          item.cantidad
+        )
+      },
+      0
+    )
 
   return (
     <main className="carrito-section">
@@ -149,7 +301,9 @@ function Carrito() {
 
         </div>
 
+
         {mensaje !== '' && (
+
           <div
             className={
               mensajeError
@@ -159,7 +313,9 @@ function Carrito() {
           >
             {mensaje}
           </div>
+
         )}
+
 
         {carrito.length === 0 ? (
 
@@ -190,110 +346,150 @@ function Carrito() {
 
             <div className="col-12 col-lg-8">
 
-              {carrito.map((item) => {
+              {carrito.map(
+                (item) => {
 
-                const producto = obtenerProducto(item.id)
+                  const producto =
+                    obtenerProducto(
+                      item.id
+                    )
 
-                if (!producto) {
-                  return null
-                }
+                  if (!producto) {
+                    return null
+                  }
 
-                const subtotal =
-                  producto.precio * item.cantidad
+                  const subtotal =
+                    producto.precio *
+                    item.cantidad
 
-                return (
-                  <div
-                    className="carrito-item"
-                    key={item.id}
-                  >
+                  return (
 
-                    <div className="row g-3 align-items-center">
+                    <div
+                      className="carrito-item"
+                      key={item.id}
+                    >
 
-                      <div className="col-4 col-md-2 text-center">
+                      <div className="row g-3 align-items-center">
 
-                        <img
-                          src={producto.imagen}
-                          alt={producto.nombre}
-                          className="carrito-imagen"
-                        />
+                        <div className="col-4 col-md-2 text-center">
 
-                      </div>
+                          <img
+                            src={
+                              producto.imagen
+                            }
+                            alt={
+                              producto.nombre
+                            }
+                            className="carrito-imagen"
+                          />
 
-                      <div className="col-8 col-md-4">
+                        </div>
 
-                        <h2 className="carrito-producto-nombre">
-                          {producto.nombre}
-                        </h2>
 
-                        <p className="mb-1">
-                          ${producto.precio.toLocaleString('es-CL')} c/u
-                        </p>
+                        <div className="col-8 col-md-4">
 
-                        <small>
-                          Stock disponible: {producto.stockActual}
-                        </small>
+                          <h2 className="carrito-producto-nombre">
+                            {producto.nombre}
+                          </h2>
 
-                      </div>
+                          <p className="mb-1">
 
-                      <div className="col-6 col-md-2">
+                            $
+                            {producto.precio.toLocaleString(
+                              'es-CL'
+                            )}{' '}
+                            c/u
 
-                        <label
-                          htmlFor={`cantidad-${producto.id}`}
-                          className="form-label"
-                        >
-                          Cantidad
-                        </label>
+                          </p>
 
-                        <input
-                          type="number"
-                          id={`cantidad-${producto.id}`}
-                          className="form-control"
-                          value={item.cantidad}
-                          min="1"
-                          max={producto.stockActual}
-                          onChange={(evento) =>
-                            cambiarCantidad(
-                              producto.id,
-                              evento.target.value
-                            )
-                          }
-                        />
+                          <small>
 
-                      </div>
+                            Stock disponible:{' '}
+                            {producto.stockActual}
 
-                      <div className="col-6 col-md-2">
+                          </small>
 
-                        <p className="fw-bold mb-1">
-                          Subtotal
-                        </p>
+                        </div>
 
-                        <p className="mb-0">
-                          ${subtotal.toLocaleString('es-CL')}
-                        </p>
 
-                      </div>
+                        <div className="col-6 col-md-2">
 
-                      <div className="col-12 col-md-2 text-md-end">
+                          <label
+                            htmlFor={`cantidad-${producto.id}`}
+                            className="form-label"
+                          >
+                            Cantidad
+                          </label>
 
-                        <button
-                          className="btn btn-outline-danger"
-                          onClick={() =>
-                            eliminarProducto(producto.id)
-                          }
-                        >
-                          <i className="bi bi-trash"></i>{' '}
-                          Eliminar
-                        </button>
+                          <input
+                            type="number"
+                            id={`cantidad-${producto.id}`}
+                            className="form-control"
+                            value={
+                              item.cantidad
+                            }
+                            min="1"
+                            max={
+                              producto.stockActual
+                            }
+                            onChange={
+                              (evento) =>
+                                cambiarCantidad(
+                                  producto.id,
+                                  evento.target.value
+                                )
+                            }
+                          />
+
+                        </div>
+
+
+                        <div className="col-6 col-md-2">
+
+                          <p className="fw-bold mb-1">
+                            Subtotal
+                          </p>
+
+                          <p className="mb-0">
+
+                            $
+                            {subtotal.toLocaleString(
+                              'es-CL'
+                            )}
+
+                          </p>
+
+                        </div>
+
+
+                        <div className="col-12 col-md-2 text-md-end">
+
+                          <button
+                            className="btn btn-outline-danger"
+                            onClick={
+                              () =>
+                                eliminarProducto(
+                                  producto.id
+                                )
+                            }
+                          >
+
+                            <i className="bi bi-trash"></i>{' '}
+                            Eliminar
+
+                          </button>
+
+                        </div>
 
                       </div>
 
                     </div>
-
-                  </div>
-                )
-              })}
+                  )
+                }
+              )}
 
             </div>
+
 
             <div className="col-12 col-lg-4">
 
@@ -317,6 +513,7 @@ function Carrito() {
 
                 <hr />
 
+
                 <div className="resumen-total">
 
                   <span>
@@ -324,16 +521,23 @@ function Carrito() {
                   </span>
 
                   <strong>
-                    ${totalCarrito.toLocaleString('es-CL')}
+
+                    $
+                    {totalCarrito.toLocaleString(
+                      'es-CL'
+                    )}
+
                   </strong>
 
                 </div>
 
                 <hr />
 
+
                 <p className="fw-bold mb-3">
                   Método de pago
                 </p>
+
 
                 <div className="form-check mb-2">
 
@@ -343,9 +547,15 @@ function Carrito() {
                     name="metodoPago"
                     id="debito"
                     value="debito"
-                    checked={metodoPago === 'debito'}
-                    onChange={(evento) =>
-                      setMetodoPago(evento.target.value)
+                    checked={
+                      metodoPago ===
+                      'debito'
+                    }
+                    onChange={
+                      (evento) =>
+                        setMetodoPago(
+                          evento.target.value
+                        )
                     }
                   />
 
@@ -353,11 +563,14 @@ function Carrito() {
                     className="form-check-label"
                     htmlFor="debito"
                   >
+
                     <i className="bi bi-credit-card"></i>{' '}
                     Débito
+
                   </label>
 
                 </div>
+
 
                 <div className="form-check mb-4">
 
@@ -367,9 +580,15 @@ function Carrito() {
                     name="metodoPago"
                     id="credito"
                     value="credito"
-                    checked={metodoPago === 'credito'}
-                    onChange={(evento) =>
-                      setMetodoPago(evento.target.value)
+                    checked={
+                      metodoPago ===
+                      'credito'
+                    }
+                    onChange={
+                      (evento) =>
+                        setMetodoPago(
+                          evento.target.value
+                        )
                     }
                   />
 
@@ -377,19 +596,27 @@ function Carrito() {
                     className="form-check-label"
                     htmlFor="credito"
                   >
+
                     <i className="bi bi-credit-card-2-front"></i>{' '}
                     Crédito
+
                   </label>
 
                 </div>
 
+
                 <button
                   className="btn btn-success w-100 mb-2"
-                  onClick={realizarCompra}
+                  onClick={
+                    realizarCompra
+                  }
                 >
+
                   <i className="bi bi-bag-check"></i>{' '}
                   Realizar compra
+
                 </button>
+
 
                 <Link
                   to="/productos"
