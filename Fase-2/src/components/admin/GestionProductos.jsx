@@ -75,7 +75,7 @@ export const GestionProductos = () => {
                             </li>
 
                             <li className="nav-item">
-                                <Link className="nav-link" to="gestion-pedidos.html">
+                                <Link className="nav-link" to="/admin/pedidos">
                                     <i className="bi bi-receipt"></i>
                                     Pedidos
                                 </Link>
