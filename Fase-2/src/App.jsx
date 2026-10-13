@@ -7,6 +7,7 @@ import { AppProvider } from './context/AppContext';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { GestionProductos } from './components/admin/GestionProductos';
 import { AgregarProducto } from './components/admin/AgregarProducto';
+import { Inventario } from './components/admin/Inventario';
 
 // Componente temporal para el inicio público
 const InicioPublico = () => {
@@ -36,6 +37,8 @@ function App() {
           <Route path="/admin/productos" element={<GestionProductos />} />
 
           <Route path="/admin/agregar-producto" element={<AgregarProducto />} />
+
+          <Route path="/admin/inventario" element={<Inventario />} />
 
           <Route path="/admin" element={<AdminDashboard />} />
 

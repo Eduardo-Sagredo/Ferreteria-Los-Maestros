@@ -68,7 +68,7 @@ export const GestionProductos = () => {
                             </li>
 
                             <li className="nav-item">
-                                <Link className="nav-link" to="inventario.html">
+                                <Link className="nav-link" to="/admin/inventario">
                                     <i className="bi bi-card-checklist"></i>
                                     Inventario
                                 </Link>
