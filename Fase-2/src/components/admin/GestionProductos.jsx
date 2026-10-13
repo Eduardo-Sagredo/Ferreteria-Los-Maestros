@@ -82,7 +82,7 @@ export const GestionProductos = () => {
                             </li>
 
                             <li className="nav-item">
-                                <Link className="nav-link" to="gestion-usuarios.html">
+                                <Link className="nav-link" to="/admin/usuarios">
                                     <i className="bi bi-person"></i>
                                     Usuarios
                                 </Link>

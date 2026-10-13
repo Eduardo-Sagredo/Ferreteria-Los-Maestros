@@ -1,10 +1,12 @@
 import { createContext, useState, useEffect } from 'react';
-import { productosIniciales, pedidosIniciales } from '../services/mockdb';
+// Asegúrate de tener exportado usuariosIniciales en tu mockdb, o si no, 
+// el código de abajo tiene un respaldo por si acaso no existe.
+import { productosIniciales, pedidosIniciales, usuariosIniciales } from '../services/mockdb';
 
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  // Inicializamos el estado intentando leer de localStorage, si no hay, usamos mockdb
+  // --- INICIALIZACIÓN DE ESTADOS ---
   const [productos, setProductos] = useState(() => {
     const guardado = localStorage.getItem('db_productos_react');
     return guardado ? JSON.parse(guardado) : productosIniciales;
@@ -15,13 +17,25 @@ export const AppProvider = ({ children }) => {
     return guardado ? JSON.parse(guardado) : pedidosIniciales;
   });
 
-  // Efecto para autoguardar en localStorage cada vez que un admin edite un producto
+  // NUEVO: Estado de usuarios
+  const [usuarios, setUsuarios] = useState(() => {
+    const guardado = localStorage.getItem('db_usuarios_react');
+    // Si tienes usuariosIniciales en mockdb los usa, sino usa un arreglo vacío de respaldo
+    return guardado ? JSON.parse(guardado) : (usuariosIniciales || []); 
+  });
+
+  // --- EFECTOS DE AUTOGUARDADO ---
   useEffect(() => {
     localStorage.setItem('db_productos_react', JSON.stringify(productos));
   }, [productos]);
 
-  // --- FUNCIONES CRUD PARA PRODUCTOS ---
+  // NUEVO: Autoguardado para usuarios
+  useEffect(() => {
+    localStorage.setItem('db_usuarios_react', JSON.stringify(usuarios));
+  }, [usuarios]);
 
+
+  // --- FUNCIONES CRUD PARA PRODUCTOS ---
   const actualizarStockProducto = (id, nuevoStock) => {
     setProductos(prev => prev.map(p => 
       p.id === id ? { ...p, stockActual: nuevoStock } : p
@@ -33,7 +47,6 @@ export const AppProvider = ({ children }) => {
   };
 
   const agregarProducto = (nuevoProducto) => {
-    // Generamos un ID temporal con Date.now() para simular una base de datos real
     setProductos(prev => [...prev, { ...nuevoProducto, id: Date.now() }]);
   };
 
@@ -43,16 +56,42 @@ export const AppProvider = ({ children }) => {
     ));
   };
 
+
+  // --- FUNCIONES CRUD PARA USUARIOS (NUEVO) ---
+  const eliminarUsuario = (id) => {
+    setUsuarios(prev => prev.filter(u => u.id !== id));
+  };
+
+  const agregarUsuario = (nuevoUsuario) => {
+    setUsuarios(prev => [...prev, { ...nuevoUsuario, id: Date.now() }]);
+  };
+
+  const editarUsuario = (id, datosActualizados) => {
+    setUsuarios(prev => prev.map(u => 
+      u.id === id ? { ...u, ...datosActualizados } : u
+    ));
+  };
+
   return (
     <AppContext.Provider value={{ 
+      // Exportamos lo de productos
       productos, 
       setProductos, 
-      pedidos, 
-      setPedidos, 
       actualizarStockProducto,
       eliminarProducto,
       agregarProducto,
-      editarProducto
+      editarProducto,
+      
+      // Exportamos lo de pedidos
+      pedidos, 
+      setPedidos, 
+
+      // Exportamos lo de usuarios (NUEVO)
+      usuarios,
+      setUsuarios,
+      eliminarUsuario,
+      agregarUsuario,
+      editarUsuario
     }}>
       {children}
     </AppContext.Provider>
