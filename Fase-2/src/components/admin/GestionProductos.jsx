@@ -106,7 +106,7 @@ export const GestionProductos = () => {
                 <section>
                     <div className="d-flex justify-content-between mx-2 my-2">
                         <h1 className="fs-2">Gestión de productos</h1>
-                        <Link to="agregar-producto.html" className="btn d-inline-flex align-items-center" style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-header)' }} >
+                        <Link to="/admin/agregar-producto" className="btn d-inline-flex align-items-center" style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-header)' }} >
                             + Agregar Producto
                         </Link>
                     </div>
@@ -125,16 +125,16 @@ export const GestionProductos = () => {
                                         <i className="bi bi-search"></i>
                                     </span>
                                     <input type="text" id="buscador-productos"
-                                        className="form-control border-start-0 rounded-end-3 shadow-none" 
-                                        placeholder="Buscar..." 
-                                        value={busqueda}onChange={(e) => setBusqueda(e.target.value)} />
+                                        className="form-control border-start-0 rounded-end-3 shadow-none"
+                                        placeholder="Buscar..."
+                                        value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
                                 </div>
                             </div>
 
                             <div className="col-md-6 col-lg-3">
-                                <select id="filtro-categoria" className="form-select rounded-3 shadow-none text-secondary" 
-                                value={filtroCategoria}
-                                onChange={(e) => setFiltroCategoria(e.target.value)}>
+                                <select id="filtro-categoria" className="form-select rounded-3 shadow-none text-secondary"
+                                    value={filtroCategoria}
+                                    onChange={(e) => setFiltroCategoria(e.target.value)}>
                                     <option value="todas" selected>Todas las categorías</option>
                                     <option value="herramientas">Herramientas</option>
                                     <option value="electricidad">Eléctricas</option>
@@ -145,8 +145,8 @@ export const GestionProductos = () => {
 
                             <div className="col-md-6 col-lg-3">
                                 <select id="filtro-estado" className="form-select rounded-3 shadow-none text-secondary"
-                                value={filtroEstado}
-                                onChange={(e) => setFiltroEstado(e.target.value)}>
+                                    value={filtroEstado}
+                                    onChange={(e) => setFiltroEstado(e.target.value)}>
                                     <option value="todos" selected>Todos los estados</option>
                                     <option value="Disponible">Disponible</option>
                                     <option value="Stock bajo">Stock bajo</option>
@@ -177,29 +177,68 @@ export const GestionProductos = () => {
                                 </thead>
 
                                 <tbody className="border-top-0">
-                                    {productosFiltrados.map((prod) => (
-                                        <tr key={prod.id}>
-                                            <td className="py-3 px-4">{prod.codigo}</td>
-                                            <td className="py-3 fw-medium">{prod.nombre}</td>
-                                            <td className="py-3">{prod.categoria}</td>
-                                            <td className="py-3">${prod.precio.toLocaleString('es-CL')}</td>
-                                            <td className="py-3 text-center">{prod.stockActual}</td>
-                                            <td className="py-3 text-center">{prod.stockMinimo}</td>
-                                            <td className="py-3 text-center">
-                                                <span className={`badge ${prod.estado === 'Disponible' ? 'bg-success' : prod.estado === 'Stock bajo' ? 'bg-warning text-dark' : 'bg-danger'}`}>
-                                                    {prod.estado}
-                                                </span>
-                                            </td>
-                                            <td className="py-3 text-center">
-                                                <button className="btn btn-sm btn-outline-primary me-2" onClick={() => handleEditar(prod.id)}>
-                                                    <i className="bi bi-pencil"></i>
-                                                </button>
-                                                <button className="btn btn-sm btn-outline-danger" onClick={() => handleEliminar(prod.id)}>
-                                                    <i className="bi bi-trash"></i>
-                                                </button>
-                                            </td>
+                                    {productosFiltrados.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="8" className="text-center py-4 text-muted">No se encontraron productos con esos filtros.</td>
                                         </tr>
-                                    ))}
+                                    ) : (
+                                        productosFiltrados.map((prod) => (
+                                            <tr key={prod.id}>
+                                                {/* Código: Color gris y fuente monoespaciada */}
+                                                <td className="py-3 px-4 text-secondary font-monospace">
+                                                    {prod.codigo}
+                                                </td>
+
+                                                {/* Nombre: Color oscuro por defecto */}
+                                                <td className="py-3 text-dark">
+                                                    {prod.nombre}
+                                                </td>
+
+                                                {/* Categoría: Gris y primera letra mayúscula */}
+                                                <td className="py-3 text-secondary">
+                                                    {prod.categoria ? prod.categoria.charAt(0).toUpperCase() + prod.categoria.slice(1) : '-'}
+                                                </td>
+
+                                                {/* Precio: Color naranja personalizado y texto un poco más grueso (500) */}
+                                                <td className="py-3" style={{ color: '#d97706', fontWeight: 500 }}>
+                                                    ${prod.precio.toLocaleString('es-CL')}
+                                                </td>
+
+                                                {/* Stock actual: Centrado */}
+                                                <td className="py-3 text-center">
+                                                    {prod.stockActual}
+                                                </td>
+
+                                                {/* Stock Mínimo: Centrado y gris */}
+                                                <td className="py-3 text-center text-secondary">
+                                                    {prod.stockMinimo}
+                                                </td>
+
+                                                {/* Estado: Se mantiene tal cual */}
+                                                <td className="py-3 text-center">
+                                                    <span className={`badge rounded-pill ${prod.estado === 'Disponible' ? 'bg-success' : prod.estado === 'Stock bajo' ? 'bg-warning text-dark' : 'bg-danger'}`}>
+                                                        {prod.estado}
+                                                    </span>
+                                                </td>
+
+                                                {/* Acciones: Se mantienen los iconos tal cual pediste */}
+                                                <td className="py-3 text-center">
+                                                    <button
+                                                        className="btn btn-sm btn-outline-primary me-2"
+                                                        onClick={() => handleEditar(prod.id)}
+                                                    >
+                                                        <i className="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button
+                                                        className="btn btn-sm btn-outline-danger"
+                                                        onClick={() => handleEliminar(prod.id)}
+                                                    >
+                                                        <i className="bi bi-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
 
                             </table>
