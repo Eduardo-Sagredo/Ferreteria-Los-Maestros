@@ -15,6 +15,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #ffffff;
   color: #212529;
+  overflow-x: hidden;
 }
 
 
@@ -197,6 +198,7 @@ body {
 }
 
 .producto-home-img {
+  width: 100%;
   height: 220px;
   object-fit: contain;
   padding: 15px;
@@ -355,6 +357,7 @@ body {
    DETALLE DE PRODUCTO
 */
 .detalle-producto-section {
+  min-height: calc(100vh - 85px);
   padding: 50px 0;
   background-color: #f4f6f8;
 }
@@ -495,6 +498,14 @@ body {
 
 
 /*
+   MENSAJES
+*/
+.alert {
+  border-radius: 8px;
+}
+
+
+/*
    FOOTER
 */
 footer {
@@ -541,6 +552,10 @@ footer p {
     padding: 40px;
   }
 
+  .detalle-producto-img {
+    height: 340px;
+  }
+
   .carrito-resumen {
     margin-top: 10px;
   }
@@ -552,8 +567,16 @@ footer p {
 */
 @media (max-width: 576px) {
 
+  /*
+     NAVBAR
+  */
+  .navbar {
+    min-height: 75px;
+  }
+
   .navbar-brand {
     font-size: 16px;
+    gap: 4px;
   }
 
   .logo-img {
@@ -561,6 +584,10 @@ footer p {
     height: 55px;
   }
 
+
+  /*
+     HERO
+  */
   .hero-section {
     min-height: 450px;
     padding: 40px 20px;
@@ -578,11 +605,23 @@ footer p {
     width: 100%;
   }
 
+
+  /*
+     CATEGORÍAS
+  */
   .categorias {
     padding-top: 40px;
     padding-bottom: 40px;
   }
 
+  .categoria-card {
+    padding: 20px;
+  }
+
+
+  /*
+     PRODUCTOS DESTACADOS
+  */
   .productos-destacados {
     padding-top: 40px;
     padding-bottom: 40px;
@@ -592,12 +631,33 @@ footer p {
     height: 180px;
   }
 
+
+  /*
+     CATÁLOGO
+  */
+  .catalogo-section .container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
   .catalogo-encabezado h1 {
     font-size: 32px;
   }
 
+  .catalogo-descripcion {
+    font-size: 15px;
+  }
+
+  .buscador-catalogo {
+    width: 100%;
+  }
+
   .filtros-catalogo {
     justify-content: center;
+  }
+
+  .filtros-catalogo .btn {
+    font-size: 14px;
   }
 
   .producto-imagen-contenedor {
@@ -609,20 +669,53 @@ footer p {
     font-size: 13px;
   }
 
+
+  /*
+     DETALLE DE PRODUCTO
+  */
   .detalle-producto-section {
-    padding: 25px 0;
+    padding: 20px 0;
+  }
+
+  .detalle-producto-section .container {
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   .detalle-producto-card {
     padding: 25px;
   }
 
+  .detalle-producto-card .row {
+    --bs-gutter-y: 1.5rem;
+  }
+
   .detalle-producto-img {
-    height: 280px;
+    width: 100%;
+    max-width: 220px;
+    height: 200px;
+    object-fit: contain;
   }
 
   .detalle-nombre {
     font-size: 28px;
+  }
+
+  .detalle-descripcion {
+    font-size: 16px;
+  }
+
+  .detalle-precio {
+    font-size: 24px;
+  }
+
+
+  /*
+     CARRITO
+  */
+  .carrito-section .container {
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   .carrito-titulo {
@@ -638,6 +731,21 @@ footer p {
   }
 
   .carrito-imagen {
-    height: 90px;
+    width: 100%;
+    max-width: 100px;
+    height: 100px;
+    object-fit: contain;
+  }
+
+  .carrito-producto-nombre {
+    font-size: 19px;
+  }
+
+  .carrito-resumen h2 {
+    font-size: 24px;
+  }
+
+  .resumen-total {
+    font-size: 18px;
   }
 }
