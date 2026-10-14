@@ -1,4 +1,4 @@
-let MockDB
+import MockDB from '../src/services/MockDB.js'
 
 describe('Pruebas del módulo tienda', function () {
 
@@ -28,14 +28,6 @@ describe('Pruebas del módulo tienda', function () {
       descripcion: 'Producto sin stock'
     }
   ]
-
-  beforeAll(async function () {
-    const modulo = await import(
-      '/base/src/services/MockDB.js'
-    )
-
-    MockDB = modulo.default
-  })
 
   beforeEach(function () {
     localStorage.clear()

@@ -167,7 +167,7 @@ formulario.addEventListener("submit", function(event) {
         ) {
 
             const usuariosGuardados =
-                JSON.parse(localStorage.getItem("usuarios")) || [];
+                MockDB.getTabla("usuarios");
 
             const correoIngresado = correo.value.trim().toLowerCase();
 
@@ -185,18 +185,21 @@ formulario.addEventListener("submit", function(event) {
             }
 
             const nuevoUsuario = {
+                id: Date.now(),
                 rut: rut.value.trim(),
                 nombre: nombre.value.trim(),
                 apellidos: apellidos.value.trim(),
                 correo: correoIngresado,
-                contrasena: contrasena.value.trim()
+                contrasena: contrasena.value.trim(),
+                rol: "Cliente",
+                estado: "Activo"
             };
 
             usuariosGuardados.push(nuevoUsuario);
 
-            localStorage.setItem(
+            MockDB.setTabla(
                 "usuarios",
-                JSON.stringify(usuariosGuardados)
+                usuariosGuardados
             );
 
             mensajeExito.textContent =
