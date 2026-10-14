@@ -122,7 +122,7 @@ formulario.addEventListener("submit", function (event) {
 
 
     const usuariosGuardados =
-        JSON.parse(localStorage.getItem("usuarios")) || [];
+        MockDB.getTabla("usuarios");
 
 
     const correoIngresado =
@@ -151,7 +151,10 @@ formulario.addEventListener("submit", function (event) {
     }
 
 
-    if (usuarioEncontrado.contrasena !== contrasenaIngresada) {
+    const contrasenaGuardada =
+        usuarioEncontrado.contrasena || usuarioEncontrado.password || "";
+
+    if (contrasenaGuardada !== contrasenaIngresada) {
 
         errorContrasena.textContent =
             "La contraseña ingresada es incorrecta.";
@@ -171,9 +174,9 @@ formulario.addEventListener("submit", function (event) {
     };
 
 
-    localStorage.setItem(
+    MockDB.setDato(
         "usuarioActivo",
-        JSON.stringify(usuarioActivo)
+        usuarioActivo
     );
 
 
@@ -184,9 +187,9 @@ formulario.addEventListener("submit", function (event) {
     };
 
 
-    localStorage.setItem(
+    MockDB.setDato(
         "usuarioSesion",
-        JSON.stringify(usuarioSesion)
+        usuarioSesion
     );
 
 

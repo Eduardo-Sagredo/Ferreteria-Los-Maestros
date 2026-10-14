@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('input-stock').value = prod.stockActual;
             document.getElementById('input-stock-minimo').value = prod.stockMinimo;
             if(document.getElementById('input-descripcion')) document.getElementById('input-descripcion').value = prod.descripcion || '';
+            if(document.getElementById('input-url-imagen')) {
+                const imagen = prod.imagen || '';
+                document.getElementById('input-url-imagen').value = /^(https?:)/i.test(imagen) ? imagen : '';
+            }
         }
     }
 
@@ -27,7 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (stockIngresado <= 0) estadoCalc = 'Sin stock';
         else if (stockIngresado <= minIngresado) estadoCalc = 'Stock bajo';
 
+        const productoAnterior = idEdit ? productos.find(p => p.id == idEdit) : null;
+        const urlImagen = document.getElementById('input-url-imagen')?.value.trim() || '';
+
         const data = {
+            ...(productoAnterior || {}),
             id: idEdit ? parseInt(idEdit) : Date.now(),
             codigo: document.getElementById('input-codigo').value,
             nombre: document.getElementById('input-nombre').value,
@@ -35,7 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
             precio: parseInt(document.getElementById('input-precio').value) || 0,
             stockActual: stockIngresado,
             stockMinimo: minIngresado,
-            estado: estadoCalc
+            estado: estadoCalc,
+            descripcion: document.getElementById('input-descripcion')?.value.trim() || '',
+            imagen: urlImagen || productoAnterior?.imagen || 'logo.png'
         };
 
         if(idEdit) {
