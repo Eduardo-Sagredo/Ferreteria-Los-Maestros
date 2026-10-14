@@ -1,9 +1,43 @@
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+
+// 1. Importas el Proveedor del Contexto Global (Tus datos)
+import { AppProvider } from './context/AppContext';
+
+// 2. Importas los componentes del Administrador
+import { InventarioVendedor } from './components/Vendedor/InventarioVendedor';
+
+// Componente temporal para el inicio público
+const InicioPublico = () => {
+  return (
+    <div className="container mt-5 text-center">
+      <h1>Bienvenido a Ferretería Los Maestros</h1>
+      <p className="mb-4">Esta es la vista pública de la tienda.</p>
+      
+      {/* Botón simple que te lleva al Dashboard del Admin */}
+      <Link to="/vendedor" className="btn btn-primary btn-lg">
+        <i className="bi bi-speedometer2 me-2"></i>
+        Ir al Panel de Administrador
+      </Link>
+    </div>
+  );
+};
+
 function App() {
   return (
-    <div>
-      <h1>Hola desde React en la Fase 2</h1>
-    </div>
-  )
+    /* AppProvider envuelve todo para que el Admin y el Cliente compartan la misma "Base de Datos" */
+    <AppProvider>
+      <BrowserRouter>
+        <Routes>
+
+          <Route path="/" element={<InicioPublico />} />
+
+          <Route path="/vendedor" element={<InventarioVendedor />} />
+
+
+        </Routes>
+      </BrowserRouter>
+    </AppProvider>
+  );
 }
 
-export default App
+export default App;
