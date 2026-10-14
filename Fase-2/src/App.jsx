@@ -11,6 +11,7 @@ import { Inventario } from './components/admin/Inventario';
 import { GestionPedidos } from './components/admin/GestionPedidos';
 import { GestionUsuarios } from './components/admin/GestionUsuarios';
 import { FormUsuario } from './components/admin/FormUsuario';
+import { GestionReportes } from './components/admin/GestionReportes';
 
 // Componente temporal para el inicio público
 const InicioPublico = () => {
@@ -48,6 +49,8 @@ function App() {
           <Route path="/admin/usuarios" element={<GestionUsuarios />} />
           
           <Route path="/admin/crear-usuario" element={<FormUsuario />} />
+
+          <Route path="/admin/reportes" element={<GestionReportes />} />
 
           
 
