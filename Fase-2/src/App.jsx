@@ -12,6 +12,8 @@ import { GestionPedidos } from './components/admin/GestionPedidos';
 import { GestionUsuarios } from './components/admin/GestionUsuarios';
 import { FormUsuario } from './components/admin/FormUsuario';
 import { GestionReportes } from './components/admin/GestionReportes';
+import { SobreNosotros } from './components/SobreNosotros';
+import { Ubicacion } from './components/Ubicacion';
 
 // Componente temporal para el inicio público
 const InicioPublico = () => {
@@ -52,41 +54,17 @@ function App() {
 
           <Route path="/admin/reportes" element={<GestionReportes />} />
 
-          
-
           <Route path="/admin" element={<AdminDashboard />} />
+
+          <Route path="/sobreNosotros" element={<SobreNosotros />} />
+
+          <Route path="/ubicacion" element={<Ubicacion />} />
 
 
         </Routes>
       </BrowserRouter>
     </AppProvider>
-import { SobreNosotros } from './components/SobreNosotros';
-import { Ubicacion } from './components/Ubicacion';
-
-// Componente temporal con botón hacia /nosotros
-const Inicio = () => (
-  <div className="container mt-5 text-center">
-    <h1>Bienvenido a la página principal</h1>
-    <Link to="/nosotros" className="btn btn-primary mt-3">
-    <Link to="/Ubicacion" className="btn btn-primary mt-3">
-      Ir a Sobre Nosotros
-    </Link>
-  </div>
-);
-
-function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        {/* Cuando la URL sea "/", muestra el Inicio */}
-        <Route path="/" element={<Inicio />} />
-        
-        {/* Cuando la URL sea "/nosotros", muestra SobreNosotros */}
-        <Route path="/nosotros" element={<SobreNosotros />} />
-        <Route path="/ubicacion" element={<Ubicacion />} />
-      </Routes>
-    </BrowserRouter>
-  );
-}
+  )
+};
 
 export default App;
