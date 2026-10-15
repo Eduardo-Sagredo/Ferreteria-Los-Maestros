@@ -1,7 +1,9 @@
 import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
-import logoImg from '../../assets/logo.png';
+import '../../components/styles.css'
+import '../../components/tienda.css'
+
 
 export const GestionPedidos = () => {
     // 1. Obtenemos los pedidos desde el contexto
@@ -49,27 +51,7 @@ export const GestionPedidos = () => {
 
     return (
         <div className="d-flex flex-column min-vh-100">
-            {/* --- CABECERA --- */}
-            <header>
-                <nav className="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
-                    <div className="container">
-                        <Link className="navbar-brand" to="/admin">
-                            <img src={logoImg} alt="Logo Ferretería Los Maestros" className="logo-img" />
-                            <span className="texto-ferreteria">Ferretería</span>
-                            <span className="texto-maestros">Los Maestros</span>
-                        </Link>
-                        <ul className="navbar-nav">
-                            <li className="nav-item"><Link className="nav-link" to="/admin"><i className="bi bi-house-door-fill"></i> Inicio</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="/admin/productos"><i className="bi bi-box-seam"></i> Productos</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="/admin/inventario"><i className="bi bi-card-checklist"></i> Inventario</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="/admin/pedidos"><i className="bi bi-receipt"></i> Pedidos</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="/admin/usuarios"><i className="bi bi-person"></i> Usuarios</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="/admin/reportes"><i className="bi bi-file-bar-graph"></i> Reportes</Link></li>
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-
+            
             {/* --- CONTENIDO PRINCIPAL --- */}
             <main className="flex-grow-1">
                 <section>
@@ -227,12 +209,8 @@ export const GestionPedidos = () => {
                     </div>
                 </>
             )}
-
-            <footer className="footer-tienda mt-5">
-                <div className="container text-center">
-                    <p className="mb-0">&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
-                </div>
-            </footer>
         </div>
     );
 };
+
+export default GestionPedidos;

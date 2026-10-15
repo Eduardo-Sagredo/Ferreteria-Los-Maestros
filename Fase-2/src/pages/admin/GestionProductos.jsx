@@ -1,17 +1,24 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useLayoutEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
-import '../styles.css'
-import '../tienda.css'
-import logoImg from '../../assets/logo.png'
+import '../../components/styles.css'
+import '../../components/tienda.css'
 
 
 
 export const GestionProductos = () => {
     const { productos, eliminarProducto } = useContext(AppContext);
-    const navigate = useNavigate(); // Hook para redireccionar a otras páginas
+    const navigate = useNavigate();
 
-    // 2. Creamos Estados (useState) para controlar los filtros
+    useLayoutEffect(() => {
+    window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'instant' // Fuerza un salto inmediato sin animación
+    });
+}, []);
+
+    // 2. Creamos Estados (useState) para controlar los filtros<
     const [busqueda, setBusqueda] = useState('');
     const [filtroCategoria, setFiltroCategoria] = useState('todas');
     const [filtroEstado, setFiltroEstado] = useState('todos');
@@ -35,7 +42,7 @@ export const GestionProductos = () => {
 
     const handleEditar = (id) => {
         // Redirige a la página de agregar pero con el ID en la URL
-        navigate(`/admin/agregar-producto?edit=${id}`);
+        navigate(`/admin/agregarProducto?edit=${id}`);
     };
 
 
@@ -43,70 +50,12 @@ export const GestionProductos = () => {
     return (
         <>
 
-            <header>
-                <nav className="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
-                    <div className="container">
-                        <Link className="navbar-brand" to="../index.html">
-                            <img src={logoImg} alt="Logo Ferretería Los Maestros" className="logo-img" />
-                            <span className="texto-ferreteria">Ferretería</span>
-                            <span className="texto-maestros">Los Maestros</span>
-                        </Link>
-
-                        <ul className="navbar-nav">
-                            <li className="nav-item">
-                                <Link className="nav-link" to="principal.html">
-                                    <i className="bi bi-house-door-fill"></i>
-                                    Inicio
-                                </Link>
-                            </li>
-
-                            <li className="nav-item">
-                                <Link className="nav-link" to="admin/productos">
-                                    <i className="bi bi-box-seam"></i>
-                                    Productos
-                                </Link>
-                            </li>
-
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/admin/inventario">
-                                    <i className="bi bi-card-checklist"></i>
-                                    Inventario
-                                </Link>
-                            </li>
-
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/admin/pedidos">
-                                    <i className="bi bi-receipt"></i>
-                                    Pedidos
-                                </Link>
-                            </li>
-
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/admin/usuarios">
-                                    <i className="bi bi-person"></i>
-                                    Usuarios
-                                </Link>
-                            </li>
-
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/admin/reportes">
-                                    <i className="bi bi-file-bar-graph"></i>
-                                    Reportes
-                                </Link>
-                            </li>
-                        </ul>
-
-                    </div>
-                </nav>
-
-            </header>
-
             <main className="flex-grow-1">
 
                 <section>
                     <div className="d-flex justify-content-between mx-2 my-2">
                         <h1 className="fs-2">Gestión de productos</h1>
-                        <Link to="/admin/agregar-producto" className="btn d-inline-flex align-items-center" style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-header)' }} >
+                        <Link to="/admin/agregarProducto" className="btn d-inline-flex align-items-center" style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-header)' }} >
                             + Agregar Producto
                         </Link>
                     </div>
@@ -249,12 +198,8 @@ export const GestionProductos = () => {
 
             </main>
 
-            <footer className="footer-tienda mt-5">
-                <div className="container text-center">
-                    <p className="mb-0">&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
-                </div>
-            </footer>
-
         </>
     );
 };
+
+export default GestionProductos;

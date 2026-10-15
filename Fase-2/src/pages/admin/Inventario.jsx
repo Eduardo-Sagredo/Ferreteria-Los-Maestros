@@ -1,7 +1,8 @@
 import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
-import logoImg from '../../assets/logo.png';
+import '../../components/styles.css'
+import '../../components/tienda.css'
 
 export const Inventario = () => {
     // 1. Obtenemos los productos y la función para editar desde el contexto
@@ -67,37 +68,6 @@ export const Inventario = () => {
 
     return (
         <div className="d-flex flex-column min-vh-100">
-            {/* --- CABECERA --- */}
-            <header>
-                <nav className="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
-                    <div className="container">
-                        <Link className="navbar-brand" to="/admin">
-                            <img src={logoImg} alt="Logo Ferretería Los Maestros" className="logo-img" />
-                            <span className="texto-ferreteria">Ferretería</span>
-                            <span className="texto-maestros">Los Maestros</span>
-                        </Link>
-                        <ul className="navbar-nav">
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/admin">
-                                    <i className="bi bi-house-door-fill"></i> Inicio
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/admin/productos">
-                                    <i className="bi bi-box-seam"></i> Productos
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/admin/inventario">
-                                    <i className="bi bi-card-checklist"></i> Inventario
-                                </Link>
-                            </li>
-                            {/* Agrega los demás enlaces (Pedidos, Usuarios, Reportes) aquí si lo deseas */}
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-
             <main className="flex-grow-1">
                 <section className="container mt-5">
                     <h1 className="mb-1" style={{ color: '#1E293B' }}>Inventario</h1>
@@ -235,12 +205,6 @@ export const Inventario = () => {
                 </section>
             </main>
 
-            <footer className="footer-tienda mt-5">
-                <div className="container text-center">
-                    <p className="mb-0">&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
-                </div>
-            </footer>
-
             {/* --- MODAL REACTIVO --- */}
             {showModal && productoSeleccionado && (
                 <>
@@ -297,3 +261,5 @@ export const Inventario = () => {
         </div>
     );
 };
+
+export default Inventario;

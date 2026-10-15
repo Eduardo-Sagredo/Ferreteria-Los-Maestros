@@ -1,7 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
-import logoImg from '../../assets/logo.png';
+import '../../components/styles.css'
+import '../../components/tienda.css'
 
 export const AgregarProducto = () => {
     const { productos, agregarProducto, editarProducto } = useContext(AppContext);
@@ -111,25 +112,7 @@ export const AgregarProducto = () => {
 
     return (
         <div className="d-flex flex-column min-vh-100">
-            <header>
-                <nav className="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
-                    <div className="container">
-                        <Link className="navbar-brand" to="/admin">
-                            <img src={logoImg} alt="Logo Ferretería Los Maestros" className="logo-img" />
-                            <span className="texto-ferreteria">Ferretería</span>
-                            <span className="texto-maestros">Los Maestros</span>
-                        </Link>
-                        <ul className="navbar-nav">
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/admin/productos">
-                                    <i className="bi bi-box-seam"></i> Productos
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-
+            
             <main className="flex-grow-1">
                 <section>
                     <div className="card my-5 border-0 shadow-sm rounded-4 p-4 mx-auto" style={{ border: '1px solid #e2e8f0', maxWidth: '800px' }}>
@@ -208,7 +191,7 @@ export const AgregarProducto = () => {
                                 <div className="col-12 mt-5">
                                     <div className="row g-3">
                                         <div className="col-6">
-                                            <button type="button" className="btn btn-outline-secondary w-100 py-2 rounded-3 fw-medium" onClick={() => navigate(-1)}>
+                                            <button type="button" className="btn btn-outline-secondary w-100 py-2 rounded-3 fw-medium" onClick={() => navigate('/admin/gestionProductos')}>
                                                 Cancelar
                                             </button>
                                         </div>
@@ -224,12 +207,8 @@ export const AgregarProducto = () => {
                     </div>
                 </section>
             </main>
-
-            <footer className="footer-tienda mt-auto py-3 bg-dark text-white">
-                <div className="container text-center">
-                    <p className="mb-0">&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
-                </div>
-            </footer>
         </div>
     );
 };
+
+export default AgregarProducto;

@@ -1,7 +1,9 @@
 import { useContext, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
-import logoImg from '../../assets/logo.png';
+import '../../components/styles.css'
+import '../../components/tienda.css'
+
 
 export const GestionReportes = () => {
     const { pedidos, usuarios } = useContext(AppContext);
@@ -75,26 +77,6 @@ export const GestionReportes = () => {
 
     return (
         <div className="d-flex flex-column min-vh-100">
-            <header>
-                <nav className="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
-                    <div className="container">
-                        <Link className="navbar-brand" to="/admin">
-                            <img src={logoImg} alt="Logo Ferretería Los Maestros" className="logo-img" />
-                            <span className="texto-ferreteria">Ferretería</span>
-                            <span className="texto-maestros">Los Maestros</span>
-                        </Link>
-                        <ul className="navbar-nav">
-                            <li className="nav-item"><Link className="nav-link" to="/admin"><i className="bi bi-house-door-fill"></i> Inicio</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="/admin/productos"><i className="bi bi-box-seam"></i> Productos</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="/admin/inventario"><i className="bi bi-card-checklist"></i> Inventario</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="/admin/pedidos"><i className="bi bi-receipt"></i> Pedidos</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="/admin/usuarios"><i className="bi bi-person"></i> Usuarios</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="/admin/reportes"><i className="bi bi-file-bar-graph"></i> Reportes</Link></li>
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-
             <main className="container my-5 flex-grow-1">
                 <div className="mt-2 mx-2">
                     <h1>Reportes</h1>
@@ -216,12 +198,8 @@ export const GestionReportes = () => {
                     </div>
                 </section>
             </main>
-
-            <footer className="footer-tienda mt-auto">
-                <div className="container text-center py-3">
-                    <p className="mb-0 text-secondary">&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
-                </div>
-            </footer>
         </div>
     );
 };
+
+export default GestionReportes;

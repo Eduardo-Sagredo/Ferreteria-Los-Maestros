@@ -1,9 +1,8 @@
 import { useState, useContext, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../context/AppContext';
-import '../styles.css';
-import '../tienda.css';
-import logoImg from '../../assets/logo.png';
+import '../../components/styles.css'
+import '../../components/tienda.css'
 
 export const InventarioVendedor = () => {
     const { productos, actualizarStockProducto } = useContext(AppContext);
@@ -91,24 +90,6 @@ export const InventarioVendedor = () => {
 
     return (
         <div className="d-flex flex-column min-vh-100">
-            {/* CABECERA */}
-            <header>
-                <nav className="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
-                    <div className="container">
-                        <Link className="navbar-brand" to="/">
-                            <img src={logoImg} alt="Logo Ferretería Los Maestros" className="logo-img" />
-                            <span className="texto-ferreteria">Ferretería</span>
-                            <span className="texto-maestros">Los Maestros</span>
-                        </Link>
-                        <ul className="navbar-nav">
-                            <li className="nav-item"><Link className="nav-link" to="/"><i className="bi bi-house-door-fill"></i> Inicio</Link></li>
-                            <li className="nav-item"><Link className="nav-link" to="/vendedor/productos"><i className="bi bi-box-seam"></i> Productos</Link></li>
-                            <li className="nav-item"><Link className="nav-link active" to="/vendedor/inventario"><i className="bi bi-card-checklist"></i> Inventario</Link></li>
-                        </ul>
-                    </div>
-                </nav>
-            </header>
-
             <main className="flex-grow-1">
                 <section className="container mt-5">
                     <h1 className="mb-1" style={{ color: '#1E293B' }}>Modulo de vendedor</h1>
@@ -242,13 +223,6 @@ export const InventarioVendedor = () => {
                     </div>
                 </section>
             </main>
-
-            <footer className="footer-tienda mt-auto py-4">
-                <div className="container text-center">
-                    <p className="mb-0 text-secondary">&copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.</p>
-                </div>
-            </footer>
-
             {/* MODAL ACTUALIZAR STOCK */}
             {productoModal && (
                 <>
@@ -302,3 +276,5 @@ export const InventarioVendedor = () => {
         </div>
     );
 };
+
+export default InventarioVendedor;

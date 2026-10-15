@@ -1,85 +1,13 @@
-import logoImg from '../assets/logo.png';
 import imagenNosotros from '../assets/imagen-nosotros.jpg'
-import './styles-nosotros.css'
-import './tienda.css'
-import './styles.css'
-import { Link } from 'react-router-dom';
+import '../components/styles-nosotros.css'
+import '../components/tienda.css'
+import '../components/styles.css'
+import { Link } from 'react-router-dom'
 
 export const SobreNosotros = () => {
     return (
         <>
-            <header>
-                <nav className="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
-                    <div className="container">
-                        <Link className="navbar-brand" to="/">
-                            <img src={logoImg} alt="Logo Ferretería Los Maestros" className="logo-img" />
-                            <span className="texto-ferreteria"> Ferretería </span>
-                            <span className="texto-maestros"> Los Maestros </span>
-                        </Link> 
-
-                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPrincipal"
-                            aria-controls="navbarPrincipal" aria-expanded="false" aria-label="Mostrar menú">
-                            <span className="navbar-toggler-icon"></span>
-                        </button>
-
-                        <div className="collapse navbar-collapse" id="navbarPrincipal">
-                            <ul className="navbar-nav ms-auto">
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/">
-                                        <i className="bi bi-house-door-fill"></i> Inicio
-                                    </Link> 
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/productos">
-                                        <i className="bi bi-box-seam"></i> Productos
-                                    </Link> 
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/nosotros">
-                                        <i className="bi bi-people"></i> Sobre nosotros
-                                    </Link> 
-                                </li>
-                                <li className="nav-item opcion-privada">
-                                    <Link className="nav-link" to="/mis-pedidos">
-                                        <i className="bi bi-receipt"></i> Mis pedidos
-                                    </Link> 
-                                </li>
-                                <li className="nav-item opcion-privada">
-                                    <Link className="nav-link" to="/historial">
-                                        <i className="bi bi-clock-history"></i> Historial
-                                    </Link> 
-                                </li>
-                                <li className="nav-item opcion-privada">
-                                    <Link className="nav-link" to="/cuenta-corriente">
-                                        <i className="bi bi-wallet2"></i> Cuenta corriente
-                                    </Link> 
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/contacto">
-                                        <i className="bi bi-envelope-fill"></i> Contacto
-                                    </Link> 
-                                </li>
-                                <li className="nav-item opcion-sin-sesion">
-                                    <Link className="nav-link" to="/inicio-sesion">
-                                        <i className="bi bi-box-arrow-in-right"></i> Iniciar sesión
-                                    </Link> 
-                                </li>
-                                <li className="nav-item opcion-con-sesion">
-                                    <Link className="nav-link" to="#" id="btnCerrarSesion">
-                                        <i className="bi bi-box-arrow-right"></i> Cerrar sesión
-                                    </Link> 
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/ubicacion">
-                                        <i className="bi bi-geo-alt"></i> Ubicación
-                                    </Link> 
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-            </header>
-
+            
             <section className="hero-nosotros">
                 <div className="container text-white">
                     <span className="text-warning fw-bold text-uppercase" style={{ letterSpacing: '2px', fontSize: '0.85rem' }}>
@@ -165,13 +93,8 @@ export const SobreNosotros = () => {
                 </aside>
             </section>
 
-            <footer className="footer-tienda">
-                <div className="container text-center">
-                    <p className="mb-0">
-                        &copy; 2026 Ferretería Los Maestros. Todos los derechos reservados.
-                    </p>
-                </div>
-            </footer>
         </>
     );
 }
+
+export default SobreNosotros;
