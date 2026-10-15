@@ -1,9 +1,11 @@
+import './styles-footer.css'
+
 function Footer() {
   return (
-    <footer className="bg-dark text-white text-center py-3 mt-5">
-      <div className="container">
+    <footer className="footer-tienda mt-5">
+      <div className="container text-center">
         <p className="mb-0">
-          © 2026 Ferretería Los Maestros
+          © 2026 Ferretería Los Maestros. Todos los derechos reservados.
         </p>
       </div>
     </footer>

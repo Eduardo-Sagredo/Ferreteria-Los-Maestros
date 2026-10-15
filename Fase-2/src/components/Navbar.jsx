@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import MockDB from '../services/MockDB.js'
+import './styles-navbar.css'
 
 function Navbar() {
   const navigate = useNavigate()

@@ -1,6 +1,7 @@
 /*
    ESTILOS GENERALES
 */
+
 * {
   box-sizing: border-box;
 }
@@ -20,77 +21,15 @@ body {
 
 
 /*
-   NAVBAR
-*/
-.navbar {
-  min-height: 85px;
-}
-
-.navbar-brand {
-  color: white;
-  font-size: 20px;
-  text-decoration: none;
-  gap: 6px;
-}
-
-.navbar-brand:hover {
-  color: white;
-}
-
-.logo-img {
-  width: 90px;
-  height: 70px;
-  object-fit: contain;
-  margin-right: 2px;
-}
-
-.texto-ferreteria {
-  color: white;
-}
-
-.texto-maestros {
-  color: #ffc107;
-}
-
-.navbar .nav-link {
-  color: #f1f1f1;
-  margin-left: 10px;
-  transition: 0.3s;
-}
-
-.navbar .nav-link:hover {
-  color: #ffc107;
-}
-
-.navbar .nav-link i {
-  margin-right: 4px;
-}
-
-.contador-carrito {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 23px;
-  height: 23px;
-  padding: 0 6px;
-  background-color: #ffc107;
-  color: #212529;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-
-/*
    HERO HOME
 */
+
 .hero-section {
   min-height: 550px;
   display: flex;
   align-items: center;
   padding: 80px 0;
   color: white;
-
   background-image:
     linear-gradient(
       rgba(0, 27, 53, 0.65),
@@ -131,6 +70,7 @@ body {
 /*
    CATEGORÍAS HOME
 */
+
 .categorias {
   padding-top: 50px;
   padding-bottom: 50px;
@@ -173,6 +113,7 @@ body {
 /*
    PRODUCTOS DESTACADOS
 */
+
 .productos-destacados {
   padding-top: 50px;
   padding-bottom: 50px;
@@ -208,6 +149,7 @@ body {
 /*
    CATÁLOGO
 */
+
 .catalogo-section {
   min-height: calc(100vh - 85px);
   background-color: #f4f6f8;
@@ -276,6 +218,7 @@ body {
 /*
    TARJETAS DE PRODUCTOS
 */
+
 .producto-card {
   border: 1px solid #dee2e6;
   border-radius: 12px;
@@ -356,6 +299,7 @@ body {
 /*
    DETALLE DE PRODUCTO
 */
+
 .detalle-producto-section {
   min-height: calc(100vh - 85px);
   padding: 50px 0;
@@ -418,6 +362,7 @@ body {
 /*
    CARRITO
 */
+
 .carrito-section {
   min-height: calc(100vh - 85px);
   background-color: #f4f6f8;
@@ -500,40 +445,17 @@ body {
 /*
    MENSAJES
 */
+
 .alert {
   border-radius: 8px;
 }
 
 
 /*
-   FOOTER
-*/
-footer {
-  background-color: #212529;
-  color: white;
-  padding: 20px 0;
-  text-align: center;
-}
-
-footer p {
-  margin: 0;
-}
-
-
-/*
    RESPONSIVE TABLET
 */
+
 @media (max-width: 991px) {
-
-  .navbar .nav-link {
-    margin-left: 0;
-    padding: 10px 0;
-  }
-
-  .logo-img {
-    width: 75px;
-    height: 60px;
-  }
 
   .hero-section {
     min-height: 500px;
@@ -565,29 +487,13 @@ footer p {
 /*
    RESPONSIVE CELULAR
 */
+
 @media (max-width: 576px) {
-
-  /*
-     NAVBAR
-  */
-  .navbar {
-    min-height: 75px;
-  }
-
-  .navbar-brand {
-    font-size: 16px;
-    gap: 4px;
-  }
-
-  .logo-img {
-    width: 65px;
-    height: 55px;
-  }
-
 
   /*
      HERO
   */
+
   .hero-section {
     min-height: 450px;
     padding: 40px 20px;
@@ -609,6 +515,7 @@ footer p {
   /*
      CATEGORÍAS
   */
+
   .categorias {
     padding-top: 40px;
     padding-bottom: 40px;
@@ -622,6 +529,7 @@ footer p {
   /*
      PRODUCTOS DESTACADOS
   */
+
   .productos-destacados {
     padding-top: 40px;
     padding-bottom: 40px;
@@ -635,6 +543,7 @@ footer p {
   /*
      CATÁLOGO
   */
+
   .catalogo-section .container {
     padding-left: 20px;
     padding-right: 20px;
@@ -673,6 +582,7 @@ footer p {
   /*
      DETALLE DE PRODUCTO
   */
+
   .detalle-producto-section {
     padding: 20px 0;
   }
@@ -713,6 +623,7 @@ footer p {
   /*
      CARRITO
   */
+
   .carrito-section .container {
     padding-left: 20px;
     padding-right: 20px;
