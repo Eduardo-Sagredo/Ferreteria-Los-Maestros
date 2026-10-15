@@ -1,0 +1,95 @@
+/* NAVBAR */
+
+.navbar {
+  min-height: 85px;
+}
+
+.navbar-brand {
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
+  gap: 6px;
+}
+
+.navbar-brand:hover {
+  color: white;
+}
+
+.logo-img {
+  width: 90px;
+  height: 70px;
+  object-fit: contain;
+  margin-right: 2px;
+}
+
+.texto-ferreteria {
+  color: white;
+}
+
+.texto-maestros {
+  color: #ffc107;
+}
+
+.navbar .nav-link {
+  color: #f1f1f1;
+  margin-left: 10px;
+  transition: 0.3s;
+}
+
+.navbar .nav-link:hover {
+  color: #ffc107;
+}
+
+.navbar .nav-link i {
+  margin-right: 4px;
+}
+
+/* CONTADOR DEL CARRITO */
+
+.contador-carrito {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 23px;
+  height: 23px;
+  padding: 0 6px;
+  background-color: #ffc107;
+  color: #212529;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* TABLET */
+
+@media (max-width: 991px) {
+
+  .navbar .nav-link {
+    margin-left: 0;
+    padding: 10px 0;
+  }
+
+  .logo-img {
+    width: 75px;
+    height: 60px;
+  }
+}
+
+/* CELULAR */
+
+@media (max-width: 576px) {
+
+  .navbar {
+    min-height: 75px;
+  }
+
+  .navbar-brand {
+    font-size: 16px;
+    gap: 4px;
+  }
+
+  .logo-img {
+    width: 65px;
+    height: 55px;
+  }
+}
