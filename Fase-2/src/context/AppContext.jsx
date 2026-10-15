@@ -1,7 +1,11 @@
 import { createContext, useState, useEffect } from 'react';
 // Asegúrate de tener exportado usuariosIniciales en tu mockdb, o si no, 
 // el código de abajo tiene un respaldo por si acaso no existe.
-import { productosIniciales, pedidosIniciales, usuariosIniciales } from '../services/mockdb';
+import {
+  productosIniciales,
+  pedidosIniciales,
+  usuariosIniciales
+} from '../services/datosIniciales.js'
 
 export const AppContext = createContext();
 
@@ -21,7 +25,7 @@ export const AppProvider = ({ children }) => {
   const [usuarios, setUsuarios] = useState(() => {
     const guardado = localStorage.getItem('db_usuarios_react');
     // Si tienes usuariosIniciales en mockdb los usa, sino usa un arreglo vacío de respaldo
-    return guardado ? JSON.parse(guardado) : (usuariosIniciales || []); 
+    return guardado ? JSON.parse(guardado) : (usuariosIniciales || []);
   });
 
   // --- EFECTOS DE AUTOGUARDADO ---
@@ -37,7 +41,7 @@ export const AppProvider = ({ children }) => {
 
   // --- FUNCIONES CRUD PARA PRODUCTOS ---
   const actualizarStockProducto = (id, nuevoStock) => {
-    setProductos(prev => prev.map(p => 
+    setProductos(prev => prev.map(p =>
       p.id === id ? { ...p, stockActual: nuevoStock } : p
     ));
   };
@@ -51,7 +55,7 @@ export const AppProvider = ({ children }) => {
   };
 
   const editarProducto = (id, datosActualizados) => {
-    setProductos(prev => prev.map(p => 
+    setProductos(prev => prev.map(p =>
       p.id === id ? { ...p, ...datosActualizados } : p
     ));
   };
@@ -67,24 +71,24 @@ export const AppProvider = ({ children }) => {
   };
 
   const editarUsuario = (id, datosActualizados) => {
-    setUsuarios(prev => prev.map(u => 
+    setUsuarios(prev => prev.map(u =>
       u.id === id ? { ...u, ...datosActualizados } : u
     ));
   };
 
   return (
-    <AppContext.Provider value={{ 
+    <AppContext.Provider value={{
       // Exportamos lo de productos
-      productos, 
-      setProductos, 
+      productos,
+      setProductos,
       actualizarStockProducto,
       eliminarProducto,
       agregarProducto,
       editarProducto,
-      
+
       // Exportamos lo de pedidos
-      pedidos, 
-      setPedidos, 
+      pedidos,
+      setPedidos,
 
       // Exportamos lo de usuarios (NUEVO)
       usuarios,
