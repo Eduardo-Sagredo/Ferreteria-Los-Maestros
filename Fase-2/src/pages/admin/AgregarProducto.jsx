@@ -107,7 +107,7 @@ export const AgregarProducto = () => {
             agregarProducto(productoFinal);
         }
 
-        navigate('/admin/productos');
+        navigate('/admin/gestionProductos');
     };
 
     return (

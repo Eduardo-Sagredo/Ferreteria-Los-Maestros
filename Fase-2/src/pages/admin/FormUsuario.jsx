@@ -32,7 +32,7 @@ export const FormUsuario = () => {
                 setEstado(usuarioEditar.estado);
                 // La contraseña se deja en blanco obligando a que la vuelva a escribir
             } else {
-                navigate('/admin/usuarios');
+                navigate('/admin/gestionUsuarios');
             }
         }
     }, [idEdicion, modoEdicion, usuarios, navigate]);
@@ -100,7 +100,7 @@ export const FormUsuario = () => {
             alert('Usuario actualizado con éxito.');
         }
 
-        navigate('/admin/usuarios');
+        navigate('/admin/gestionUsuarios');
     };
 
     return (

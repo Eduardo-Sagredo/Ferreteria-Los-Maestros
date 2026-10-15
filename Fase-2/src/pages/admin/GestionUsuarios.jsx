@@ -40,7 +40,7 @@ export const GestionUsuarios = () => {
 
 
     const getColorEstado = (estado) => {
-        return estado === 'Activo' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger';
+        return estado === 'Activo' ? 'bg-success text-white' : 'bg-danger text-white';
     };
 
     return (
