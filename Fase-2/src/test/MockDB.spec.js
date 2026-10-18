@@ -1,4 +1,4 @@
-import MockDB from '../src/services/MockDB.js'
+import MockDB from '../services/MockDB.js'
 
 describe('Pruebas del módulo tienda', function () {
 

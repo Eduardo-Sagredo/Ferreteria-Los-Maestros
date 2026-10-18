@@ -33,125 +33,129 @@ function App() {
     <AppProvider>
       <BrowserRouter>
 
-        <Navbar />
+        <div className="d-flex flex-column min-vh-100">
 
-        <Routes>
+          <Navbar />
 
-          <Route
-            path="/"
-            element={<Home />}
-          />
+          <Routes>
 
-          <Route
-            path="/productos"
-            element={<Productos />}
-          />
+            <Route
+              path="/"
+              element={<Home />}
+            />
 
-          <Route
-            path="/producto/:id"
-            element={<DetalleProducto />}
-          />
+            <Route
+              path="/productos"
+              element={<Productos />}
+            />
 
-          <Route
-            path="/carrito"
-            element={<Carrito />}
-          />
+            <Route
+              path="/producto/:id"
+              element={<DetalleProducto />}
+            />
 
-          <Route
-            path="/sobreNosotros"
-            element={<SobreNosotros />}
-          />
+            <Route
+              path="/carrito"
+              element={<Carrito />}
+            />
 
-          <Route
-            path="/ubicacion"
-            element={<Ubicacion />}
-          />
+            <Route
+              path="/sobreNosotros"
+              element={<SobreNosotros />}
+            />
 
-          <Route
-            path="/cuenta-corriente"
-            element={<CuentaCorriente />}
-          />
+            <Route
+              path="/ubicacion"
+              element={<Ubicacion />}
+            />
 
-          <Route
-            path="/historial"
-            element={<Historial />}
-          />
+            <Route
+              path="/cuenta-corriente"
+              element={<CuentaCorriente />}
+            />
 
-          <Route
-            path="/mis-pedidos"
-            element={<MisPedidos />}
-          />
+            <Route
+              path="/historial"
+              element={<Historial />}
+            />
 
-          <Route
-            path="/contacto"
-            element={<Contacto />}
-          />
+            <Route
+              path="/mis-pedidos"
+              element={<MisPedidos />}
+            />
 
-          <Route
-            path="/registro"
-            element={<Registro />}
-          />
+            <Route
+              path="/contacto"
+              element={<Contacto />}
+            />
 
-          <Route
-            path="/login"
-            element={<InicioSesion />}
-          />
+            <Route
+              path="/registro"
+              element={<Registro />}
+            />
 
-          <Route
-            path="/admin"
-            element={<AdminDashboard />}
-          />
+            <Route
+              path="/login"
+              element={<InicioSesion />}
+            />
 
-          <Route
-            path="/admin/gestionProductos"
-            element={<GestionProductos />}
-          />
+            <Route
+              path="/admin"
+              element={<AdminDashboard />}
+            />
 
-          <Route
-            path="/admin/agregarProducto"
-            element={<AgregarProducto />}
-          />
+            <Route
+              path="/admin/gestionProductos"
+              element={<GestionProductos />}
+            />
 
-          <Route
-            path="/admin/inventario"
-            element={<Inventario />}
-          />
+            <Route
+              path="/admin/agregarProducto"
+              element={<AgregarProducto />}
+            />
 
-          <Route
-            path="/admin/gestionPedidos"
-            element={<GestionPedidos />}
-          />
+            <Route
+              path="/admin/inventario"
+              element={<Inventario />}
+            />
 
-          <Route
-            path="/admin/gestionUsuarios"
-            element={<GestionUsuarios />}
-          />
+            <Route
+              path="/admin/gestionPedidos"
+              element={<GestionPedidos />}
+            />
 
-          <Route
-            path="/admin/formUsuario"
-            element={<FormUsuario />}
-          />
+            <Route
+              path="/admin/gestionUsuarios"
+              element={<GestionUsuarios />}
+            />
 
-          <Route
-            path="/admin/gestionReportes"
-            element={<GestionReportes />}
-          />
+            <Route
+              path="/admin/formUsuario"
+              element={<FormUsuario />}
+            />
 
-          <Route
-            path="/vendedor"
-            element={<InventarioVendedor />}
-          />
+            <Route
+              path="/admin/gestionReportes"
+              element={<GestionReportes />}
+            />
 
-          <Route
-            path="/vendedor/productos"
-            element={<GestionProductos />}
-          />
+            <Route
+              path="/vendedor"
+              element={<InventarioVendedor />}
+            />
+
+            <Route
+              path="/vendedor/productos"
+              element={<GestionProductos />}
+            />
 
 
 
-        </Routes>
+          </Routes>
 
-        <Footer />
+          <Footer />
+
+        </div>
 
       </BrowserRouter>
     </AppProvider>

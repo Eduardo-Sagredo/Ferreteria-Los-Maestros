@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import InicioSesion from './InicioSesion.jsx'
+import InicioSesion from '../pages/InicioSesion.jsx'
 
 describe('Pruebas del inicio de sesión', function () {
 

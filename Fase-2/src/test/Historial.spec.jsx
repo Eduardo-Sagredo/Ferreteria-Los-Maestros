@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import Historial from './Historial.jsx'
+import Historial from '../pages/Historial.jsx'
 
 describe('Pruebas del Historial de Compras', function () {
 

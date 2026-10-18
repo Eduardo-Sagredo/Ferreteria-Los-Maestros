@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import Contacto from './Contacto.jsx'
+import Contacto from '../pages/Contacto.jsx'
 
 describe('Pruebas del formulario de contacto', function () {
 

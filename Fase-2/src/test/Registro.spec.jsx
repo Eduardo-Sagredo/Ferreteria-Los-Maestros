@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import Registro from './Registro.jsx'
+import Registro from '../pages/Registro.jsx'
 
 describe('Pruebas del registro de usuario', function () {
 

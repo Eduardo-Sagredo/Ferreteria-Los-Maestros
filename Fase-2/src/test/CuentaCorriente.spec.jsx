@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import CuentaCorriente from './CuentaCorriente.jsx'
+import CuentaCorriente from '../pages/CuentaCorriente.jsx'
 
 describe('Pruebas de Cuenta Corriente', function () {
 

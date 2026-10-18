@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import MisPedidos from './MisPedidos.jsx'
+import MisPedidos from '../pages/MisPedidos.jsx'
 
 describe('Pruebas de Mis Pedidos', function () {
 
