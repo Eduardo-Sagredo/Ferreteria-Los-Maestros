@@ -5,6 +5,13 @@ import { AppProvider } from './context/AppContext.jsx';
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
 
+import CuentaCorriente from './pages/CuentaCorriente.jsx'
+import Historial from './pages/Historial.jsx'
+import MisPedidos from './pages/MisPedidos.jsx'
+import Contacto from './pages/Contacto.jsx'
+import Registro from './pages/Registro.jsx'
+import InicioSesion from './pages/InicioSesion.jsx'
+
 import Home from './pages/Home.jsx'
 import Productos from './pages/Productos.jsx'
 import Carrito from './pages/Carrito.jsx'
@@ -58,6 +65,36 @@ function App() {
           <Route
             path="/ubicacion"
             element={<Ubicacion />}
+          />
+
+          <Route
+            path="/cuenta-corriente"
+            element={<CuentaCorriente />}
+          />
+
+          <Route
+            path="/historial"
+            element={<Historial />}
+          />
+
+          <Route
+            path="/mis-pedidos"
+            element={<MisPedidos />}
+          />
+
+          <Route
+            path="/contacto"
+            element={<Contacto />}
+          />
+
+          <Route
+            path="/registro"
+            element={<Registro />}
+          />
+
+          <Route
+            path="/login"
+            element={<InicioSesion />}
           />
 
           <Route
