@@ -1,13 +1,11 @@
-import { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
+import { useState } from 'react';
+import MockDB from '../../services/MockDB.js';
 import '../../components/styles.css'
 import '../../components/tienda.css'
 
 
 export const GestionPedidos = () => {
-    // 1. Obtenemos los pedidos desde el contexto
-    const { pedidos } = useContext(AppContext);
+    const pedidos = MockDB.getTabla('pedidos');
 
     // 2. Estados para los filtros
     const [busqueda, setBusqueda] = useState('');

@@ -1,13 +1,11 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
+import MockDB from '../../services/MockDB.js';
 import '../../components/styles.css'
 import '../../components/tienda.css'
 
 export const GestionUsuarios = () => {
-    // 1. Obtenemos los usuarios y la función de eliminar desde el contexto
-    // (Te mostraré cómo agregarlos al AppContext más abajo)
-    const { usuarios, eliminarUsuario } = useContext(AppContext);
+    const [usuarios, setUsuarios] = useState(() => MockDB.getTabla('usuarios'));
     const navigate = useNavigate();
 
     // 2. Estados para los filtros
@@ -30,7 +28,12 @@ export const GestionUsuarios = () => {
     // 4. Funciones de acción
     const handleEliminar = (id) => {
         if (window.confirm('¿Seguro que deseas eliminar este usuario?')) {
-            eliminarUsuario(id);
+            const resultado = MockDB.eliminarUsuario(id);
+            if (!resultado.exito) {
+                alert(resultado.mensaje);
+            } else {
+                setUsuarios(MockDB.getTabla('usuarios'));
+            }
         }
     };
 

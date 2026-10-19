@@ -1,11 +1,11 @@
-import { useState, useContext, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import MockDB from '../../services/MockDB.js';
 import '../../components/styles.css'
 import '../../components/tienda.css'
 
 export const FormUsuario = () => {
-    const { usuarios, agregarUsuario, editarUsuario } = useContext(AppContext);
+    const [usuarios] = useState(() => MockDB.getTabla('usuarios'));
     const navigate = useNavigate();
 
     // Para saber si estamos editando
@@ -68,7 +68,11 @@ export const FormUsuario = () => {
                 estado: 'Activo' // Por defecto siempre activo al crear
             };
 
-            agregarUsuario(nuevoUsuario);
+            const resultado = MockDB.agregarUsuario(nuevoUsuario);
+            if (!resultado.exito) {
+                alert(resultado.mensaje);
+                return;
+            }
             alert('Usuario creado con éxito.');
 
         } else {
@@ -96,7 +100,11 @@ export const FormUsuario = () => {
                 password // Se mantiene la misma
             };
 
-            editarUsuario(parseInt(idEdicion), datosActualizados);
+            const resultado = MockDB.editarUsuario(parseInt(idEdicion), datosActualizados);
+            if (!resultado.exito) {
+                alert(resultado.mensaje);
+                return;
+            }
             alert('Usuario actualizado con éxito.');
         }
 

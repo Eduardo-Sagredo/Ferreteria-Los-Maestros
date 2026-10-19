@@ -1,11 +1,11 @@
-import { useState, useEffect, useContext } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import MockDB from '../../services/MockDB.js';
 import '../../components/styles.css'
 import '../../components/tienda.css'
 
 export const AgregarProducto = () => {
-    const { productos, agregarProducto, editarProducto } = useContext(AppContext);
+    const [productos] = useState(() => MockDB.getTabla('productos'));
     const navigate = useNavigate();
     
     const [searchParams] = useSearchParams();
@@ -102,9 +102,17 @@ export const AgregarProducto = () => {
         };
 
         if (isEditing) {
-            editarProducto(parseInt(editId), productoFinal);
+            const resultado = MockDB.editarProducto(parseInt(editId), productoFinal);
+            if (!resultado.exito) {
+                setErrorCodigo(resultado.mensaje);
+                return;
+            }
         } else {
-            agregarProducto(productoFinal);
+            const resultado = MockDB.agregarProducto(productoFinal);
+            if (!resultado.exito) {
+                setErrorCodigo(resultado.mensaje);
+                return;
+            }
         }
 
         navigate('/admin/gestionProductos');

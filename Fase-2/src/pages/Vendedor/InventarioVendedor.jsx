@@ -1,11 +1,10 @@
-import { useState, useContext, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
+import { useState, useMemo } from 'react';
+import MockDB from '../../services/MockDB.js';
 import '../../components/styles.css'
 import '../../components/tienda.css'
 
 export const InventarioVendedor = () => {
-    const { productos, actualizarStockProducto } = useContext(AppContext);
+    const [productos, setProductos] = useState(() => MockDB.getTabla('productos'));
 
     // --- ESTADOS ---
     const [busqueda, setBusqueda] = useState('');
@@ -16,12 +15,10 @@ export const InventarioVendedor = () => {
     const [nuevoStockInput, setNuevoStockInput] = useState('');
 
     // --- LÓGICA DE FILTRADO Y ALERTAS ---
-    const listaProductos = productos || [];
-
     const { sinStock, stockBajo } = useMemo(() => {
         const sin = [];
         const bajo = [];
-        listaProductos.forEach(p => {
+        productos.forEach(p => {
             if (p.stockActual === 0) {
                 sin.push(p);
             } else if (p.stockActual <= p.stockMinimo) {
@@ -29,9 +26,9 @@ export const InventarioVendedor = () => {
             }
         });
         return { sinStock: sin, stockBajo: bajo };
-    }, [listaProductos]);
+    }, [productos]);
 
-    const productosFiltrados = listaProductos.filter(prod => {
+    const productosFiltrados = productos.filter(prod => {
         const coincideTxt = prod.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
             prod.codigo.toLowerCase().includes(busqueda.toLowerCase());
 
@@ -60,7 +57,12 @@ export const InventarioVendedor = () => {
             alert('Por favor, ingresa un número válido mayor o igual a 0.');
             return;
         }
-        actualizarStockProducto(productoModal.id, nuevoValor);
+        const resultado = MockDB.actualizarStockProducto(productoModal.id, nuevoValor);
+        if (!resultado.exito) {
+            alert(resultado.mensaje);
+            return;
+        }
+        setProductos(MockDB.getTabla('productos'));
         cerrarModal();
         alert('Stock actualizado correctamente.');
     };

@@ -1,12 +1,12 @@
-import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
+import MockDB from '../../services/MockDB.js';
 import '../../components/styles.css'
 import '../../components/tienda.css'
 
 
 export const AdminDashboard = () => {
-    const { productos, pedidos } = useContext(AppContext);
+    const productos = MockDB.getTabla('productos');
+    const pedidos = MockDB.getTabla('pedidos');
     const alertasInventario = productos.filter(p => p.stockActual <= p.stockMinimo);
     const pedidosRecientes = pedidos.slice(0, 4);
 

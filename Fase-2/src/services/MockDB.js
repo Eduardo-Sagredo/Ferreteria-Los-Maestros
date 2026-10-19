@@ -1,679 +1,280 @@
-import productosIniciales from '../data/productos.js'
+import { 
+  productosIniciales, 
+  pedidosIniciales, 
+  usuariosIniciales 
+} from './datosIniciales.js' // Asegúrate de que la ruta sea correcta
 
 const MockDB = {
-
-  /*
-     INICIAR BASE DE DATOS
-  */
+  // ==========================================
+  // INICIAR BASE DE DATOS
+  // ==========================================
   init() {
-    const productosGuardados =
-      localStorage.getItem('db_productos')
-
-    if (!productosGuardados) {
-      localStorage.setItem(
-        'db_productos',
-        JSON.stringify(productosIniciales)
-      )
+    if (!localStorage.getItem('db_productos')) {
+      localStorage.setItem('db_productos', JSON.stringify(productosIniciales))
+    }
+    // Inicializamos también pedidos y usuarios
+    if (!localStorage.getItem('db_pedidos')) {
+      localStorage.setItem('db_pedidos', JSON.stringify(pedidosIniciales))
+    }
+    if (!localStorage.getItem('db_usuarios')) {
+      localStorage.setItem('db_usuarios', JSON.stringify(usuariosIniciales || []))
+    }
+    if (!localStorage.getItem('carritoFerreteria')) {
+      localStorage.setItem('carritoFerreteria', JSON.stringify([]))
     }
   },
 
-  /*
-     OBTENER TABLA
-  */
+  // ==========================================
+  // FUNCIONES BASE (GETTERS Y SETTERS)
+  // ==========================================
   getTabla(tabla) {
-    return JSON.parse(
-      localStorage.getItem(`db_${tabla}`)
-    ) || []
+    return JSON.parse(localStorage.getItem(`db_${tabla}`)) || []
   },
 
-  /*
-     GUARDAR TABLA
-  */
   setTabla(tabla, datos) {
-    localStorage.setItem(
-      `db_${tabla}`,
-      JSON.stringify(datos)
-    )
+    localStorage.setItem(`db_${tabla}`, JSON.stringify(datos))
+    // Emitimos un evento genérico por si React necesita actualizar la pantalla
+    window.dispatchEvent(new Event(`db_${tabla}_actualizada`))
   },
 
-  /*
-     OBTENER DATO
-  */
   getDato(clave) {
-    return JSON.parse(
-      localStorage.getItem(clave)
-    )
+    return JSON.parse(localStorage.getItem(clave))
   },
 
-  /*
-     GUARDAR DATO
-  */
   setDato(clave, dato) {
-    localStorage.setItem(
-      clave,
-      JSON.stringify(dato)
-    )
+    localStorage.setItem(clave, JSON.stringify(dato))
   },
 
-  /*
-     ELIMINAR DATO
-  */
   eliminarDato(clave) {
     localStorage.removeItem(clave)
   },
 
-  /*
-     CALCULAR ESTADO DEL STOCK
-  */
-  calcularEstadoStock(
-    stockActual,
-    stockMinimo
-  ) {
+  eliminarRegistro(tabla, id) {
+    const datos = this.getTabla(tabla).filter((item) => item.id !== id)
+    this.setTabla(tabla, datos)
+    return { exito: true, mensaje: 'Registro eliminado correctamente.' }
+  },
 
-    if (stockActual <= 0) {
-      return 'Sin stock'
-    }
-
-    if (stockActual <= stockMinimo) {
-      return 'Stock bajo'
-    }
-
+  // ==========================================
+  // LÓGICA DE PRODUCTOS (ADMIN / VENDEDOR)
+  // ==========================================
+  calcularEstadoStock(stockActual, stockMinimo) {
+    if (stockActual <= 0) return 'Sin stock'
+    if (stockActual <= stockMinimo) return 'Stock bajo'
     return 'Disponible'
   },
 
-  /*
-     ACTUALIZAR STOCK
-  */
-  actualizarStockProducto(
-    id,
-    nuevoStock
-  ) {
-
-    const productos =
-      this.getTabla('productos')
-
-    const producto =
-      productos.find(
-        (producto) =>
-          producto.id === id
-      )
+  actualizarStockProducto(id, nuevoStock) {
+    const productos = this.getTabla('productos')
+    const producto = productos.find((p) => p.id === id)
 
     if (!producto) {
-      return {
-        exito: false,
-        mensaje:
-          'No se encontró el producto.'
-      }
+      return { exito: false, mensaje: 'No se encontró el producto.' }
     }
 
-    producto.stockActual =
-      Number(nuevoStock)
+    producto.stockActual = Number(nuevoStock)
+    producto.estado = this.calcularEstadoStock(producto.stockActual, producto.stockMinimo)
 
-    producto.estado =
-      this.calcularEstadoStock(
-        producto.stockActual,
-        producto.stockMinimo
-      )
-
-    this.setTabla(
-      'productos',
-      productos
-    )
-
-    return {
-      exito: true,
-      mensaje:
-        'Stock actualizado correctamente.'
-    }
+    this.setTabla('productos', productos)
+    return { exito: true, mensaje: 'Stock actualizado correctamente.' }
   },
 
-  /*
-     AGREGAR PRODUCTO
-  */
-  agregarProducto(
-    nuevoProducto
-  ) {
-
-    const productos =
-      this.getTabla('productos')
-
-    /*
-       VALIDAR CÓDIGO REPETIDO
-    */
-    const codigoExiste =
-      productos.some(
-        (producto) =>
-          producto.codigo ===
-          nuevoProducto.codigo
-      )
+  agregarProducto(nuevoProducto) {
+    const productos = this.getTabla('productos')
+    const codigoExiste = productos.some((p) => p.codigo === nuevoProducto.codigo)
 
     if (codigoExiste) {
-      return {
-        exito: false,
-        mensaje:
-          'Ya existe un producto con ese código.'
-      }
+      return { exito: false, mensaje: 'Ya existe un producto con ese código.' }
     }
 
-    /*
-       GENERAR NUEVO ID
-    */
     let nuevoId = 1
-
     if (productos.length > 0) {
-
-      nuevoId =
-        Math.max(
-          ...productos.map(
-            (producto) =>
-              producto.id
-          )
-        ) + 1
+      nuevoId = Math.max(...productos.map((p) => p.id)) + 1
     }
 
-    const stockActual =
-      Number(
-        nuevoProducto.stockActual
-      )
-
-    const stockMinimo =
-      Number(
-        nuevoProducto.stockMinimo
-      )
+    const stockActual = Number(nuevoProducto.stockActual)
+    const stockMinimo = Number(nuevoProducto.stockMinimo)
 
     const productoCompleto = {
-
+      ...nuevoProducto,
       id: nuevoId,
-
-      codigo:
-        nuevoProducto.codigo,
-
-      nombre:
-        nuevoProducto.nombre,
-
-      categoria:
-        nuevoProducto.categoria,
-
-      precio:
-        Number(
-          nuevoProducto.precio
-        ),
-
-      stockActual:
-        stockActual,
-
-      stockMinimo:
-        stockMinimo,
-
-      estado:
-        this.calcularEstadoStock(
-          stockActual,
-          stockMinimo
-        ),
-
-      imagen:
-        nuevoProducto.imagen,
-
-      descripcion:
-        nuevoProducto.descripcion
+      precio: Number(nuevoProducto.precio),
+      stockActual,
+      stockMinimo,
+      estado: this.calcularEstadoStock(stockActual, stockMinimo)
     }
 
-    productos.push(
-      productoCompleto
-    )
+    productos.push(productoCompleto)
+    this.setTabla('productos', productos)
 
-    this.setTabla(
-      'productos',
-      productos
-    )
-
-    return {
-      exito: true,
-      mensaje:
-        'Producto agregado correctamente.',
-      producto:
-        productoCompleto
-    }
+    return { exito: true, mensaje: 'Producto agregado correctamente.', producto: productoCompleto }
   },
 
-  /*
-     EDITAR PRODUCTO
-  */
-  actualizarProducto(
-    id,
-    datosActualizados
-  ) {
-
-    const productos =
-      this.getTabla('productos')
-
-    const indice =
-      productos.findIndex(
-        (producto) =>
-          producto.id === id
-      )
+  editarProducto(id, datosActualizados) {
+    const productos = this.getTabla('productos')
+    const indice = productos.findIndex((p) => p.id === id)
 
     if (indice === -1) {
-      return {
-        exito: false,
-        mensaje:
-          'No se encontró el producto.'
-      }
+      return { exito: false, mensaje: 'No se encontró el producto.' }
     }
 
-    /*
-       VALIDAR CÓDIGO REPETIDO
-    */
-    const codigoExiste =
-      productos.some(
-        (producto) =>
-          producto.codigo ===
-            datosActualizados.codigo &&
-          producto.id !== id
-      )
+    const codigoExiste = productos.some(
+      (p) => p.codigo === datosActualizados.codigo && p.id !== id
+    )
 
     if (codigoExiste) {
-      return {
-        exito: false,
-        mensaje:
-          'Ya existe otro producto con ese código.'
-      }
+      return { exito: false, mensaje: 'Ya existe otro producto con ese código.' }
     }
 
-    const stockActual =
-      Number(
-        datosActualizados.stockActual
-      )
-
-    const stockMinimo =
-      Number(
-        datosActualizados.stockMinimo
-      )
+    const stockActual = Number(datosActualizados.stockActual)
+    const stockMinimo = Number(datosActualizados.stockMinimo)
 
     productos[indice] = {
-
       ...productos[indice],
-
       ...datosActualizados,
-
       id: id,
-
-      precio:
-        Number(
-          datosActualizados.precio
-        ),
-
-      stockActual:
-        stockActual,
-
-      stockMinimo:
-        stockMinimo,
-
-      estado:
-        this.calcularEstadoStock(
-          stockActual,
-          stockMinimo
-        )
+      precio: Number(datosActualizados.precio),
+      stockActual,
+      stockMinimo,
+      estado: this.calcularEstadoStock(stockActual, stockMinimo)
     }
 
-    this.setTabla(
-      'productos',
-      productos
-    )
-
-    return {
-      exito: true,
-      mensaje:
-        'Producto actualizado correctamente.'
-    }
+    this.setTabla('productos', productos)
+    return { exito: true, mensaje: 'Producto actualizado correctamente.' }
   },
 
-  /*
-     ELIMINAR PRODUCTO
-  */
   eliminarProducto(id) {
-
-    const productos =
-      this.getTabla('productos')
-
-    const productoExiste =
-      productos.some(
-        (producto) =>
-          producto.id === id
-      )
+    const productos = this.getTabla('productos')
+    const productoExiste = productos.some((p) => p.id === id)
 
     if (!productoExiste) {
-      return {
-        exito: false,
-        mensaje:
-          'No se encontró el producto.'
-      }
+      return { exito: false, mensaje: 'No se encontró el producto.' }
     }
 
-    const productosActualizados =
-      productos.filter(
-        (producto) =>
-          producto.id !== id
-      )
+    // Eliminar de la base de datos
+    this.eliminarRegistro('productos', id)
 
-    this.setTabla(
-      'productos',
-      productosActualizados
-    )
+    // Si estaba en el carrito, también se elimina
+    const carrito = this.getCarrito()
+    const carritoActualizado = carrito.filter((item) => item.id !== id)
+    this.guardarCarrito(carritoActualizado)
 
-    /*
-       SI ESTABA EN EL CARRITO
-       TAMBIÉN SE ELIMINA
-    */
-    const carrito =
-      this.getCarrito()
+    return { exito: true, mensaje: 'Producto eliminado correctamente.' }
+  },
 
-    const carritoActualizado =
-      carrito.filter(
-        (item) =>
-          item.id !== id
-      )
+  // ==========================================
+  // LÓGICA DE USUARIOS (ADMINISTRADOR)
+  // ==========================================
+  agregarUsuario(nuevoUsuario) {
+    const usuarios = this.getTabla('usuarios')
+    const nuevoId = usuarios.length > 0 ? Math.max(...usuarios.map((u) => u.id)) + 1 : 1
+    
+    usuarios.push({ ...nuevoUsuario, id: nuevoId })
+    this.setTabla('usuarios', usuarios)
+    
+    return { exito: true, mensaje: 'Usuario agregado correctamente.' }
+  },
 
-    this.guardarCarrito(
-      carritoActualizado
-    )
+  editarUsuario(id, datosActualizados) {
+    const usuarios = this.getTabla('usuarios')
+    const indice = usuarios.findIndex((u) => u.id === id)
 
-    return {
-      exito: true,
-      mensaje:
-        'Producto eliminado correctamente.'
+    if (indice === -1) {
+      return { exito: false, mensaje: 'No se encontró el usuario.' }
     }
+
+    usuarios[indice] = { ...usuarios[indice], ...datosActualizados }
+    this.setTabla('usuarios', usuarios)
+    
+    return { exito: true, mensaje: 'Usuario actualizado correctamente.' }
   },
 
-  /*
-     ELIMINAR REGISTRO GENÉRICO
-  */
-  eliminarRegistro(
-    tabla,
-    id
-  ) {
-
-    const datos =
-      this.getTabla(tabla)
-        .filter(
-          (item) =>
-            item.id !== id
-        )
-
-    this.setTabla(
-      tabla,
-      datos
-    )
+  eliminarUsuario(id) {
+    return this.eliminarRegistro('usuarios', id)
   },
 
-  /*
-     OBTENER CARRITO
-  */
+  // ==========================================
+  // LÓGICA DEL CARRITO Y COMPRAS (CLIENTE)
+  // ==========================================
   getCarrito() {
-
-    return this.getDato(
-      'carritoFerreteria'
-    ) || []
+    return this.getDato('carritoFerreteria') || []
   },
 
-  /*
-     GUARDAR CARRITO
-  */
   guardarCarrito(carrito) {
-
-    this.setDato(
-      'carritoFerreteria',
-      carrito
-    )
-
-    window.dispatchEvent(
-      new Event(
-        'carritoActualizado'
-      )
-    )
+    this.setDato('carritoFerreteria', carrito)
+    window.dispatchEvent(new Event('carritoActualizado'))
   },
 
-  /*
-     AGREGAR AL CARRITO
-  */
-  agregarAlCarrito(
-    idProducto,
-    cantidad
-  ) {
+  agregarAlCarrito(idProducto, cantidad) {
+    const productos = this.getTabla('productos')
+    const producto = productos.find((p) => p.id === idProducto)
 
-    const productos =
-      this.getTabla('productos')
+    if (!producto) return { exito: false, mensaje: 'No se encontró el producto.' }
+    if (producto.stockActual <= 0) return { exito: false, mensaje: 'Este producto no tiene stock disponible.' }
+    if (cantidad < 1) return { exito: false, mensaje: 'La cantidad debe ser mayor a 0.' }
 
-    const producto =
-      productos.find(
-        (producto) =>
-          producto.id === idProducto
-      )
+    const carrito = this.getCarrito()
+    const itemEncontrado = carrito.find((item) => item.id === idProducto)
+    let cantidadActual = itemEncontrado ? itemEncontrado.cantidad : 0
 
-    if (!producto) {
-      return {
-        exito: false,
-        mensaje:
-          'No se encontró el producto.'
-      }
-    }
-
-    if (
-      producto.stockActual <= 0
-    ) {
-      return {
-        exito: false,
-        mensaje:
-          'Este producto no tiene stock disponible.'
-      }
-    }
-
-    if (cantidad < 1) {
-      return {
-        exito: false,
-        mensaje:
-          'La cantidad debe ser mayor a 0.'
-      }
-    }
-
-    const carrito =
-      this.getCarrito()
-
-    const itemEncontrado =
-      carrito.find(
-        (item) =>
-          item.id === idProducto
-      )
-
-    let cantidadActual = 0
-
-    if (itemEncontrado) {
-      cantidadActual =
-        itemEncontrado.cantidad
-    }
-
-    if (
-      cantidadActual + cantidad >
-      producto.stockActual
-    ) {
-      return {
-        exito: false,
-        mensaje:
-          'No puedes superar el stock disponible.'
-      }
+    if (cantidadActual + cantidad > producto.stockActual) {
+      return { exito: false, mensaje: 'No puedes superar el stock disponible.' }
     }
 
     if (itemEncontrado) {
-
-      itemEncontrado.cantidad =
-        itemEncontrado.cantidad +
-        cantidad
-
+      itemEncontrado.cantidad += cantidad
     } else {
-
-      carrito.push({
-        id: idProducto,
-        cantidad: cantidad
-      })
+      carrito.push({ id: idProducto, cantidad: cantidad })
     }
 
-    this.guardarCarrito(
-      carrito
-    )
-
-    return {
-      exito: true,
-      mensaje:
-        'Producto agregado al carrito.'
-    }
+    this.guardarCarrito(carrito)
+    return { exito: true, mensaje: 'Producto agregado al carrito.' }
   },
 
-  /*
-     REALIZAR COMPRA
-  */
-  realizarCompra(
-    metodoPago
-  ) {
-
-    /*
-       VALIDAR MÉTODO
-    */
-    if (
-      metodoPago !== 'debito' &&
-      metodoPago !== 'credito'
-    ) {
-      return {
-        exito: false,
-        mensaje:
-          'Selecciona un método de pago.'
-      }
+  realizarCompra(metodoPago) {
+    if (metodoPago !== 'debito' && metodoPago !== 'credito') {
+      return { exito: false, mensaje: 'Selecciona un método de pago.' }
     }
 
-    const carrito =
-      this.getCarrito()
-
-    /*
-       VALIDAR CARRITO
-    */
+    const carrito = this.getCarrito()
     if (carrito.length === 0) {
+      return { exito: false, mensaje: 'El carrito está vacío.' }
+    }
 
+    const productos = this.getTabla('productos')
+
+    // Validar stock antes de comprar
+    for (const item of carrito) {
+      const producto = productos.find((p) => p.id === item.id)
+      if (!producto) return { exito: false, mensaje: 'Uno de los productos ya no está disponible.' }
+      if (producto.stockActual <= 0) return { exito: false, mensaje: `${producto.nombre} ya no tiene stock disponible.` }
+      if (item.cantidad > producto.stockActual) {
+        return { exito: false, mensaje: `No hay stock suficiente para ${producto.nombre}. Stock disponible: ${producto.stockActual}.` }
+      }
+    }
+
+    // Descontar stock
+    const productosActualizados = productos.map((producto) => {
+      const itemCarrito = carrito.find((item) => item.id === producto.id)
+      if (!itemCarrito) return producto
+
+      const nuevoStock = producto.stockActual - itemCarrito.cantidad
       return {
-        exito: false,
-        mensaje:
-          'El carrito está vacío.'
+        ...producto,
+        stockActual: nuevoStock,
+        estado: this.calcularEstadoStock(nuevoStock, producto.stockMinimo)
       }
-    }
+    })
 
-    const productos =
-      this.getTabla('productos')
-
-    /*
-       VALIDAR STOCK
-       ANTES DE COMPRAR
-    */
-    for (
-      const item of carrito
-    ) {
-
-      const producto =
-        productos.find(
-          (producto) =>
-            producto.id ===
-            item.id
-        )
-
-      if (!producto) {
-
-        return {
-          exito: false,
-          mensaje:
-            'Uno de los productos ya no está disponible.'
-        }
-      }
-
-      if (
-        producto.stockActual <= 0
-      ) {
-
-        return {
-          exito: false,
-          mensaje:
-            `${producto.nombre} ya no tiene stock disponible.`
-        }
-      }
-
-      if (
-        item.cantidad >
-        producto.stockActual
-      ) {
-
-        return {
-          exito: false,
-          mensaje:
-            `No hay stock suficiente para ${producto.nombre}. Stock disponible: ${producto.stockActual}.`
-        }
-      }
-    }
-
-    /*
-       DESCONTAR STOCK
-    */
-    const productosActualizados =
-      productos.map(
-        (producto) => {
-
-          const itemCarrito =
-            carrito.find(
-              (item) =>
-                item.id ===
-                producto.id
-            )
-
-          if (!itemCarrito) {
-            return producto
-          }
-
-          const nuevoStock =
-            producto.stockActual -
-            itemCarrito.cantidad
-
-          return {
-
-            ...producto,
-
-            stockActual:
-              nuevoStock,
-
-            estado:
-              this.calcularEstadoStock(
-                nuevoStock,
-                producto.stockMinimo
-              )
-          }
-        }
-      )
-
-    /*
-       GUARDAR NUEVO STOCK
-    */
-    this.setTabla(
-      'productos',
-      productosActualizados
-    )
-
-    /*
-       VACIAR CARRITO
-    */
+    // Guardar cambios
+    this.setTabla('productos', productosActualizados)
     this.guardarCarrito([])
 
-    return {
-      exito: true,
-      mensaje:
-        'Compra realizada correctamente.'
-    }
+    return { exito: true, mensaje: 'Compra realizada correctamente.' }
   }
 }
 
+// Inicializamos la base de datos automáticamente al cargar el archivo
 MockDB.init()
 
 export default MockDB

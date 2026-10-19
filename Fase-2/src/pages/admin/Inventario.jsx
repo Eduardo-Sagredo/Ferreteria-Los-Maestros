@@ -1,12 +1,10 @@
-import { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
+import { useState } from 'react';
+import MockDB from '../../services/MockDB.js';
 import '../../components/styles.css'
 import '../../components/tienda.css'
 
 export const Inventario = () => {
-    // 1. Obtenemos los productos y la función para editar desde el contexto
-    const { productos, editarProducto } = useContext(AppContext);
+    const [productos, setProductos] = useState(() => MockDB.getTabla('productos'));
 
     // 2. Estados para los filtros
     const [busqueda, setBusqueda] = useState('');
@@ -48,19 +46,12 @@ export const Inventario = () => {
         if (productoSeleccionado) {
             const stockVal = Number(nuevoStock);
 
-            // Recalculamos el estado automáticamente
-            let nuevoEstado = 'Disponible';
-            if (stockVal <= 0) {
-                nuevoEstado = 'Sin stock';
-            } else if (stockVal <= Number(productoSeleccionado.stockMinimo)) {
-                nuevoEstado = 'Stock bajo';
+            const resultado = MockDB.actualizarStockProducto(productoSeleccionado.id, stockVal);
+            if (!resultado.exito) {
+                alert(resultado.mensaje);
+                return;
             }
-
-            // Actualizamos en la base de datos global
-            editarProducto(productoSeleccionado.id, {
-                stockActual: stockVal,
-                estado: nuevoEstado
-            });
+            setProductos(MockDB.getTabla('productos'));
 
             handleCerrarModal(); // Cerramos el modal tras guardar
         }

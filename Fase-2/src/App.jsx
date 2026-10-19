@@ -1,7 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import { AppProvider } from './context/AppContext.jsx';
-
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
 
@@ -30,7 +28,6 @@ import InventarioVendedor from './pages/Vendedor/InventarioVendedor.jsx';
 
 function App() {
   return (
-    <AppProvider>
       <BrowserRouter>
 
         <div className="d-flex flex-column min-vh-100">
@@ -158,7 +155,6 @@ function App() {
         </div>
 
       </BrowserRouter>
-    </AppProvider>
   )
 }
 

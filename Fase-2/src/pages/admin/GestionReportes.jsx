@@ -1,12 +1,12 @@
-import { useContext, useMemo } from 'react';
-import { Link } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
+import { useMemo } from 'react';
+import MockDB from '../../services/MockDB.js';
 import '../../components/styles.css'
 import '../../components/tienda.css'
 
 
 export const GestionReportes = () => {
-    const { pedidos, usuarios } = useContext(AppContext);
+    const pedidos = MockDB.getTabla('pedidos');
+    const usuarios = MockDB.getTabla('usuarios');
 
     // --- CÁLCULOS DINÁMICOS (Reemplaza la lógica de dashboard.js) ---
     const estadisticas = useMemo(() => {

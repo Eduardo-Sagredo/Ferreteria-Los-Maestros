@@ -1,13 +1,13 @@
-import { useContext, useState, useLayoutEffect } from 'react';
+import { useState, useLayoutEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
+import MockDB from '../../services/MockDB.js';
 import '../../components/styles.css'
 import '../../components/tienda.css'
 
 
 
 export const GestionProductos = () => {
-    const { productos, eliminarProducto } = useContext(AppContext);
+    const [productos, setProductos] = useState(() => MockDB.getTabla('productos'));
     const navigate = useNavigate();
 
     useLayoutEffect(() => {
@@ -36,7 +36,12 @@ export const GestionProductos = () => {
     // 4. Funciones de acción (reemplazan a window.eliminarProducto y window.editarProducto)
     const handleEliminar = (id) => {
         if (window.confirm('¿Seguro que deseas eliminar este producto?')) {
-            eliminarProducto(id); // Borra del estado global automáticamente
+            const resultado = MockDB.eliminarProducto(id);
+            if (!resultado.exito) {
+                alert(resultado.mensaje);
+            } else {
+                setProductos(MockDB.getTabla('productos'));
+            }
         }
     };
 
