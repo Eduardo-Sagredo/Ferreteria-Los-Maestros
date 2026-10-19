@@ -2,7 +2,7 @@ import {
   productosIniciales, 
   pedidosIniciales, 
   usuariosIniciales 
-} from './datosIniciales.js' // Asegúrate de que la ruta sea correcta
+} from '../data/productos.js' // Asegúrate de que la ruta sea correcta
 
 const MockDB = {
   // ==========================================

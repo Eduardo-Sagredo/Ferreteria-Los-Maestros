@@ -1,4 +1,4 @@
-const productosIniciales = [
+export const productosIniciales = [
   {
     id: 1,
     codigo: 'PROD-001',
@@ -239,6 +239,20 @@ const productosIniciales = [
     imagen: '/img/sherwin-williams.png',
     descripcion: 'Pintura látex interior de terminación mate para muros y cielos.'
   }
+];
+
+export const pedidosIniciales = [
+  { id: 101, numero: 'PED-00125', cliente: 'Carlos González', fecha: '08/09/2026', total: 38950, entrega: 'Retiro', estado: 'Pendiente', productos: [{nombre: 'Martillo', cant: 2}, {nombre: 'Cemento', cant: 3}] },
+            { id: 102, numero: 'PED-00120', cliente: 'Laura Rojas', fecha: '03/09/2026', total: 74990, entrega: 'Despacho', estado: 'Preparando', productos: [{nombre: 'Taladro', cant: 1}, {nombre: 'Brocas', cant: 2}] },
+            { id: 103, numero: 'PED-00112', cliente: 'Constructora López', fecha: '25/08/2026', total: 126940, entrega: 'Despacho', estado: 'Entregado', productos: [{nombre: 'Cemento', cant: 15}] },
+            { id: 104, numero: 'PED-00110', cliente: 'Juan Pérez', fecha: '20/08/2026', total: 15900, entrega: 'Retiro', estado: 'Listo para retiro', productos: [{nombre: 'Tubo PVC', cant: 3}] }
+];
+
+export const usuariosIniciales = [
+    { id: 1, nombre: 'Andrea Muñoz', correo: 'admin@ferreteria.cl', rol: 'Administrador', estado: 'Activo' },
+            { id: 2, nombre: 'Pedro Soto', correo: 'pedro@ferreteria.cl', rol: 'Vendedor', estado: 'Activo' },
+            { id: 3, nombre: 'Carlos González', correo: 'carlos@email.cl', rol: 'Cliente', estado: 'Activo' },
+            { id: 4, nombre: 'Juan Pérez', correo: 'juan@email.cl', rol: 'Cliente', estado: 'Inactivo' }
 ]
 
 export default productosIniciales
