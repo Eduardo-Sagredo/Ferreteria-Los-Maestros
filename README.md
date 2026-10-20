@@ -97,7 +97,7 @@ Incorporación de tableros de control (Dashboard), CRUD simulado de productos y 
 
 * Carrito de Compras y Control de Stock: Cálculo automático de subtotales y totales. Impide agregar o acumular cantidades que superen el stock disponible y descuenta el inventario al simular compras con débito o crédito.
 
-*Formularios con Validaciones Estrictas: Registro de clientes, inicio de sesión y formulario de contacto con validación de RUT (sin puntos ni guion), formato/dominio de correo y longitud de contraseña (4 a 10 caracteres).
+* Formularios con Validaciones Estrictas: Registro de clientes, inicio de sesión y formulario de contacto con validación de RUT (sin puntos ni guion), formato/dominio de correo y longitud de contraseña (4 a 10 caracteres).
 
 * Vistas Personalizadas según Sesión: Opciones de seguimiento (Mis pedidos, Historial y Cuenta corriente) visibles en el menú del cliente cuando existe una sesión simulada activa.
 
