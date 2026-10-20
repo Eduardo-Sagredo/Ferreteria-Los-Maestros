@@ -6,7 +6,7 @@ module.exports = function (config) {
 
     files: [
       {
-        pattern: 'tests/**/*.spec.js',
+        pattern: 'src/**/*.spec.js',
         included: true,
         served: true
       },
@@ -18,7 +18,7 @@ module.exports = function (config) {
     ],
 
     preprocessors: {
-      'tests/**/*.spec.js': ['webpack'],
+      'src/**/*.spec.js': ['webpack'],
       'src/**/*.spec.jsx': ['webpack']
     },
 
