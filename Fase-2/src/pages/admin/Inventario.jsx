@@ -6,11 +6,9 @@ import '../../components/tienda.css'
 export const Inventario = () => {
     const [productos, setProductos] = useState(() => MockDB.getTabla('productos'));
 
-    // 2. Estados para los filtros
     const [busqueda, setBusqueda] = useState('');
     const [filtroEstado, setFiltroEstado] = useState('todos');
 
-    // 3. Estados para controlar el Modal nativo de React
     const [showModal, setShowModal] = useState(false);
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
     const [nuevoStock, setNuevoStock] = useState(0);
@@ -34,11 +32,11 @@ export const Inventario = () => {
     const handleAbrirModal = (prod) => {
         setProductoSeleccionado(prod);
         setNuevoStock(prod.stockActual);
-        setShowModal(true); // Muestra el modal
+        setShowModal(true);
     };
 
     const handleCerrarModal = () => {
-        setShowModal(false); // Oculta el modal
+        setShowModal(false);
         setProductoSeleccionado(null);
     };
 
@@ -53,7 +51,7 @@ export const Inventario = () => {
             }
             setProductos(MockDB.getTabla('productos'));
 
-            handleCerrarModal(); // Cerramos el modal tras guardar
+            handleCerrarModal();
         }
     };
 
@@ -228,7 +226,7 @@ export const Inventario = () => {
                                         min="0"
                                         value={nuevoStock}
                                         onChange={(e) => setNuevoStock(e.target.value)}
-                                        onKeyDown={(e) => e.key === 'Enter' && handleGuardarStock()} // Guarda al presionar Enter
+                                        onKeyDown={(e) => e.key === 'Enter' && handleGuardarStock()}
                                     />
                                 </div>
 

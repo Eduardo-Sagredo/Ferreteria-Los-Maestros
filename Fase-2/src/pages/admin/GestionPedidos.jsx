@@ -7,11 +7,9 @@ import '../../components/tienda.css'
 export const GestionPedidos = () => {
     const pedidos = MockDB.getTabla('pedidos');
 
-    // 2. Estados para los filtros
     const [busqueda, setBusqueda] = useState('');
     const [filtroEstado, setFiltroEstado] = useState('todos');
 
-    // 3. Estados para el Modal de Detalle
     const [showModal, setShowModal] = useState(false);
     const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
 
@@ -180,10 +178,8 @@ export const GestionPedidos = () => {
                                         {pedidoSeleccionado.productos && pedidoSeleccionado.productos.length > 0 ? (
                                             pedidoSeleccionado.productos.map((prod, index) => (
                                                 <li key={index} className="d-flex justify-content-between mb-2 pb-2 border-bottom text-dark">
-                                                    {/* Mostramos el nombre del producto */}
                                                     <span>{prod.nombre || prod}</span>
 
-                                                    {/* Intentamos leer la cantidad con distintos nombres comunes, o mostramos 1 por defecto */}
                                                     <span className="text-secondary">
                                                         Cant: {prod.cantidad || prod.cant || prod.qty || 1}
                                                     </span>
@@ -193,7 +189,6 @@ export const GestionPedidos = () => {
                                             <li className="text-muted fst-italic">Detalle de productos no disponible.</li>
                                         )}
 
-                                        {/* Restauramos el Total en la parte inferior */}
                                         <li className="d-flex justify-content-between mt-3 pt-2">
                                             <strong className="text-dark">Total:</strong>
                                             <strong style={{ color: '#d97706' }}>

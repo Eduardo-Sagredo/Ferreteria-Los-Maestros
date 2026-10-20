@@ -10,7 +10,6 @@ export const InventarioVendedor = () => {
     const [busqueda, setBusqueda] = useState('');
     const [filtroEstado, setFiltroEstado] = useState('todos');
 
-    // Estado para el Modal de Actualizar Stock
     const [productoModal, setProductoModal] = useState(null);
     const [nuevoStockInput, setNuevoStockInput] = useState('');
 

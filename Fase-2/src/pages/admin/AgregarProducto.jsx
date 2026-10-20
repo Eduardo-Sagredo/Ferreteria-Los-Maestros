@@ -12,11 +12,10 @@ export const AgregarProducto = () => {
     const editId = searchParams.get('edit');
     const isEditing = Boolean(editId);
 
-    // 1. Estado para manejar el error del código duplicado
     const [errorCodigo, setErrorCodigo] = useState('');
 
     const [formData, setFormData] = useState({
-        codigo: 'PROD-', // 2. Iniciamos por defecto con el prefijo
+        codigo: 'PROD-',
         nombre: '',
         categoria: 'construccion',
         precio: 0,
@@ -47,21 +46,18 @@ export const AgregarProducto = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         
-        // 3. Lógica estricta de bloqueo para el Código (Solo al agregar)
         if (name === 'codigo' && !isEditing) {
-            let val = value.toUpperCase(); // Forzar mayúsculas
+            let val = value.toUpperCase();
             
-            // Impedir que el usuario borre el prefijo "PROD-"
             if (!val.startsWith('PROD-')) {
                 val = 'PROD-';
             }
             
-            // Extraer lo que escribió después de "PROD-" y eliminar caracteres especiales/espacios
             const sufijo = val.substring(5).replace(/[^A-Z0-9]/g, '');
             val = 'PROD-' + sufijo;
 
             setFormData(prev => ({ ...prev, [name]: val }));
-            setErrorCodigo(''); // Limpia el error apenas el usuario empieza a corregir
+            setErrorCodigo('');
             return;
         }
 
@@ -71,18 +67,16 @@ export const AgregarProducto = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // 4. Validación: Verificar que exista un código y que no esté duplicado
         if (!isEditing) {
             if (formData.codigo === 'PROD-') {
                 setErrorCodigo('Debes ingresar números o letras después de PROD-');
                 return;
             }
 
-            // Busca si algún producto en la base de datos ya tiene ese mismo código
             const codigoExiste = productos.some(p => p.codigo === formData.codigo);
             if (codigoExiste) {
                 setErrorCodigo(`El código ${formData.codigo} ya está registrado. Ingresa uno distinto.`);
-                return; // Bloquea la creación deteniendo la función
+                return;
             }
         }
 
@@ -136,14 +130,12 @@ export const AgregarProducto = () => {
                                     <input 
                                         type="text" 
                                         name="codigo"
-                                        // Si está editando, ponemos readonly y pintamos el fondo grisáceo
                                         className={`form-control shadow-none ${isEditing ? 'bg-light text-muted' : ''}`} 
                                         required 
                                         readOnly={isEditing} 
                                         value={formData.codigo} 
                                         onChange={handleChange} 
                                     />
-                                    {/* Muestra alerta si hay error con el código */}
                                     {errorCodigo && <div className="text-danger mt-1" style={{ fontSize: '0.85rem' }}>{errorCodigo}</div>}
                                 </div>
                     
@@ -191,7 +183,6 @@ export const AgregarProducto = () => {
                     
                                 <div className="col-12">
                                     <label htmlFor="imagen" className="form-label fw-medium text-dark">URL de imagen (Opcional)</label>
-                                    {/* 5. Le quitamos el atributo 'required' a la imagen */}
                                     <input type="text" className="form-control shadow-none" name="imagen" placeholder="https://..." 
                                            value={formData.imagen} onChange={handleChange} />
                                 </div>

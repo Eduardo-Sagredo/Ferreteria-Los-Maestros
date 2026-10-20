@@ -8,29 +8,23 @@ export const GestionReportes = () => {
     const pedidos = MockDB.getTabla('pedidos');
     const usuarios = MockDB.getTabla('usuarios');
 
-    // --- CÁLCULOS DINÁMICOS (Reemplaza la lógica de dashboard.js) ---
+    // --- CÁLCULOS DINÁMICOS ---
     const estadisticas = useMemo(() => {
         const listaPedidos = pedidos || [];
         const listaUsuarios = usuarios || [];
 
-        // 1. Resumen de rendimiento
-        // Calculamos el total de ventas sumando los totales de todos los pedidos
         const totalVentas = listaPedidos.reduce((acc, pedido) => acc + (pedido.total || 0), 0);
 
-        // Pedidos completados (asumimos que 'Entregado' o 'Listo para retiro' cuentan como completados)
         const pedidosCompletados = listaPedidos.filter(p =>
             p.estado === 'Entregado' || p.estado === 'Listo para retiro'
         ).length;
 
-        // Ticket promedio
         const ticketPromedio = listaPedidos.length > 0 ? totalVentas / listaPedidos.length : 0;
 
-        // Clientes activos (Usuarios con rol Cliente y estado Activo)
         const clientesActivos = listaUsuarios.filter(u =>
             u.rol === 'Cliente' && u.estado === 'Activo'
         ).length;
 
-        // 2. Ranking de Clientes más frecuentes
         const conteoClientes = {};
         listaPedidos.forEach(p => {
             if (p.cliente) {
@@ -41,9 +35,8 @@ export const GestionReportes = () => {
         const topClientes = Object.entries(conteoClientes)
             .map(([nombre, compras]) => ({ nombre, compras }))
             .sort((a, b) => b.compras - a.compras)
-            .slice(0, 5); // Tomamos solo los top 5
+            .slice(0, 5);
 
-        // 3. Ranking de Productos más vendidos
         const conteoProductos = {};
         listaPedidos.forEach(pedido => {
             if (pedido.productos && Array.isArray(pedido.productos)) {
@@ -58,7 +51,7 @@ export const GestionReportes = () => {
         const topProductos = Object.entries(conteoProductos)
             .map(([nombre, unidades]) => ({ nombre, unidades }))
             .sort((a, b) => b.unidades - a.unidades)
-            .slice(0, 5); // Tomamos solo los top 5
+            .slice(0, 5);
 
         return {
             totalVentas,
@@ -68,7 +61,7 @@ export const GestionReportes = () => {
             topClientes,
             topProductos
         };
-    }, [pedidos, usuarios]); // Se recalcula automáticamente si cambian los pedidos o usuarios
+    }, [pedidos, usuarios]);
 
     // Función para formatear dinero
     const formatearDinero = (monto) => {
@@ -161,7 +154,6 @@ export const GestionReportes = () => {
                         <div className="card-body p-0">
                             <div className="row g-0 border-top text-center" style={{ borderColor: '#e2e8f0 !important' }}>
 
-                                {/* Total Ventas */}
                                 <div className="col-6 col-md-3 py-4 border-end" style={{ borderColor: '#e2e8f0 !important' }}>
                                     <div className="fs-2 mb-1" style={{ color: '#d97706', fontWeight: 400 }}>
                                         ${formatearDinero(estadisticas.totalVentas)}
@@ -169,7 +161,6 @@ export const GestionReportes = () => {
                                     <div className="text-secondary small">Total ventas (mes)</div>
                                 </div>
 
-                                {/* Pedidos Completados */}
                                 <div className="col-6 col-md-3 py-4 border-end" style={{ borderColor: '#e2e8f0 !important' }}>
                                     <div className="fs-2 mb-1" style={{ color: '#d97706', fontWeight: 400 }}>
                                         {estadisticas.pedidosCompletados}
@@ -177,7 +168,6 @@ export const GestionReportes = () => {
                                     <div className="text-secondary small">Pedidos completados</div>
                                 </div>
 
-                                {/* Ticket Promedio */}
                                 <div className="col-6 col-md-3 py-4 border-end" style={{ borderColor: '#e2e8f0 !important' }}>
                                     <div className="fs-2 mb-1" style={{ color: '#d97706', fontWeight: 400 }}>
                                         ${formatearDinero(estadisticas.ticketPromedio)}
@@ -185,7 +175,6 @@ export const GestionReportes = () => {
                                     <div className="text-secondary small">Ticket promedio</div>
                                 </div>
 
-                                {/* Clientes Activos */}
                                 <div className="col-6 col-md-3 py-4">
                                     <div className="fs-2 mb-1" style={{ color: '#d97706', fontWeight: 400 }}>
                                         {estadisticas.clientesActivos}

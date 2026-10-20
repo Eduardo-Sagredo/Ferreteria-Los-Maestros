@@ -8,14 +8,12 @@ export const GestionUsuarios = () => {
     const [usuarios, setUsuarios] = useState(() => MockDB.getTabla('usuarios'));
     const navigate = useNavigate();
 
-    // 2. Estados para los filtros
     const [busqueda, setBusqueda] = useState('');
     const [filtroRol, setFiltroRol] = useState('todos');
     const [filtroEstado, setFiltroEstado] = useState('todos');
 
-    // 3. Derivación de datos (Filtros en tiempo real)
-    // Se asegura de no romper si 'usuarios' aún no está definido
     const listaUsuarios = usuarios || [];
+    // --- DERIVACIÓN DE DATOS ---
     const usuariosFiltrados = listaUsuarios.filter(usuario => {
         const coincideTxt = usuario.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
             usuario.correo.toLowerCase().includes(busqueda.toLowerCase());
@@ -25,7 +23,7 @@ export const GestionUsuarios = () => {
         return coincideTxt && coincideRol && coincideEst;
     });
 
-    // 4. Funciones de acción
+    // --- FUNCIONES DE ACCIÓN ---
     const handleEliminar = (id) => {
         if (window.confirm('¿Seguro que deseas eliminar este usuario?')) {
             const resultado = MockDB.eliminarUsuario(id);
@@ -51,7 +49,6 @@ export const GestionUsuarios = () => {
             
             <main className="flex-grow-1">
                 <section>
-                    {/* Restauramos las clases exactas de tu HTML original para el título y botón */}
                     <div className="d-flex justify-content-between mx-2 my-2 align-items-center">
                         <h1 className="mx-2 my-2 fs-2">
                             Gestión de usuarios
@@ -135,23 +132,18 @@ export const GestionUsuarios = () => {
                                     ) : (
                                         usuariosFiltrados.map((usuario) => (
                                             <tr key={usuario.id}>
-                                                {/* Nombre: Oscuro y negrita media */}
                                                 <td className="py-3 px-4 text-dark fw-medium">{usuario.nombre}</td>
 
-                                                {/* Correo: Texto gris */}
                                                 <td className="py-3 text-secondary">{usuario.correo}</td>
 
-                                                {/* Rol: Texto normal sin badge */}
                                                 <td className="py-3 text-dark">{usuario.rol}</td>
 
-                                                {/* Estado: Badge con colores suaves */}
                                                 <td className="py-3">
                                                     <span className={`badge rounded-pill px-3 py-2 fw-medium ${getColorEstado(usuario.estado)}`}>
                                                         {usuario.estado}
                                                     </span>
                                                 </td>
 
-                                                {/* Acciones: Se mantienen los iconos */}
                                                 <td className="py-3 text-center">
                                                     <button className="btn btn-sm btn-outline-primary me-2" onClick={() => handleEditar(usuario.id)}>
                                                         <i className="bi bi-pencil"></i>

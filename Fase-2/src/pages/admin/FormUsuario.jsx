@@ -8,7 +8,6 @@ export const FormUsuario = () => {
     const [usuarios] = useState(() => MockDB.getTabla('usuarios'));
     const navigate = useNavigate();
 
-    // Para saber si estamos editando
     const [searchParams] = useSearchParams();
     const idEdicion = searchParams.get('edit');
     const modoEdicion = Boolean(idEdicion);
@@ -21,7 +20,6 @@ export const FormUsuario = () => {
     const [rol, setRol] = useState('Cliente');
     const [estado, setEstado] = useState('Activo');
 
-    // Cargar datos si estamos en modo edición
     useEffect(() => {
         if (modoEdicion && usuarios) {
             const usuarioEditar = usuarios.find(u => u.id === parseInt(idEdicion));
@@ -30,7 +28,6 @@ export const FormUsuario = () => {
                 setCorreo(usuarioEditar.correo);
                 setRol(usuarioEditar.rol);
                 setEstado(usuarioEditar.estado);
-                // La contraseña se deja en blanco obligando a que la vuelva a escribir
             } else {
                 navigate('/admin/gestionUsuarios');
             }
@@ -40,13 +37,11 @@ export const FormUsuario = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // 1. Validar que la contraseña esté escrita (el HTML5 lo exige, pero lo reforzamos aquí)
         if (!password || !confirmarPassword) {
             alert('Debes ingresar y confirmar la contraseña.');
             return;
         }
 
-        // 2. Validar que coincidan entre sí (Contraseña === Confirmar Contraseña)
         if (password !== confirmarPassword) {
             alert('Las contraseñas no coinciden entre sí. Por favor, verifica.');
             return;
@@ -65,7 +60,7 @@ export const FormUsuario = () => {
                 correo,
                 password,
                 rol,
-                estado: 'Activo' // Por defecto siempre activo al crear
+                estado: 'Activo'
             };
 
             const resultado = MockDB.agregarUsuario(nuevoUsuario);
@@ -79,13 +74,11 @@ export const FormUsuario = () => {
             // === EDITAR USUARIO ===
             const usuarioOriginal = usuarios.find(u => u.id === parseInt(idEdicion));
 
-            // 3. Validar que la contraseña escrita coincida con la original del usuario
             if (usuarioOriginal && usuarioOriginal.password !== password) {
                 alert('La contraseña ingresada es incorrecta (no coincide con la original). Edición denegada.');
-                return; // Bloquea la edición
+                return;
             }
 
-            // Validar correo único respecto a otros usuarios
             const correoExisteEnOtro = usuarios.some(u => u.correo.toLowerCase() === correo.toLowerCase() && u.id !== parseInt(idEdicion));
             if (correoExisteEnOtro) {
                 alert('Ese correo ya está en uso por otro usuario.');
@@ -97,7 +90,7 @@ export const FormUsuario = () => {
                 correo,
                 rol,
                 estado,
-                password // Se mantiene la misma
+                password
             };
 
             const resultado = MockDB.editarUsuario(parseInt(idEdicion), datosActualizados);
@@ -153,7 +146,6 @@ export const FormUsuario = () => {
                                     />
                                 </div>
 
-                                {/* Campos de contraseña obligatorios en AMBOS modos */}
                                 <div className="col-12">
                                     <label className="form-label fw-medium text-dark">Contraseña *</label>
                                     <input

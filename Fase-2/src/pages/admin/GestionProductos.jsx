@@ -14,16 +14,15 @@ export const GestionProductos = () => {
     window.scrollTo({
         top: 0,
         left: 0,
-        behavior: 'instant' // Fuerza un salto inmediato sin animación
+        behavior: 'instant'
     });
 }, []);
 
-    // 2. Creamos Estados (useState) para controlar los filtros<
     const [busqueda, setBusqueda] = useState('');
     const [filtroCategoria, setFiltroCategoria] = useState('todas');
     const [filtroEstado, setFiltroEstado] = useState('todos');
 
-    // 3. Lógica de filtrado en tiempo real (reemplaza a aplicarFiltrosProd)
+    // --- LÓGICA DE FILTRADO ---
     const productosFiltrados = productos.filter(p => {
         const coincideTxt = p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
             p.codigo.toLowerCase().includes(busqueda.toLowerCase());
@@ -33,7 +32,7 @@ export const GestionProductos = () => {
         return coincideTxt && coincideCat && coincideEst;
     });
 
-    // 4. Funciones de acción (reemplazan a window.eliminarProducto y window.editarProducto)
+    // --- FUNCIONES DE ACCIÓN ---
     const handleEliminar = (id) => {
         if (window.confirm('¿Seguro que deseas eliminar este producto?')) {
             const resultado = MockDB.eliminarProducto(id);
@@ -46,7 +45,6 @@ export const GestionProductos = () => {
     };
 
     const handleEditar = (id) => {
-        // Redirige a la página de agregar pero con el ID en la URL
         navigate(`/admin/agregarProducto?edit=${id}`);
     };
 
@@ -138,44 +136,36 @@ export const GestionProductos = () => {
                                     ) : (
                                         productosFiltrados.map((prod) => (
                                             <tr key={prod.id}>
-                                                {/* Código: Color gris y fuente monoespaciada */}
                                                 <td className="py-3 px-4 text-secondary font-monospace">
                                                     {prod.codigo}
                                                 </td>
 
-                                                {/* Nombre: Color oscuro por defecto */}
                                                 <td className="py-3 text-dark">
                                                     {prod.nombre}
                                                 </td>
 
-                                                {/* Categoría: Gris y primera letra mayúscula */}
                                                 <td className="py-3 text-secondary">
                                                     {prod.categoria ? prod.categoria.charAt(0).toUpperCase() + prod.categoria.slice(1) : '-'}
                                                 </td>
 
-                                                {/* Precio: Color naranja personalizado y texto un poco más grueso (500) */}
                                                 <td className="py-3" style={{ color: '#d97706', fontWeight: 500 }}>
                                                     ${prod.precio.toLocaleString('es-CL')}
                                                 </td>
 
-                                                {/* Stock actual: Centrado */}
                                                 <td className="py-3 text-center">
                                                     {prod.stockActual}
                                                 </td>
 
-                                                {/* Stock Mínimo: Centrado y gris */}
                                                 <td className="py-3 text-center text-secondary">
                                                     {prod.stockMinimo}
                                                 </td>
 
-                                                {/* Estado: Se mantiene tal cual */}
                                                 <td className="py-3 text-center">
                                                     <span className={`badge rounded-pill ${prod.estado === 'Disponible' ? 'bg-success' : prod.estado === 'Stock bajo' ? 'bg-warning text-dark' : 'bg-danger'}`}>
                                                         {prod.estado}
                                                     </span>
                                                 </td>
 
-                                                {/* Acciones: Se mantienen los iconos tal cual pediste */}
                                                 <td className="py-3 text-center">
                                                     <button
                                                         className="btn btn-sm btn-outline-primary me-2"

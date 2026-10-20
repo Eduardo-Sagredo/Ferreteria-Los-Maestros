@@ -2,7 +2,7 @@ import {
   productosIniciales, 
   pedidosIniciales, 
   usuariosIniciales 
-} from '../data/productos.js' // Asegúrate de que la ruta sea correcta
+} from '../data/productos.js'
 
 const MockDB = {
   // ==========================================
@@ -12,7 +12,6 @@ const MockDB = {
     if (!localStorage.getItem('db_productos')) {
       localStorage.setItem('db_productos', JSON.stringify(productosIniciales))
     }
-    // Inicializamos también pedidos y usuarios
     if (!localStorage.getItem('db_pedidos')) {
       localStorage.setItem('db_pedidos', JSON.stringify(pedidosIniciales))
     }
@@ -33,7 +32,6 @@ const MockDB = {
 
   setTabla(tabla, datos) {
     localStorage.setItem(`db_${tabla}`, JSON.stringify(datos))
-    // Emitimos un evento genérico por si React necesita actualizar la pantalla
     window.dispatchEvent(new Event(`db_${tabla}_actualizada`))
   },
 
@@ -151,10 +149,8 @@ const MockDB = {
       return { exito: false, mensaje: 'No se encontró el producto.' }
     }
 
-    // Eliminar de la base de datos
     this.eliminarRegistro('productos', id)
 
-    // Si estaba en el carrito, también se elimina
     const carrito = this.getCarrito()
     const carritoActualizado = carrito.filter((item) => item.id !== id)
     this.guardarCarrito(carritoActualizado)
@@ -243,7 +239,6 @@ const MockDB = {
 
     const productos = this.getTabla('productos')
 
-    // Validar stock antes de comprar
     for (const item of carrito) {
       const producto = productos.find((p) => p.id === item.id)
       if (!producto) return { exito: false, mensaje: 'Uno de los productos ya no está disponible.' }
@@ -253,7 +248,6 @@ const MockDB = {
       }
     }
 
-    // Descontar stock
     const productosActualizados = productos.map((producto) => {
       const itemCarrito = carrito.find((item) => item.id === producto.id)
       if (!itemCarrito) return producto
@@ -266,7 +260,6 @@ const MockDB = {
       }
     })
 
-    // Guardar cambios
     this.setTabla('productos', productosActualizados)
     this.guardarCarrito([])
 
@@ -274,7 +267,6 @@ const MockDB = {
   }
 }
 
-// Inicializamos la base de datos automáticamente al cargar el archivo
 MockDB.init()
 
 export default MockDB
