@@ -138,10 +138,7 @@ describe(
     })
 
 
-    /*
-       PRUEBA 1
-       AGREGAR PRODUCTO
-    */
+    // Test 1: validación de guardado de producto
     it(
       'debe agregar un producto nuevo al inventario',
       function () {
@@ -186,10 +183,7 @@ describe(
     )
 
 
-    /*
-       PRUEBA 2
-       CÓDIGO DUPLICADO
-    */
+    // Test 2: validación de rechazo de código duplicado
     it(
       'no debe permitir agregar un producto con código duplicado',
       function () {
@@ -219,10 +213,7 @@ describe(
     )
 
 
-    /*
-       PRUEBA 3
-       EDITAR PRODUCTO
-    */
+    // Test 3: validación de edición de producto existente
     it(
       'debe editar un producto existente',
       function () {
@@ -275,10 +266,7 @@ describe(
     )
 
 
-    /*
-       PRUEBA 4
-       ESTADOS DE STOCK
-    */
+    // Test 4: validación de reglas de estado del stock
     it(
       'debe calcular correctamente los estados del inventario',
       function () {
@@ -309,10 +297,7 @@ describe(
     )
 
 
-    /*
-       PRUEBA 5
-       ACTUALIZAR STOCK
-    */
+    // Test 5: validación de actualización de stock y su estado
     it(
       'debe actualizar el stock y cambiar automáticamente su estado',
       function () {
@@ -350,11 +335,7 @@ describe(
     )
 
 
-    /*
-       PRUEBA 6
-       ALERTAS DE INVENTARIO
-       RF-38 Y RF-39
-    */
+    // Test 6: validación visual de alertas de inventario
     it(
       'debe mostrar visualmente productos con stock bajo y sin stock',
       function () {
@@ -402,10 +383,7 @@ describe(
     )
 
 
-    /*
-       PRUEBA 7
-       AGREGAR USUARIO
-    */
+    // Test 7: validación de agregado de usuario vendedor
     it(
       'debe agregar un usuario con rol Vendedor',
       function () {
@@ -441,10 +419,7 @@ describe(
     )
 
 
-    /*
-       PRUEBA 8
-       EDITAR ROL DE USUARIO
-    */
+    // Test 8: validación de modificación del rol de usuario
     it(
       'debe modificar el rol de un usuario',
       function () {
@@ -483,10 +458,7 @@ describe(
     )
 
 
-    /*
-       PRUEBA 9
-       GESTIÓN DE PEDIDOS
-    */
+    // Test 9: validación de visualización y filtrado de pedidos
     it(
       'debe mostrar y filtrar los pedidos del sistema',
       function () {
@@ -543,11 +515,7 @@ describe(
     )
 
 
-    /*
-       PRUEBA 10
-       UBICACIÓN Y COBERTURA
-       RF-40
-    */
+    // Test 10: validación de cobertura para una ubicación
     it(
       'debe confirmar cobertura para una dirección de La Serena',
       function () {
