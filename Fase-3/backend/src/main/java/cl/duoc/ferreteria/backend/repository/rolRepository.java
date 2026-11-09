@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface rolRepository extends JpaRepository<Rol, UUID> {
+public interface rolRepository extends JpaRepository<Rol, Long> {
 
     //Buscar un rol por su nombre Enum
     Optional<Rol> findByNombre(RolEnum nombre);

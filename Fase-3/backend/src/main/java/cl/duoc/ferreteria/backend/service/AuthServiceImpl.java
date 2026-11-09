@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AuthServiceImpl {
+public class AuthServiceImpl implements AuthService{
 
     private final AuthenticationManager authenticationManager;
     private final userRepository userRepository;
@@ -37,17 +37,13 @@ public class AuthServiceImpl {
 
 
     public AuthResponseDTO login(LoginRequestDTO loginDto) {
-        // 1. Autenticar correo y contraseña con el AuthenticationManager
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getCorreo(), loginDto.getContrasena())
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // 2. Generar token JWT
         String token = jwtUtils.generarToken(authentication);
 
-        // 3. Obtener datos del usuario autenticado para la respuesta
         Usuario usuario = userRepository.findByCorreo(loginDto.getCorreo())
                 .orElseThrow(() -> new RuntimeException("Error: Usuario no encontrado."));
 
@@ -69,20 +65,20 @@ public class AuthServiceImpl {
 
 
     public String registrar(RegistroRequestDTO registroDto) {
-        // 1. Validar que el correo no esté duplicado
+
         if (userRepository.existsByCorreo(registroDto.getCorreo())) {
             throw new RuntimeException("Error: El correo ya está registrado.");
         }
 
-        // 2. Asignar rol por defecto (ROLE_CLIENTE)
         Set<Rol> roles = new HashSet<>();
         Rol rolCliente = rolRepository.findByNombre(RolEnum.ROLE_CLIENTE)
                 .orElseThrow(() -> new RuntimeException("Error: Rol no encontrado."));
         roles.add(rolCliente);
 
-        // 3. Crear nuevo usuario con contraseña encriptada (BCrypt)
         Usuario usuario = Usuario.builder()
+                .rut(registroDto.getRut())
                 .nombre(registroDto.getNombre())
+                .apellidos(registroDto.getApellidos())
                 .correo(registroDto.getCorreo())
                 .contrasena(passwordEncoder.encode(registroDto.getContrasena()))
                 .estado("Activo")

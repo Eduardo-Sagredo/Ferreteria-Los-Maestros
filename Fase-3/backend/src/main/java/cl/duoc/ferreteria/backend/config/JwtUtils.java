@@ -14,11 +14,9 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    // Clave secreta para firmar los tokens (mínimo 256 bits para HMAC-SHA256)
     @Value("${ferreteria.app.jwtSecret:FerreteriaLosMaestrosSecretKey2026ParaTokenJWTSuperSeguro123456}")
     private String jwtSecret;
 
-    // Tiempo de expiración del token (24 horas en milisegundos)
     @Value("${ferreteria.app.jwtExpirationMs:86400000}")
     private int jwtExpirationMs;
 
@@ -27,19 +25,17 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // Generar Token JWT a partir de la autenticación del usuario
     public String generarToken(Authentication authentication) {
         UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
 
         return Jwts.builder()
-                .setSubject(userPrincipal.getUsername()) // Guardamos el correo en el subject
+                .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // Extraer el correo (Subject) desde un Token JWT
     public String obtenerCorreoDelToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -49,7 +45,6 @@ public class JwtUtils {
                 .getSubject();
     }
 
-    // Validar si un Token JWT es auténtico y no ha expirado
     public boolean validarToken(String authToken) {
         try {
             Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(authToken);

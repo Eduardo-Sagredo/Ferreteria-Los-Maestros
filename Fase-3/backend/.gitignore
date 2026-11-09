@@ -33,7 +33,7 @@ build/
 .vscode/
 
 # Archivos de variables de entorno y secretos (Frontend)
-.env
+../../.env
 .env.local
 .env.development.local
 .env.test.local
