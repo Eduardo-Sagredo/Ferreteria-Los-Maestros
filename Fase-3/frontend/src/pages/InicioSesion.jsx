@@ -1,190 +1,106 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import MockDB from '../services/MockDB.js'
+import api from "../api/axiosConfig.js";
 
 function InicioSesion() {
 
   const [correo, setCorreo] = useState('')
   const [contrasena, setContrasena] = useState('')
-
   const [errorCorreo, setErrorCorreo] = useState('')
   const [errorContrasena, setErrorContrasena] = useState('')
   const [mensajeExito, setMensajeExito] = useState('')
+  const [cargando, setCargando] = useState(false)
+
+  const navigate = useNavigate()
 
 
   const validarCorreo = (valor) => {
 
     const correoLimpio = valor.trim()
+    if (correoLimpio === '') { return 'El correo es obligatorio.'}
+    if (correoLimpio.length > 100) { return 'El correo no puede superar los 100 caracteres.'}
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correoLimpio)) { return 'Ingrese un correo electrónico válido.'}
 
-    if (correoLimpio === '') {
-      return 'El correo es obligatorio.'
+    const dominio = correoLimpio.split('@')[1].toLowerCase()
+
+    const dominiosPermitidos = [ 'duoc.cl', 'profesor.duoc.cl', 'gmail.com', 'ferreteria.cl']
+
+    if (!dominiosPermitidos.includes(dominio)) { return 'Solo se permiten correos @duoc.cl, @profesor.duoc.cl o @gmail.com.'
     }
-
-    if (correoLimpio.length > 100) {
-      return 'El correo no puede superar los 100 caracteres.'
-    }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correoLimpio)) {
-      return 'Ingrese un correo electrónico válido.'
-    }
-
-    const dominio =
-      correoLimpio.split('@')[1].toLowerCase()
-
-    const dominiosPermitidos = [
-      'duoc.cl',
-      'profesor.duoc.cl',
-      'gmail.com'
-    ]
-
-    if (!dominiosPermitidos.includes(dominio)) {
-      return 'Solo se permiten correos @duoc.cl, @profesor.duoc.cl o @gmail.com.'
-    }
-
     return ''
   }
-
 
   const validarContrasena = (valor) => {
-
     const contrasenaLimpia = valor.trim()
-
-    if (contrasenaLimpia === '') {
-      return 'La contraseña es obligatoria.'
-    }
-
-    if (
-      contrasenaLimpia.length < 4 ||
-      contrasenaLimpia.length > 10
-    ) {
+    if (contrasenaLimpia === '') { return 'La contraseña es obligatoria.'}
+    if (contrasenaLimpia.length < 4 || contrasenaLimpia.length > 10) {
       return 'La contraseña debe tener entre 4 y 10 caracteres.'
     }
-
     return ''
   }
 
-
   const manejarCambioCorreo = (event) => {
-
     const valor = event.target.value
-
     setCorreo(valor)
     setErrorCorreo(validarCorreo(valor))
     setMensajeExito('')
   }
 
-
   const manejarCambioContrasena = (event) => {
-
     const valor = event.target.value
-
     setContrasena(valor)
     setErrorContrasena(validarContrasena(valor))
     setMensajeExito('')
   }
 
-
-  const manejarSubmit = (event) => {
-
+  const manejarSubmit = async (event) => {
     event.preventDefault()
-
     setMensajeExito('')
 
-    const nuevoErrorCorreo =
-      validarCorreo(correo)
-
-    const nuevoErrorContrasena =
-      validarContrasena(contrasena)
-
+    const nuevoErrorCorreo = validarCorreo(correo)
+    const nuevoErrorContrasena = validarContrasena(contrasena)
     setErrorCorreo(nuevoErrorCorreo)
     setErrorContrasena(nuevoErrorContrasena)
 
-    if (
-      nuevoErrorCorreo ||
-      nuevoErrorContrasena
-    ) {
-      return
-    }
+    if(nuevoErrorCorreo || nuevoErrorContrasena) return
 
-
-    const usuariosGuardados =
-      JSON.parse(
-        localStorage.getItem('usuarios')
-      ) || []
-
-
-    const correoIngresado =
-      correo.trim().toLowerCase()
-
-    const contrasenaIngresada =
-      contrasena.trim()
-
-
-    const usuarioEncontrado =
-      usuariosGuardados.find((usuario) => {
-
-        return (
-          usuario.correo &&
-          usuario.correo.toLowerCase() === correoIngresado
-        )
-
+    setCargando(true)
+    try{
+      const response = await api.post('/auth/login', {
+        correo: correo.trim().toLocaleLowerCase(),
+        contrasena: contrasena.trim()
       })
 
+    const data = response.data
+    const token = data.token
 
-    if (!usuarioEncontrado) {
+    localStorage.setItem('token', token)
+    localStorage.setItem('usuario', JSON.stringify(data))
 
-      setErrorCorreo(
-        'No existe un usuario registrado con este correo.'
-      )
-
-      return
-    }
-
-
-    if (
-      usuarioEncontrado.contrasena !==
-      contrasenaIngresada
-    ) {
-
-      setErrorContrasena(
-        'La contraseña ingresada es incorrecta.'
-      )
-
-      return
-    }
-
-
-    const usuarioActivo = {
-      rut: usuarioEncontrado.rut,
-      nombre: usuarioEncontrado.nombre,
-      apellidos: usuarioEncontrado.apellidos,
-      correo: usuarioEncontrado.correo
-    }
-
-
-    MockDB.setDato(
-      'usuarioActivo',
-      usuarioActivo
-    )
-
-    MockDB.setDato(
-      'usuarioSesion',
-      usuarioActivo
-    )
-
-    window.dispatchEvent(
-      new Event('sesionActualizada')
-    )
-
+    MockDB.setDato('usuarioActivo', data)
+    MockDB.setDato('usuarioSesion', data)
+    window.dispatchEvent(new Event('sesionActualizada'))
 
     setErrorCorreo('')
     setErrorContrasena('')
+    setMensajeExito('Inicio de sesion éxitoso')
 
-    setMensajeExito(
-      'Inicio de sesión validado correctamente.'
-    )
+    setTimeout(() => {
+      navigate('/usuarios')
+    }, 1000)
+
+    }catch (error) {
+      if (error.response && error.response.status === 401) {
+        setErrorContrasena('Credenciales incorrectas. Verifique correo y contraseña.')
+      } else {
+        setErrorContrasena('Ocurrio un error al conectar con el servidor.')
+      }
+    }finally {
+      setCargando(false)
+    }
+
   }
-
 
   return (
 
