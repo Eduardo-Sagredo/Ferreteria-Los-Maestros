@@ -4,6 +4,8 @@ import cl.duoc.ferreteria.backend.dto.AuthResponseDTO;
 import cl.duoc.ferreteria.backend.dto.LoginRequestDTO;
 import cl.duoc.ferreteria.backend.dto.RegistroRequestDTO;
 import cl.duoc.ferreteria.backend.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Tag(name = "Login", description = "Endpoints para el registro y login de usuarios")
 public class AuthController {
 
     private final AuthService authService;
 
+    @Operation(summary = "Logearse en la web")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginDTO) {
         try {
@@ -33,6 +37,7 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Registrarse en la web")
     @PostMapping("/register")
     public ResponseEntity<String> registrar(@RequestBody RegistroRequestDTO registroRequestDTO){
         try {
