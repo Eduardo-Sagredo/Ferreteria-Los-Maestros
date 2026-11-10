@@ -2,19 +2,27 @@ package cl.duoc.ferreteria.backend.service;
 
 import cl.duoc.ferreteria.backend.dto.RegistroRequestDTO;
 import cl.duoc.ferreteria.backend.dto.UsuarioResponseDTO;
+import cl.duoc.ferreteria.backend.enums.RolEnum;
 import cl.duoc.ferreteria.backend.mapper.UserMapper;
+import cl.duoc.ferreteria.backend.model.Rol;
 import cl.duoc.ferreteria.backend.model.Usuario;
+import cl.duoc.ferreteria.backend.repository.rolRepository;
 import cl.duoc.ferreteria.backend.repository.userRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -24,7 +32,12 @@ import java.util.stream.Collectors;
 public class UsuarioService implements UserDetailsService{
 
     private final userRepository userRepository;
+    private final rolRepository rolRepository;
     private final UserMapper usuarioMapper;
+
+    @Autowired
+    @Lazy
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException {
@@ -61,10 +74,35 @@ public class UsuarioService implements UserDetailsService{
         Usuario usuario = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        usuario.setRut(dto.getRut());
+        if (dto.getRut() != null && !dto.getRut().isBlank()){
+            usuario.setRut(dto.getRut());
+        }
         usuario.setNombre(dto.getNombre());
         usuario.setApellidos(dto.getApellidos());
         usuario.setCorreo(dto.getCorreo());
+
+        if (dto.getContrasena() != null && !dto.getContrasena().isBlank()) {
+            usuario.setContrasena(passwordEncoder.encode(dto.getContrasena()));
+        }
+
+        if (dto.getEstado() != null) {
+            usuario.setEstado(dto.getEstado() ? "ACTIVO" : "INACTIVO");
+        }
+
+        if (dto.getRol() != null && !dto.getRol().isBlank()) {
+            String nombreRolStr = dto.getRol().startsWith("ROLE_")
+                    ? dto.getRol()
+                    : "ROLE_" + dto.getRol().toUpperCase();
+
+            RolEnum rolEnum = RolEnum.valueOf(nombreRolStr);
+
+            Rol rolEntidad = rolRepository.findByNombre(rolEnum)
+                    .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + nombreRolStr));
+
+            Set<Rol> roles = new HashSet<>();
+            roles.add(rolEntidad);
+            usuario.setRoles(roles);
+        }
 
         Usuario actualizado = userRepository.save(usuario);
         return usuarioMapper.toResponseDTO(actualizado);
