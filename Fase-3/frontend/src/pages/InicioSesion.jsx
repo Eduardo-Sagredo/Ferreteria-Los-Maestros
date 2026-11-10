@@ -74,6 +74,7 @@ function InicioSesion() {
 
     const data = response.data
     const token = data.token
+    const roles = data.roles || [];
 
     localStorage.setItem('token', token)
     localStorage.setItem('usuario', JSON.stringify(data))
@@ -87,8 +88,14 @@ function InicioSesion() {
     setMensajeExito('Inicio de sesion éxitoso')
 
     setTimeout(() => {
-      navigate('/usuarios')
-    }, 1000)
+      if (roles.includes('ROLE_ADMIN')){
+        navigate('/admin');
+      }else if (roles.includes('ROLE_VENDEDOR')){
+        navigate('/vendedor');
+      }else{
+        navigate('/')
+      }
+    }, 800)
 
     }catch (error) {
       if (error.response && error.response.status === 401) {

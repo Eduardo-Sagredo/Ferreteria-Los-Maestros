@@ -1,9 +1,11 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-
 import { AppProvider } from './context/AppContext.jsx';
+
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
+
+import RutaProtegida from "./components/RutaProtegida.jsx";
 
 import CuentaCorriente from './pages/CuentaCorriente.jsx'
 import Historial from './pages/Historial.jsx'
@@ -39,6 +41,8 @@ function App() {
 
           <Routes>
 
+            {/* --- RUTAS PUBLICAS PARA CLIENTE --- */}
+
             <Route
               path="/"
               element={<Home />}
@@ -70,21 +74,6 @@ function App() {
             />
 
             <Route
-              path="/cuenta-corriente"
-              element={<CuentaCorriente />}
-            />
-
-            <Route
-              path="/historial"
-              element={<Historial />}
-            />
-
-            <Route
-              path="/mis-pedidos"
-              element={<MisPedidos />}
-            />
-
-            <Route
               path="/contacto"
               element={<Contacto />}
             />
@@ -98,6 +87,31 @@ function App() {
               path="/login"
               element={<InicioSesion />}
             />
+
+            {/* --- RUTAS PRIVADAS CLIENTE --- */}
+
+            <Route element={<RutaProtegida rolesPermitidos={['ROLE_CLIENTE', 'ROLE_VENDEDOR', 'ROLE_ADMIN']} />}>
+
+            <Route
+                path="/cuenta-corriente"
+                element={<CuentaCorriente />}
+            />
+
+            <Route
+                path="/historial"
+                element={<Historial />}
+            />
+
+            <Route
+                path="/mis-pedidos"
+                element={<MisPedidos />}
+            />
+
+            </Route>
+
+            {/* --- RUTAS PRIVADAS ADMINISTRADOR --- */}
+
+            <Route element={<RutaProtegida rolesPermitidos={['ROLE_ADMIN']} />}>
 
             <Route
               path="/admin"
@@ -139,6 +153,12 @@ function App() {
               element={<GestionReportes />}
             />
 
+            </Route>
+
+            {/* --- RUTAS PRIVADAS VENDEDOR --- */}
+
+            <Route element={<RutaProtegida rolesPermitidos={['ROLE_VENDEDOR', 'ROLE_ADMIN']} />}>
+
             <Route
               path="/vendedor"
               element={<InventarioVendedor />}
@@ -148,6 +168,12 @@ function App() {
               path="/vendedor/productos"
               element={<GestionProductos />}
             />
+
+            </Route>
+
+            {/* --- RUTA POR DEFECTO --- */}
+
+            <Route path="*" element={<Navigate to="/" replace />} />
 
 
 
