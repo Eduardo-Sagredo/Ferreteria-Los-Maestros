@@ -1,6 +1,6 @@
 spring:
   config:
-    import: "file:./Fase-3/backend/.env[.properties]"
+    import: "optional:file:.env[.properties],optional:file:./Fase-3/backend/.env[.properties]"
 
   datasource:
     url: ${DB_URL}
@@ -25,3 +25,6 @@ ferreteria:
   app:
     jwtSecret: ${JWT_SECRET}
     jwtExpirationMs: 86400000
+
+server:
+  port: 8080
