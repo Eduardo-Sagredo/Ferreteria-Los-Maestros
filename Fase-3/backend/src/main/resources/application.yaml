@@ -1,16 +1,16 @@
 spring:
-  application:
-    name: backend
+  config:
+    import: "file:./Fase-3/backend/.env[.properties]"
 
   datasource:
     url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username: ${DB_USER}
+    password: ${DB_PASS}
     driver-class-name: oracle.jdbc.OracleDriver
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
@@ -18,8 +18,10 @@ spring:
 
   flyway:
     enabled: true
-    locations: classpath:db/migration
     baseline-on-migrate: true
+    baseline-version: 0
 
-server:
-  port: 8080
+ferreteria:
+  app:
+    jwtSecret: ${JWT_SECRET}
+    jwtExpirationMs: 86400000

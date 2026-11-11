@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate} from 'react-router-dom'
+import api from "../api/axiosConfig.js";
+
 
 function Registro() {
 
@@ -8,7 +10,6 @@ function Registro() {
   const [apellidos, setApellidos] = useState('')
   const [correo, setCorreo] = useState('')
   const [contrasena, setContrasena] = useState('')
-
   const [errorRut, setErrorRut] = useState('')
   const [errorNombre, setErrorNombre] = useState('')
   const [errorApellidos, setErrorApellidos] = useState('')
@@ -16,35 +17,25 @@ function Registro() {
   const [errorContrasena, setErrorContrasena] = useState('')
 
   const [mensajeExito, setMensajeExito] = useState('')
+  const navigate = useNavigate()
+  const [cargando, setCargando] = useState(false)
 
 
   const validarRut = (valor) => {
 
     const rutLimpio = valor.trim()
-
-    if (rutLimpio === '') {
-      return 'El RUT es obligatorio.'
-    }
-
-    if (!/^\d{6,8}[0-9Kk]$/.test(rutLimpio)) {
-      return 'Ingrese un RUT válido, sin puntos ni guion.'
+    if (rutLimpio === '') {return 'El RUT es obligatorio.'}
+    if (!/^\d{6,8}[0-9Kk]$/.test(rutLimpio)) { return 'Ingrese un RUT válido, sin puntos ni guion.'
     }
 
     return ''
   }
 
-
   const validarNombre = (valor) => {
 
     const nombreLimpio = valor.trim()
-
-    if (nombreLimpio === '') {
-      return 'El nombre es obligatorio.'
-    }
-
-    if (nombreLimpio.length > 50) {
-      return 'El nombre no puede superar los 50 caracteres.'
-    }
+    if (nombreLimpio === '') { return 'El nombre es obligatorio.'}
+    if (nombreLimpio.length > 50) { return 'El nombre no puede superar los 50 caracteres.'}
 
     return ''
   }
@@ -117,10 +108,8 @@ function Registro() {
   }
 
 
-  const manejarSubmit = (event) => {
-
+  const manejarSubmit = async (event) => {
     event.preventDefault()
-
     setMensajeExito('')
 
     const nuevoErrorRut = validarRut(rut)
@@ -136,83 +125,60 @@ function Registro() {
     setErrorContrasena(nuevoErrorContrasena)
 
     if (
-      nuevoErrorRut ||
-      nuevoErrorNombre ||
-      nuevoErrorApellidos ||
-      nuevoErrorCorreo ||
-      nuevoErrorContrasena
+        nuevoErrorRut ||
+        nuevoErrorNombre ||
+        nuevoErrorApellidos ||
+        nuevoErrorCorreo ||
+        nuevoErrorContrasena
     ) {
       return
     }
 
+    setCargando(true)
 
-    const usuariosGuardados =
-      JSON.parse(localStorage.getItem('usuarios')) || []
+    try {
+      const datosRegistro = {
+        rut: rut.trim(),
+        nombre: nombre.trim(),
+        apellidos: apellidos.trim(),
+        correo: correo.trim().toLowerCase(),
+        contrasena: contrasena.trim()
+      }
 
+      await api.post('/auth/register', datosRegistro)
 
-    const correoIngresado =
-      correo.trim().toLowerCase()
+      setMensajeExito('Registro realizado correctamente. Redirigiendo al incio de sesion...')
 
+      setRut('')
+      setNombre('')
+      setApellidos('')
+      setCorreo('')
+      setContrasena('')
 
-    const usuarioExistente =
-      usuariosGuardados.some((usuario) => {
+      setErrorRut('')
+      setErrorNombre('')
+      setErrorApellidos('')
+      setErrorCorreo('')
+      setErrorContrasena('')
 
-        return (
-          usuario.correo &&
-          usuario.correo.toLowerCase() === correoIngresado
-        )
+      setTimeout(() => {
+        navigate('/login')
+      }, 1500)
 
-      })
-
-
-    if (usuarioExistente) {
-
-      setErrorCorreo(
-        'Ya existe un usuario registrado con este correo.'
-      )
-
-      return
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 400 || error.response.status === 409) {
+          setErrorCorreo(error.response.data?.mensaje || 'El correo o RUT ya se encuentra registrado.')
+        } else {
+          setErrorContrasena('Error interno en el servidor al procesar el registro.')
+        }
+      } else {
+        setErrorContrasena('No se pudo establecer conexión con el backend.')
+      }
+    } finally {
+      setCargando(false)
     }
-
-
-    const nuevoUsuario = {
-
-      rut: rut.trim(),
-      nombre: nombre.trim(),
-      apellidos: apellidos.trim(),
-      correo: correoIngresado,
-      contrasena: contrasena.trim()
-
-    }
-
-
-    usuariosGuardados.push(nuevoUsuario)
-
-
-    localStorage.setItem(
-      'usuarios',
-      JSON.stringify(usuariosGuardados)
-    )
-
-
-    setMensajeExito(
-      'Registro realizado correctamente.'
-    )
-
-
-    setRut('')
-    setNombre('')
-    setApellidos('')
-    setCorreo('')
-    setContrasena('')
-
-    setErrorRut('')
-    setErrorNombre('')
-    setErrorApellidos('')
-    setErrorCorreo('')
-    setErrorContrasena('')
   }
-
 
   return (
 
