@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import productoService from '../api/productoService.js'
 import MockDB from '../services/MockDB.js'
 
 function DetalleProducto() {
+
   const { id } = useParams()
 
   const [producto, setProducto] = useState(null)
@@ -11,37 +13,45 @@ function DetalleProducto() {
   const [mensaje, setMensaje] = useState('')
   const [mensajeError, setMensajeError] = useState(false)
 
+  const [cargando, setCargando] = useState(true)
+  const [errorCarga, setErrorCarga] = useState('')
+
   useEffect(() => {
-    const productos = MockDB.getTabla('productos')
 
-    const productoEncontrado = productos.find(
-      (producto) => producto.id === Number(id)
-    )
+    async function cargarProducto() {
 
-    setProducto(productoEncontrado)
+      try {
+
+        setCargando(true)
+        setErrorCarga('')
+
+        const productoBackend =
+          await productoService.obtenerPorId(id)
+
+        setProducto(productoBackend)
+
+      } catch (error) {
+
+        console.error(
+          'Error al cargar producto:',
+          error
+        )
+
+        setErrorCarga(
+          'No fue posible cargar el producto.'
+        )
+
+      } finally {
+
+        setCargando(false)
+
+      }
+
+    }
+
+    cargarProducto()
+
   }, [id])
-
-  if (!producto) {
-    return (
-      <main className="container py-5">
-
-        <h1>
-          Producto no encontrado
-        </h1>
-
-        <Link
-          to="/productos"
-          className="btn btn-dark mt-3"
-        >
-          Volver al catálogo
-        </Link>
-
-      </main>
-    )
-  }
-
-  const sinStock =
-    producto.stockActual <= 0
 
   function mostrarMensaje(
     texto,
@@ -52,6 +62,7 @@ function DetalleProducto() {
   }
 
   function cambiarCantidad(evento) {
+
     let nuevaCantidad =
       Number(evento.target.value)
 
@@ -66,6 +77,7 @@ function DetalleProducto() {
     }
 
     if (
+      producto &&
       nuevaCantidad >
       producto.stockActual
     ) {
@@ -95,6 +107,62 @@ function DetalleProducto() {
       !resultado.exito
     )
   }
+
+  if (cargando) {
+
+    return (
+      <main className="container py-5 text-center">
+
+        <p className="fs-5">
+          Cargando producto...
+        </p>
+
+      </main>
+    )
+  }
+
+  if (errorCarga !== '') {
+
+    return (
+      <main className="container py-5">
+
+        <div className="alert alert-danger">
+          {errorCarga}
+        </div>
+
+        <Link
+          to="/productos"
+          className="btn btn-dark"
+        >
+          Volver al catálogo
+        </Link>
+
+      </main>
+    )
+  }
+
+  if (!producto) {
+
+    return (
+      <main className="container py-5">
+
+        <h1>
+          Producto no encontrado
+        </h1>
+
+        <Link
+          to="/productos"
+          className="btn btn-dark mt-3"
+        >
+          Volver al catálogo
+        </Link>
+
+      </main>
+    )
+  }
+
+  const sinStock =
+    producto.stockActual <= 0
 
   return (
     <main className="detalle-producto-section">
@@ -184,12 +252,8 @@ function DetalleProducto() {
                         className="form-control"
                         value={cantidad}
                         min="1"
-                        max={
-                          producto.stockActual
-                        }
-                        onChange={
-                          cambiarCantidad
-                        }
+                        max={producto.stockActual}
+                        onChange={cambiarCantidad}
                       />
 
                     </div>
@@ -198,9 +262,7 @@ function DetalleProducto() {
 
                       <button
                         className="btn btn-warning w-100"
-                        onClick={
-                          agregarProducto
-                        }
+                        onClick={agregarProducto}
                       >
                         <i className="bi bi-cart-plus"></i>{' '}
                         Agregar al carrito

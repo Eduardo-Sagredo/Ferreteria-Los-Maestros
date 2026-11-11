@@ -1,50 +1,179 @@
-import { useContext, useState, useLayoutEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
-import '../../components/styles.css'
-import '../../components/tienda.css'
+import {
+    useEffect,
+    useLayoutEffect,
+    useState
+} from 'react';
 
+import {
+    Link,
+    useNavigate
+} from 'react-router-dom';
 
+import productoService from '../../api/productoService.js';
+
+import '../../components/styles.css';
+import '../../components/tienda.css';
 
 export const GestionProductos = () => {
-    const { productos, eliminarProducto } = useContext(AppContext);
+
     const navigate = useNavigate();
 
+    const [productos, setProductos] =
+        useState([]);
+
+    const [cargando, setCargando] =
+        useState(true);
+
+    const [mensaje, setMensaje] =
+        useState('');
+
+    const [mensajeError, setMensajeError] =
+        useState(false);
+
+    const [busqueda, setBusqueda] =
+        useState('');
+
+    const [filtroCategoria, setFiltroCategoria] =
+        useState('todas');
+
+    const [filtroEstado, setFiltroEstado] =
+        useState('todos');
+
+
     useLayoutEffect(() => {
-    window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'instant' // Fuerza un salto inmediato sin animación
-    });
-}, []);
 
-    // 2. Creamos Estados (useState) para controlar los filtros<
-    const [busqueda, setBusqueda] = useState('');
-    const [filtroCategoria, setFiltroCategoria] = useState('todas');
-    const [filtroEstado, setFiltroEstado] = useState('todos');
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'instant'
+        });
 
-    // 3. Lógica de filtrado en tiempo real (reemplaza a aplicarFiltrosProd)
-    const productosFiltrados = productos.filter(p => {
-        const coincideTxt = p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-            p.codigo.toLowerCase().includes(busqueda.toLowerCase());
-        const coincideCat = filtroCategoria === 'todas' || p.categoria === filtroCategoria;
-        const coincideEst = filtroEstado === 'todos' || p.estado === filtroEstado;
+    }, []);
 
-        return coincideTxt && coincideCat && coincideEst;
-    });
 
-    // 4. Funciones de acción (reemplazan a window.eliminarProducto y window.editarProducto)
-    const handleEliminar = (id) => {
-        if (window.confirm('¿Seguro que deseas eliminar este producto?')) {
-            eliminarProducto(id); // Borra del estado global automáticamente
+    useEffect(() => {
+
+        cargarProductos();
+
+    }, []);
+
+
+    async function cargarProductos() {
+
+        try {
+
+            setCargando(true);
+
+            const datos =
+                await productoService.obtenerTodos();
+
+            setProductos(datos);
+
+        } catch (error) {
+
+            console.error(
+                'Error al obtener productos:',
+                error
+            );
+
+            setMensaje(
+                'No fue posible cargar los productos.'
+            );
+
+            setMensajeError(true);
+
+        } finally {
+
+            setCargando(false);
+
         }
-    };
+    }
 
-    const handleEditar = (id) => {
-        // Redirige a la página de agregar pero con el ID en la URL
-        navigate(`/admin/agregarProducto?edit=${id}`);
-    };
 
+    async function handleEliminar(id) {
+
+        const confirmar =
+            window.confirm(
+                '¿Seguro que deseas eliminar este producto?'
+            );
+
+        if (!confirmar) {
+            return;
+        }
+
+        try {
+
+            await productoService.eliminar(id);
+
+            setProductos(
+                productosActuales =>
+                    productosActuales.filter(
+                        producto =>
+                            producto.id !== id
+                    )
+            );
+
+            setMensaje(
+                'Producto eliminado correctamente.'
+            );
+
+            setMensajeError(false);
+
+        } catch (error) {
+
+            console.error(
+                'Error al eliminar producto:',
+                error
+            );
+
+            setMensaje(
+                'No fue posible eliminar el producto.'
+            );
+
+            setMensajeError(true);
+        }
+    }
+
+
+    function handleEditar(id) {
+
+        navigate(
+            `/admin/agregarProducto?edit=${id}`
+        );
+    }
+
+
+    const productosFiltrados =
+        productos.filter(producto => {
+
+            const coincideTexto =
+                producto.nombre
+                    .toLowerCase()
+                    .includes(
+                        busqueda.toLowerCase()
+                    ) ||
+                producto.codigo
+                    .toLowerCase()
+                    .includes(
+                        busqueda.toLowerCase()
+                    );
+
+            const coincideCategoria =
+                filtroCategoria === 'todas' ||
+                producto.categoria ===
+                    filtroCategoria;
+
+            const coincideEstado =
+                filtroEstado === 'todos' ||
+                producto.estado ===
+                    filtroEstado;
+
+            return (
+                coincideTexto &&
+                coincideCategoria &&
+                coincideEstado
+            );
+        });
 
 
     return (
@@ -53,148 +182,380 @@ export const GestionProductos = () => {
             <main className="flex-grow-1">
 
                 <section>
+
                     <div className="d-flex justify-content-between mx-2 my-2">
-                        <h1 className="fs-2">Gestión de productos</h1>
-                        <Link to="/admin/agregarProducto" className="btn d-inline-flex align-items-center" style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-header)' }} >
+
+                        <h1 className="fs-2">
+                            Gestión de productos
+                        </h1>
+
+                        <Link
+                            to="/admin/agregarProducto"
+                            className="btn d-inline-flex align-items-center"
+                            style={{
+                                backgroundColor:
+                                    'var(--color-accent)',
+                                color:
+                                    'var(--color-header)'
+                            }}
+                        >
                             + Agregar Producto
                         </Link>
+
                     </div>
 
                 </section>
 
-                <section>
-                    <div className="container my-5">
 
+                {mensaje !== '' && (
+
+                    <div className="container mt-3">
+
+                        <div
+                            className={
+                                mensajeError
+                                    ? 'alert alert-danger'
+                                    : 'alert alert-success'
+                            }
+                        >
+                            {mensaje}
+                        </div>
+
+                    </div>
+
+                )}
+
+
+                <section>
+
+                    <div className="container my-5">
 
                         <div className="row g-3 mb-4">
 
                             <div className="col-md-12 col-lg-6">
+
                                 <div className="input-group">
+
                                     <span className="input-group-text bg-white border-end-0 rounded-start-3 text-secondary">
+
                                         <i className="bi bi-search"></i>
+
                                     </span>
-                                    <input type="text" id="buscador-productos"
+
+                                    <input
+                                        type="text"
                                         className="form-control border-start-0 rounded-end-3 shadow-none"
                                         placeholder="Buscar..."
-                                        value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
+                                        value={busqueda}
+                                        onChange={
+                                            (e) =>
+                                                setBusqueda(
+                                                    e.target.value
+                                                )
+                                        }
+                                    />
+
                                 </div>
+
                             </div>
 
+
                             <div className="col-md-6 col-lg-3">
-                                <select id="filtro-categoria" className="form-select rounded-3 shadow-none text-secondary"
+
+                                <select
+                                    className="form-select rounded-3 shadow-none text-secondary"
                                     value={filtroCategoria}
-                                    onChange={(e) => setFiltroCategoria(e.target.value)}>
-                                    <option value="todas" selected>Todas las categorías</option>
-                                    <option value="herramientas">Herramientas</option>
-                                    <option value="electricidad">Eléctricas</option>
-                                    <option value="construccion">Construcción</option>
-                                    <option value="gasfiteria">Gásfitería</option>
+                                    onChange={
+                                        (e) =>
+                                            setFiltroCategoria(
+                                                e.target.value
+                                            )
+                                    }
+                                >
+
+                                    <option value="todas">
+                                        Todas las categorías
+                                    </option>
+
+                                    <option value="herramientas">
+                                        Herramientas
+                                    </option>
+
+                                    <option value="electricidad">
+                                        Electricidad
+                                    </option>
+
+                                    <option value="construccion">
+                                        Construcción
+                                    </option>
+
+                                    <option value="pinturas">
+                                        Pinturas
+                                    </option>
+
+                                    <option value="gasfiteria">
+                                        Gásfitería
+                                    </option>
+
                                 </select>
+
                             </div>
 
+
                             <div className="col-md-6 col-lg-3">
-                                <select id="filtro-estado" className="form-select rounded-3 shadow-none text-secondary"
+
+                                <select
+                                    className="form-select rounded-3 shadow-none text-secondary"
                                     value={filtroEstado}
-                                    onChange={(e) => setFiltroEstado(e.target.value)}>
-                                    <option value="todos" selected>Todos los estados</option>
-                                    <option value="Disponible">Disponible</option>
-                                    <option value="Stock bajo">Stock bajo</option>
-                                    <option value="Sin stock">Sin stock</option>
+                                    onChange={
+                                        (e) =>
+                                            setFiltroEstado(
+                                                e.target.value
+                                            )
+                                    }
+                                >
+
+                                    <option value="todos">
+                                        Todos los estados
+                                    </option>
+
+                                    <option value="Disponible">
+                                        Disponible
+                                    </option>
+
+                                    <option value="Stock bajo">
+                                        Stock bajo
+                                    </option>
+
+                                    <option value="Sin stock">
+                                        Sin stock
+                                    </option>
+
                                 </select>
+
                             </div>
 
                         </div>
+
                     </div>
 
                 </section>
 
+
                 <section>
+
                     <div className="container">
-                        <div className="table-responsive bg-white rounded-3 shadow-sm border" style={{ borderColor: 'var(--color-header)' }} >
+
+                        <div className="table-responsive bg-white rounded-3 shadow-sm border">
+
                             <table className="table table-hover align-middle mb-0">
-                                <thead className="table-light text-secondary" style={{ fontSize: '0.85rem', letterSpacing: '0.5px' }} >
+
+                                <thead className="table-light text-secondary">
+
                                     <tr>
-                                        <th className="py-3 px-4 fw-medium border-bottom-0">CÓDIGO</th>
-                                        <th className="py-3 fw-medium border-bottom-0">PRODUCTO</th>
-                                        <th className="py-3 fw-medium border-bottom-0">CATEGORÍA</th>
-                                        <th className="py-3 fw-medium border-bottom-0">PRECIO</th>
-                                        <th className="py-3 text-center fw-medium border-bottom-0">STOCK</th>
-                                        <th className="py-3 text-center fw-medium border-bottom-0">MÍN.</th>
-                                        <th className="py-3 text-center fw-medium border-bottom-0">ESTADO</th>
-                                        <th className="py-3 text-center fw-medium border-bottom-0">ACCIONES</th>
+
+                                        <th className="py-3 px-4">
+                                            CÓDIGO
+                                        </th>
+
+                                        <th className="py-3">
+                                            PRODUCTO
+                                        </th>
+
+                                        <th className="py-3">
+                                            CATEGORÍA
+                                        </th>
+
+                                        <th className="py-3">
+                                            PRECIO
+                                        </th>
+
+                                        <th className="py-3 text-center">
+                                            STOCK
+                                        </th>
+
+                                        <th className="py-3 text-center">
+                                            MÍN.
+                                        </th>
+
+                                        <th className="py-3 text-center">
+                                            ESTADO
+                                        </th>
+
+                                        <th className="py-3 text-center">
+                                            ACCIONES
+                                        </th>
+
                                     </tr>
+
                                 </thead>
 
-                                <tbody className="border-top-0">
-                                    {productosFiltrados.length === 0 ? (
+
+                                <tbody>
+
+                                    {cargando ? (
+
                                         <tr>
-                                            <td colSpan="8" className="text-center py-4 text-muted">No se encontraron productos con esos filtros.</td>
+
+                                            <td
+                                                colSpan="8"
+                                                className="text-center py-4"
+                                            >
+                                                Cargando productos...
+                                            </td>
+
                                         </tr>
+
+                                    ) : productosFiltrados.length === 0 ? (
+
+                                        <tr>
+
+                                            <td
+                                                colSpan="8"
+                                                className="text-center py-4 text-muted"
+                                            >
+                                                No se encontraron productos.
+                                            </td>
+
+                                        </tr>
+
                                     ) : (
-                                        productosFiltrados.map((prod) => (
-                                            <tr key={prod.id}>
-                                                {/* Código: Color gris y fuente monoespaciada */}
-                                                <td className="py-3 px-4 text-secondary font-monospace">
-                                                    {prod.codigo}
-                                                </td>
 
-                                                {/* Nombre: Color oscuro por defecto */}
-                                                <td className="py-3 text-dark">
-                                                    {prod.nombre}
-                                                </td>
+                                        productosFiltrados.map(
+                                            (producto) => (
 
-                                                {/* Categoría: Gris y primera letra mayúscula */}
-                                                <td className="py-3 text-secondary">
-                                                    {prod.categoria ? prod.categoria.charAt(0).toUpperCase() + prod.categoria.slice(1) : '-'}
-                                                </td>
+                                                <tr key={producto.id}>
 
-                                                {/* Precio: Color naranja personalizado y texto un poco más grueso (500) */}
-                                                <td className="py-3" style={{ color: '#d97706', fontWeight: 500 }}>
-                                                    ${prod.precio.toLocaleString('es-CL')}
-                                                </td>
+                                                    <td className="py-3 px-4 text-secondary font-monospace">
 
-                                                {/* Stock actual: Centrado */}
-                                                <td className="py-3 text-center">
-                                                    {prod.stockActual}
-                                                </td>
+                                                        {producto.codigo}
 
-                                                {/* Stock Mínimo: Centrado y gris */}
-                                                <td className="py-3 text-center text-secondary">
-                                                    {prod.stockMinimo}
-                                                </td>
+                                                    </td>
 
-                                                {/* Estado: Se mantiene tal cual */}
-                                                <td className="py-3 text-center">
-                                                    <span className={`badge rounded-pill ${prod.estado === 'Disponible' ? 'bg-success' : prod.estado === 'Stock bajo' ? 'bg-warning text-dark' : 'bg-danger'}`}>
-                                                        {prod.estado}
-                                                    </span>
-                                                </td>
 
-                                                {/* Acciones: Se mantienen los iconos tal cual pediste */}
-                                                <td className="py-3 text-center">
-                                                    <button
-                                                        className="btn btn-sm btn-outline-primary me-2"
-                                                        onClick={() => handleEditar(prod.id)}
+                                                    <td className="py-3 text-dark">
+
+                                                        {producto.nombre}
+
+                                                    </td>
+
+
+                                                    <td className="py-3 text-secondary">
+
+                                                        {producto.categoria
+                                                            ? producto.categoria
+                                                                .charAt(0)
+                                                                .toUpperCase() +
+                                                              producto.categoria
+                                                                .slice(1)
+                                                            : '-'}
+
+                                                    </td>
+
+
+                                                    <td
+                                                        className="py-3"
+                                                        style={{
+                                                            color: '#d97706',
+                                                            fontWeight: 500
+                                                        }}
                                                     >
-                                                        <i className="bi bi-pencil"></i>
-                                                    </button>
-                                                    <button
-                                                        className="btn btn-sm btn-outline-danger"
-                                                        onClick={() => handleEliminar(prod.id)}
-                                                    >
-                                                        <i className="bi bi-trash"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))
+
+                                                        $
+                                                        {producto.precio
+                                                            .toLocaleString(
+                                                                'es-CL'
+                                                            )}
+
+                                                    </td>
+
+
+                                                    <td className="py-3 text-center">
+
+                                                        {producto.stockActual}
+
+                                                    </td>
+
+
+                                                    <td className="py-3 text-center text-secondary">
+
+                                                        {producto.stockMinimo}
+
+                                                    </td>
+
+
+                                                    <td className="py-3 text-center">
+
+                                                        <span
+                                                            className={
+                                                                `badge rounded-pill ${
+                                                                    producto.estado ===
+                                                                    'Disponible'
+                                                                        ? 'bg-success'
+                                                                        : producto.estado ===
+                                                                          'Stock bajo'
+                                                                            ? 'bg-warning text-dark'
+                                                                            : 'bg-danger'
+                                                                }`
+                                                            }
+                                                        >
+
+                                                            {producto.estado}
+
+                                                        </span>
+
+                                                    </td>
+
+
+                                                    <td className="py-3 text-center">
+
+                                                        <button
+                                                            className="btn btn-sm btn-outline-primary me-2"
+                                                            onClick={
+                                                                () =>
+                                                                    handleEditar(
+                                                                        producto.id
+                                                                    )
+                                                            }
+                                                        >
+
+                                                            <i className="bi bi-pencil"></i>
+
+                                                        </button>
+
+
+                                                        <button
+                                                            className="btn btn-sm btn-outline-danger"
+                                                            onClick={
+                                                                () =>
+                                                                    handleEliminar(
+                                                                        producto.id
+                                                                    )
+                                                            }
+                                                        >
+
+                                                            <i className="bi bi-trash"></i>
+
+                                                        </button>
+
+                                                    </td>
+
+                                                </tr>
+
+                                            )
+                                        )
+
                                     )}
+
                                 </tbody>
 
                             </table>
-                        </div>
-                    </div>
-                </section>
 
+                        </div>
+
+                    </div>
+
+                </section>
 
             </main>
 
