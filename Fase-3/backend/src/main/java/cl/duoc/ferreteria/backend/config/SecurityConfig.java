@@ -2,8 +2,10 @@ package cl.duoc.ferreteria.backend.config;
 
 import cl.duoc.ferreteria.backend.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -14,7 +16,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -29,37 +30,84 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http) throws Exception {
 
+        http
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .cors(Customizer.withDefaults())
 
-
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        session.sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS
+                        )
                 )
 
-
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/error").permitAll()
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
+                        // Login y registro públicos
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/error"
+                        ).permitAll()
 
-                        .requestMatchers("/api/productos/**").permitAll()
-                        .requestMatchers("/api/pedidos/**").permitAll()
+                        // Swagger público
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
 
+                        // Productos - lectura pública
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/productos/**"
+                        ).permitAll()
 
+                        // Productos - crear
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/productos/**"
+                        ).hasAnyAuthority(
+                                "ROLE_ADMIN",
+                                "ROLE_VENDEDOR"
+                        )
+
+                        // Productos - actualizar
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/productos/**"
+                        ).hasAnyAuthority(
+                                "ROLE_ADMIN",
+                                "ROLE_VENDEDOR"
+                        )
+
+                        // Productos - eliminar
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/productos/**"
+                        ).hasAnyAuthority(
+                                "ROLE_ADMIN",
+                                "ROLE_VENDEDOR"
+                        )
+
+                        // Pedidos
+                        .requestMatchers(
+                                "/api/pedidos/**"
+                        ).permitAll()
+
+                        // Todo lo demás requiere login
                         .anyRequest().authenticated()
                 );
 
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
+        http.addFilterBefore(
+                jwtAuthenticationFilter,
+                UsernamePasswordAuthenticationFilter.class
+        );
 
         return http.build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -67,16 +115,27 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationProvider authenticationProvider) {
-        return new ProviderManager(authenticationProvider);
+    public AuthenticationManager authenticationManager(
+            AuthenticationProvider authenticationProvider) {
+
+        return new ProviderManager(
+                authenticationProvider
+        );
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(UsuarioService usuarioService) {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(usuarioService);
-        authProvider.setPasswordEncoder(passwordEncoder());
+    public AuthenticationProvider authenticationProvider(
+            UsuarioService usuarioService) {
+
+        DaoAuthenticationProvider authProvider =
+                new DaoAuthenticationProvider(
+                        usuarioService
+                );
+
+        authProvider.setPasswordEncoder(
+                passwordEncoder()
+        );
+
         return authProvider;
     }
-
-
 }
