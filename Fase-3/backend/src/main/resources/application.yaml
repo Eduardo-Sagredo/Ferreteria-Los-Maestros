@@ -24,4 +24,4 @@ spring:
 ferreteria:
   app:
     jwtSecret: ${JWT_SECRET}
-    jwtExpirationMs: 86400000
+    jwtExpirationMs: ${JWT_EXPIRATION}
