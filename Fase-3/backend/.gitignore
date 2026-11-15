@@ -43,3 +43,12 @@ build/
 # Secretos y credenciales de Backend (Spring Boot)
 application-secret.properties
 application-secret.yml
+**/src/main/resources/wallet/
+wallet/
+Wallet_*.zip
+*.sso
+*.p12
+*.jks
+tnsnames.ora
+sqlnet.ora
+ojdbc.properties
