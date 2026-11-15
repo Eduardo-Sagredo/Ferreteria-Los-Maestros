@@ -14,7 +14,7 @@ public interface UserMapper {
     Usuario toEntity(RegistroRequestDTO dto);
 
     default String mapRol(Rol rol) {
-        if (rol == null) {
+        if (rol == null){
             return null;
         }
         return rol.getNombre().name();

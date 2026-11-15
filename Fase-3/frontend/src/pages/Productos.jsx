@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import ProductoCard from '../components/ProductoCard.jsx'
-import MockDB from '../services/MockDB.js'
+import productoService from '../api/productoService.js'
 
 function Productos() {
+
   const [productos, setProductos] = useState([])
   const [busqueda, setBusqueda] = useState('')
   const [mensaje, setMensaje] = useState('')
   const [mensajeError, setMensajeError] = useState(false)
+
+  const [cargando, setCargando] = useState(true)
+  const [errorCarga, setErrorCarga] = useState('')
 
   const [searchParams] = useSearchParams()
 
@@ -15,10 +19,40 @@ function Productos() {
     searchParams.get('categoria')
 
   useEffect(() => {
-    const productosGuardados =
-      MockDB.getTabla('productos')
 
-    setProductos(productosGuardados)
+    async function cargarProductos() {
+
+      try {
+
+        setCargando(true)
+        setErrorCarga('')
+
+        const productosBackend =
+          await productoService.obtenerTodos()
+
+        setProductos(productosBackend)
+
+      } catch (error) {
+
+        console.error(
+          'Error al cargar productos:',
+          error
+        )
+
+        setErrorCarga(
+          'No fue posible cargar los productos.'
+        )
+
+      } finally {
+
+        setCargando(false)
+
+      }
+
+    }
+
+    cargarProductos()
+
   }, [])
 
   function mostrarMensaje(texto, esError) {
@@ -143,41 +177,59 @@ function Productos() {
           </div>
         )}
 
-        <div className="row g-4">
+        {errorCarga !== '' && (
+          <div className="alert alert-danger">
+            {errorCarga}
+          </div>
+        )}
 
-          {productosFiltrados.length > 0 ? (
+        {cargando ? (
 
-            productosFiltrados.map(
-              (producto) => (
+          <div className="text-center py-5">
+            <p className="fs-5">
+              Cargando productos...
+            </p>
+          </div>
 
-                <div
-                  className="col-12 col-md-6 col-lg-3"
-                  key={producto.id}
-                >
+        ) : (
 
-                  <ProductoCard
-                    producto={producto}
-                    mostrarMensaje={
-                      mostrarMensaje
-                    }
-                  />
+          <div className="row g-4">
 
-                </div>
+            {productosFiltrados.length > 0 ? (
 
+              productosFiltrados.map(
+                (producto) => (
+
+                  <div
+                    className="col-12 col-md-6 col-lg-3"
+                    key={producto.id}
+                  >
+
+                    <ProductoCard
+                      producto={producto}
+                      mostrarMensaje={
+                        mostrarMensaje
+                      }
+                    />
+
+                  </div>
+
+                )
               )
-            )
 
-          ) : (
+            ) : (
 
-            <div className="col-12 text-center py-5">
-              <p className="fs-5 text-muted">
-                No se encontraron productos.
-              </p>
-            </div>
+              <div className="col-12 text-center py-5">
+                <p className="fs-5 text-muted">
+                  No se encontraron productos.
+                </p>
+              </div>
 
-          )}
+            )}
 
-        </div>
+          </div>
+
+        )}
 
       </div>
 

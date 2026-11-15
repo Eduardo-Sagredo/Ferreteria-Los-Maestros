@@ -1,261 +1,921 @@
-import { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
-import '../../components/styles.css'
-import '../../components/tienda.css'
+import { useEffect, useState } from 'react';
+import productoService from '../../api/productoService.js';
+
+import '../../components/styles.css';
+import '../../components/tienda.css';
 
 export const Inventario = () => {
-    // 1. Obtenemos los productos y la función para editar desde el contexto
-    const { productos, editarProducto } = useContext(AppContext);
 
-    // 2. Estados para los filtros
-    const [busqueda, setBusqueda] = useState('');
-    const [filtroEstado, setFiltroEstado] = useState('todos');
+    const [productos, setProductos] =
+        useState([]);
 
-    // 3. Estados para controlar el Modal nativo de React
-    const [showModal, setShowModal] = useState(false);
-    const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-    const [nuevoStock, setNuevoStock] = useState(0);
+    const [busqueda, setBusqueda] =
+        useState('');
 
-    // --- DERIVACIÓN DE DATOS (Filtros en tiempo real) ---
+    const [filtroEstado, setFiltroEstado] =
+        useState('todos');
 
-    // Alertas superiores
-    const productosSinStock = productos.filter(p => p.estado === 'Sin stock');
-    const productosStockBajo = productos.filter(p => p.estado === 'Stock bajo');
+    const [showModal, setShowModal] =
+        useState(false);
 
-    // Tabla principal
-    const productosFiltrados = productos.filter(p => {
-        const coincideTxt = p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-            p.codigo.toLowerCase().includes(busqueda.toLowerCase());
-        const coincideEst = filtroEstado === 'todos' || p.estado === filtroEstado;
-        return coincideTxt && coincideEst;
-    });
+    const [productoSeleccionado, setProductoSeleccionado] =
+        useState(null);
 
-    // --- FUNCIONES DEL MODAL ---
+    const [nuevoStock, setNuevoStock] =
+        useState(0);
 
-    const handleAbrirModal = (prod) => {
-        setProductoSeleccionado(prod);
-        setNuevoStock(prod.stockActual);
-        setShowModal(true); // Muestra el modal
+    const [cargando, setCargando] =
+        useState(true);
+
+    const [guardando, setGuardando] =
+        useState(false);
+
+    const [mensaje, setMensaje] =
+        useState('');
+
+    const [mensajeError, setMensajeError] =
+        useState(false);
+
+
+    /*
+        CARGAR PRODUCTOS DESDE BACKEND
+    */
+    useEffect(() => {
+
+        cargarProductos();
+
+    }, []);
+
+
+    async function cargarProductos() {
+
+        try {
+
+            setCargando(true);
+
+            const datos =
+                await productoService.obtenerTodos();
+
+            setProductos(datos);
+
+        } catch (error) {
+
+            console.error(
+                'Error al cargar inventario:',
+                error
+            );
+
+            setMensaje(
+                'No fue posible cargar el inventario.'
+            );
+
+            setMensajeError(true);
+
+        } finally {
+
+            setCargando(false);
+
+        }
+    }
+
+
+    /*
+        PRODUCTOS SIN STOCK
+    */
+    const productosSinStock =
+        productos.filter(
+            producto =>
+                producto.estado === 'Sin stock'
+        );
+
+
+    /*
+        PRODUCTOS CON STOCK BAJO
+    */
+    const productosStockBajo =
+        productos.filter(
+            producto =>
+                producto.estado === 'Stock bajo'
+        );
+
+
+    /*
+        FILTROS
+    */
+    const productosFiltrados =
+        productos.filter(producto => {
+
+            const coincideTexto =
+                producto.nombre
+                    .toLowerCase()
+                    .includes(
+                        busqueda.toLowerCase()
+                    ) ||
+                producto.codigo
+                    .toLowerCase()
+                    .includes(
+                        busqueda.toLowerCase()
+                    );
+
+            const coincideEstado =
+                filtroEstado === 'todos' ||
+                producto.estado ===
+                    filtroEstado;
+
+            return (
+                coincideTexto &&
+                coincideEstado
+            );
+        });
+
+
+    /*
+        ABRIR MODAL
+    */
+    const handleAbrirModal = (producto) => {
+
+        setProductoSeleccionado(
+            producto
+        );
+
+        setNuevoStock(
+            producto.stockActual
+        );
+
+        setShowModal(true);
     };
 
+
+    /*
+        CERRAR MODAL
+    */
     const handleCerrarModal = () => {
-        setShowModal(false); // Oculta el modal
-        setProductoSeleccionado(null);
+
+        setShowModal(false);
+
+        setProductoSeleccionado(
+            null
+        );
     };
 
-    const handleGuardarStock = () => {
-        if (productoSeleccionado) {
-            const stockVal = Number(nuevoStock);
 
-            // Recalculamos el estado automáticamente
-            let nuevoEstado = 'Disponible';
-            if (stockVal <= 0) {
-                nuevoEstado = 'Sin stock';
-            } else if (stockVal <= Number(productoSeleccionado.stockMinimo)) {
-                nuevoEstado = 'Stock bajo';
+    /*
+        ACTUALIZAR STOCK EN SPRING BOOT
+    */
+    const handleGuardarStock =
+        async () => {
+
+            if (!productoSeleccionado) {
+                return;
             }
 
-            // Actualizamos en la base de datos global
-            editarProducto(productoSeleccionado.id, {
-                stockActual: stockVal,
-                estado: nuevoEstado
-            });
+            const stock =
+                Number(nuevoStock);
 
-            handleCerrarModal(); // Cerramos el modal tras guardar
-        }
-    };
+            if (stock < 0) {
+
+                setMensaje(
+                    'El stock no puede ser negativo.'
+                );
+
+                setMensajeError(true);
+
+                return;
+            }
+
+
+            /*
+                Se envía el producto completo porque
+                PUT /api/productos/{id}
+                trabaja con ProductoRequest.
+            */
+            const productoActualizado = {
+
+                codigo:
+                    productoSeleccionado.codigo,
+
+                nombre:
+                    productoSeleccionado.nombre,
+
+                categoria:
+                    productoSeleccionado.categoria,
+
+                precio:
+                    productoSeleccionado.precio,
+
+                stockActual:
+                    stock,
+
+                stockMinimo:
+                    productoSeleccionado.stockMinimo,
+
+                imagen:
+                    productoSeleccionado.imagen,
+
+                descripcion:
+                    productoSeleccionado.descripcion
+
+            };
+
+
+            try {
+
+                setGuardando(true);
+
+                const respuesta =
+                    await productoService.actualizar(
+                        productoSeleccionado.id,
+                        productoActualizado
+                    );
+
+
+                /*
+                    El backend devuelve el producto
+                    con el estado ya recalculado.
+                */
+                setProductos(
+                    productosActuales =>
+                        productosActuales.map(
+                            producto =>
+                                producto.id ===
+                                respuesta.id
+                                    ? respuesta
+                                    : producto
+                        )
+                );
+
+
+                setMensaje(
+                    'Stock actualizado correctamente.'
+                );
+
+                setMensajeError(false);
+
+                handleCerrarModal();
+
+
+            } catch (error) {
+
+                console.error(
+                    'Error al actualizar stock:',
+                    error
+                );
+
+
+                if (
+                    error.response?.status === 401 ||
+                    error.response?.status === 403
+                ) {
+
+                    setMensaje(
+                        'No tienes autorización para actualizar el stock.'
+                    );
+
+                } else {
+
+                    setMensaje(
+                        'No fue posible actualizar el stock.'
+                    );
+                }
+
+                setMensajeError(true);
+
+            } finally {
+
+                setGuardando(false);
+
+            }
+        };
+
 
     return (
+
         <div className="d-flex flex-column min-vh-100">
+
             <main className="flex-grow-1">
+
                 <section className="container mt-5">
-                    <h1 className="mb-1" style={{ color: '#1E293B' }}>Inventario</h1>
-                    <h3 className="fs-6 mb-4">Gestión de stock de productos</h3>
+
+                    <h1
+                        className="mb-1"
+                        style={{
+                            color: '#1E293B'
+                        }}
+                    >
+                        Inventario
+                    </h1>
+
+                    <h3 className="fs-6 mb-4">
+                        Gestión de stock de productos
+                    </h3>
+
+
+                    {mensaje !== '' && (
+
+                        <div
+                            className={
+                                mensajeError
+                                    ? 'alert alert-danger'
+                                    : 'alert alert-success'
+                            }
+                        >
+                            {mensaje}
+                        </div>
+
+                    )}
+
 
                     <div className="row justify-content-center g-4">
-                        {/* Tarjeta 1: Sin Stock */}
+
+
+                        {/* SIN STOCK */}
+
                         <div className="col-md-6 col-lg-5">
-                            <div className="card border-0 shadow-sm rounded-4 overflow-hidden" style={{ border: '1px solid #fecdd3' }}>
-                                <div className="card-header d-flex justify-content-between align-items-center py-3 border-bottom" style={{ backgroundColor: '#fff1f2' }}>
-                                    <h3 className="h6 m-0 fw-medium" style={{ color: '#f43f5e' }}>Sin stock</h3>
+
+                            <div className="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+                                <div
+                                    className="card-header d-flex justify-content-between align-items-center py-3 border-bottom"
+                                    style={{
+                                        backgroundColor:
+                                            '#fff1f2'
+                                    }}
+                                >
+
+                                    <h3
+                                        className="h6 m-0 fw-medium"
+                                        style={{
+                                            color:
+                                                '#f43f5e'
+                                        }}
+                                    >
+                                        Sin stock
+                                    </h3>
+
                                 </div>
+
+
                                 <ul className="list-group list-group-flush">
+
                                     {productosSinStock.length === 0 ? (
-                                        <li className="list-group-item text-muted py-3">No hay productos sin stock.</li>
+
+                                        <li className="list-group-item text-muted py-3">
+
+                                            No hay productos sin stock.
+
+                                        </li>
+
                                     ) : (
-                                        productosSinStock.map(p => (
-                                            <li key={p.id} className="list-group-item d-flex justify-content-between align-items-center py-3">
-                                                <div>
-                                                    <span className="d-block text-dark fw-medium">{p.nombre}</span>
-                                                    <small className="text-secondary">Stock: {p.stockActual} / Mín: {p.stockMinimo}</small>
-                                                </div>
-                                                <button className="btn btn-sm btn-outline-secondary rounded-3" onClick={() => handleAbrirModal(p)}>Actualizar</button>
-                                            </li>
-                                        ))
+
+                                        productosSinStock.map(
+                                            producto => (
+
+                                                <li
+                                                    key={producto.id}
+                                                    className="list-group-item d-flex justify-content-between align-items-center py-3"
+                                                >
+
+                                                    <div>
+
+                                                        <span className="d-block text-dark fw-medium">
+
+                                                            {producto.nombre}
+
+                                                        </span>
+
+                                                        <small className="text-secondary">
+
+                                                            Stock: {producto.stockActual}
+                                                            {' / '}
+                                                            Mín: {producto.stockMinimo}
+
+                                                        </small>
+
+                                                    </div>
+
+
+                                                    <button
+                                                        className="btn btn-sm btn-outline-secondary rounded-3"
+                                                        onClick={
+                                                            () =>
+                                                                handleAbrirModal(
+                                                                    producto
+                                                                )
+                                                        }
+                                                    >
+                                                        Actualizar
+                                                    </button>
+
+                                                </li>
+
+                                            )
+                                        )
+
                                     )}
+
                                 </ul>
+
                             </div>
+
                         </div>
 
-                        {/* Tarjeta 2: Stock Bajo */}
+
+                        {/* STOCK BAJO */}
+
                         <div className="col-md-6 col-lg-5">
-                            <div className="card border-0 shadow-sm rounded-4 overflow-hidden" style={{ border: '1px solid #fef08a' }}>
-                                <div className="card-header d-flex justify-content-between align-items-center py-3 border-bottom" style={{ backgroundColor: '#fefce8' }}>
-                                    <h3 className="h6 m-0 fw-medium" style={{ color: '#d97706' }}>Stock Bajo</h3>
+
+                            <div className="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+                                <div
+                                    className="card-header d-flex justify-content-between align-items-center py-3 border-bottom"
+                                    style={{
+                                        backgroundColor:
+                                            '#fefce8'
+                                    }}
+                                >
+
+                                    <h3
+                                        className="h6 m-0 fw-medium"
+                                        style={{
+                                            color:
+                                                '#d97706'
+                                        }}
+                                    >
+                                        Stock Bajo
+                                    </h3>
+
                                 </div>
+
+
                                 <ul className="list-group list-group-flush">
+
                                     {productosStockBajo.length === 0 ? (
-                                        <li className="list-group-item text-muted py-3">No hay productos con stock bajo.</li>
+
+                                        <li className="list-group-item text-muted py-3">
+
+                                            No hay productos con stock bajo.
+
+                                        </li>
+
                                     ) : (
-                                        productosStockBajo.map(p => (
-                                            <li key={p.id} className="list-group-item d-flex justify-content-between align-items-center py-3">
-                                                <div>
-                                                    <span className="d-block text-dark fw-medium">{p.nombre}</span>
-                                                    <small className="text-secondary">Stock: {p.stockActual} / Mín: {p.stockMinimo}</small>
-                                                </div>
-                                                <button className="btn btn-sm btn-outline-secondary rounded-3" onClick={() => handleAbrirModal(p)}>Actualizar</button>
-                                            </li>
-                                        ))
+
+                                        productosStockBajo.map(
+                                            producto => (
+
+                                                <li
+                                                    key={producto.id}
+                                                    className="list-group-item d-flex justify-content-between align-items-center py-3"
+                                                >
+
+                                                    <div>
+
+                                                        <span className="d-block text-dark fw-medium">
+
+                                                            {producto.nombre}
+
+                                                        </span>
+
+                                                        <small className="text-secondary">
+
+                                                            Stock: {producto.stockActual}
+                                                            {' / '}
+                                                            Mín: {producto.stockMinimo}
+
+                                                        </small>
+
+                                                    </div>
+
+
+                                                    <button
+                                                        className="btn btn-sm btn-outline-secondary rounded-3"
+                                                        onClick={
+                                                            () =>
+                                                                handleAbrirModal(
+                                                                    producto
+                                                                )
+                                                        }
+                                                    >
+                                                        Actualizar
+                                                    </button>
+
+                                                </li>
+
+                                            )
+                                        )
+
                                     )}
+
                                 </ul>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </section>
 
+
+                {/* FILTROS */}
+
                 <section>
+
                     <div className="container my-5">
+
                         <div className="row g-3 mb-4">
+
                             <div className="col-md-12 col-lg-6">
+
                                 <div className="input-group">
-                                    <span className="input-group-text bg-white border-end-0 rounded-start-3 text-secondary">
+
+                                    <span className="input-group-text bg-white border-end-0">
+
                                         <i className="bi bi-search"></i>
+
                                     </span>
+
                                     <input
                                         type="text"
-                                        className="form-control border-start-0 rounded-end-3 shadow-none"
+                                        className="form-control border-start-0 shadow-none"
                                         placeholder="Buscar..."
                                         value={busqueda}
-                                        onChange={(e) => setBusqueda(e.target.value)}
+                                        onChange={
+                                            e =>
+                                                setBusqueda(
+                                                    e.target.value
+                                                )
+                                        }
                                     />
+
                                 </div>
+
                             </div>
 
+
                             <div className="col-md-6 col-lg-3">
+
                                 <select
                                     className="form-select rounded-3 shadow-none text-secondary"
                                     value={filtroEstado}
-                                    onChange={(e) => setFiltroEstado(e.target.value)}
+                                    onChange={
+                                        e =>
+                                            setFiltroEstado(
+                                                e.target.value
+                                            )
+                                    }
                                 >
-                                    <option value="todos">Todos los estados</option>
-                                    <option value="Disponible">Disponible</option>
-                                    <option value="Stock bajo">Stock bajo</option>
-                                    <option value="Sin stock">Sin stock</option>
+
+                                    <option value="todos">
+                                        Todos los estados
+                                    </option>
+
+                                    <option value="Disponible">
+                                        Disponible
+                                    </option>
+
+                                    <option value="Stock bajo">
+                                        Stock bajo
+                                    </option>
+
+                                    <option value="Sin stock">
+                                        Sin stock
+                                    </option>
+
                                 </select>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </section>
+
+
+                {/* TABLA */}
 
                 <section>
+
                     <div className="container">
-                        <div className="table-responsive bg-white rounded-3 shadow-sm border" style={{ borderColor: 'var(--color-header)' }}>
+
+                        <div className="table-responsive bg-white rounded-3 shadow-sm border">
+
                             <table className="table table-hover align-middle mb-0">
-                                <thead className="table-light text-secondary" style={{ fontSize: '0.85rem', letterSpacing: '0.5px' }}>
+
+                                <thead className="table-light text-secondary">
+
                                     <tr>
-                                        <th className="py-3 px-4 fw-medium border-bottom-0">CÓDIGO</th>
-                                        <th className="py-3 fw-medium border-bottom-0">PRODUCTO</th>
-                                        <th className="py-3 text-center fw-medium border-bottom-0">STOCK ACTUAL</th>
-                                        <th className="py-3 text-center fw-medium border-bottom-0">STOCK MÍNIMO</th>
-                                        <th className="py-3 text-center fw-medium border-bottom-0">ESTADO</th>
-                                        <th className="py-3 text-center fw-medium border-bottom-0">ACCIÓN</th>
+
+                                        <th className="py-3 px-4">
+                                            CÓDIGO
+                                        </th>
+
+                                        <th className="py-3">
+                                            PRODUCTO
+                                        </th>
+
+                                        <th className="py-3 text-center">
+                                            STOCK ACTUAL
+                                        </th>
+
+                                        <th className="py-3 text-center">
+                                            STOCK MÍNIMO
+                                        </th>
+
+                                        <th className="py-3 text-center">
+                                            ESTADO
+                                        </th>
+
+                                        <th className="py-3 text-center">
+                                            ACCIÓN
+                                        </th>
+
                                     </tr>
+
                                 </thead>
 
-                                <tbody className="border-top-0">
-                                    {productosFiltrados.length === 0 ? (
+
+                                <tbody>
+
+                                    {cargando ? (
+
                                         <tr>
-                                            <td colSpan="6" className="text-center py-4 text-muted">No se encontraron productos en el inventario.</td>
+
+                                            <td
+                                                colSpan="6"
+                                                className="text-center py-4"
+                                            >
+                                                Cargando inventario...
+                                            </td>
+
                                         </tr>
+
+                                    ) : productosFiltrados.length === 0 ? (
+
+                                        <tr>
+
+                                            <td
+                                                colSpan="6"
+                                                className="text-center py-4 text-muted"
+                                            >
+                                                No se encontraron productos.
+                                            </td>
+
+                                        </tr>
+
                                     ) : (
-                                        productosFiltrados.map((prod) => (
-                                            <tr key={prod.id}>
-                                                <td className="py-3 px-4 text-secondary font-monospace">{prod.codigo}</td>
-                                                <td className="py-3 text-dark">{prod.nombre}</td>
-                                                <td className="py-3 text-center">{prod.stockActual}</td>
-                                                <td className="py-3 text-center text-secondary">{prod.stockMinimo}</td>
-                                                <td className="py-3 text-center">
-                                                    <span className={`badge rounded-pill ${prod.estado === 'Disponible' ? 'bg-success' : prod.estado === 'Stock bajo' ? 'bg-warning text-dark' : 'bg-danger'}`}>
-                                                        {prod.estado}
-                                                    </span>
-                                                </td>
-                                                <td className="py-3 text-center">
-                                                    <button className="btn btn-sm btn-outline-secondary rounded-3" onClick={() => handleAbrirModal(prod)}>
-                                                        Actualizar stock
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))
+
+                                        productosFiltrados.map(
+                                            producto => (
+
+                                                <tr key={producto.id}>
+
+                                                    <td className="py-3 px-4 text-secondary font-monospace">
+
+                                                        {producto.codigo}
+
+                                                    </td>
+
+
+                                                    <td className="py-3 text-dark">
+
+                                                        {producto.nombre}
+
+                                                    </td>
+
+
+                                                    <td className="py-3 text-center">
+
+                                                        {producto.stockActual}
+
+                                                    </td>
+
+
+                                                    <td className="py-3 text-center text-secondary">
+
+                                                        {producto.stockMinimo}
+
+                                                    </td>
+
+
+                                                    <td className="py-3 text-center">
+
+                                                        <span
+                                                            className={
+                                                                `badge rounded-pill ${
+                                                                    producto.estado === 'Disponible'
+                                                                        ? 'bg-success'
+                                                                        : producto.estado === 'Stock bajo'
+                                                                            ? 'bg-warning text-dark'
+                                                                            : 'bg-danger'
+                                                                }`
+                                                            }
+                                                        >
+
+                                                            {producto.estado}
+
+                                                        </span>
+
+                                                    </td>
+
+
+                                                    <td className="py-3 text-center">
+
+                                                        <button
+                                                            className="btn btn-sm btn-outline-secondary rounded-3"
+                                                            onClick={
+                                                                () =>
+                                                                    handleAbrirModal(
+                                                                        producto
+                                                                    )
+                                                            }
+                                                        >
+                                                            Actualizar stock
+                                                        </button>
+
+                                                    </td>
+
+                                                </tr>
+
+                                            )
+                                        )
+
                                     )}
+
                                 </tbody>
+
                             </table>
+
                         </div>
+
                     </div>
+
                 </section>
+
             </main>
 
-            {/* --- MODAL REACTIVO --- */}
-            {showModal && productoSeleccionado && (
-                <>
-                    {/* Fondo oscuro transparente */}
-                    <div className="modal-backdrop fade show" style={{ zIndex: 1040 }}></div>
 
-                    {/* Ventana del modal */}
-                    <div className="modal fade show d-block" tabIndex="-1" style={{ zIndex: 1050, backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            {/* MODAL */}
+
+            {showModal && productoSeleccionado && (
+
+                <>
+
+                    <div
+                        className="modal-backdrop fade show"
+                        style={{
+                            zIndex: 1040
+                        }}
+                    />
+
+
+                    <div
+                        className="modal fade show d-block"
+                        tabIndex="-1"
+                        style={{
+                            zIndex: 1050,
+                            backgroundColor:
+                                'rgba(0,0,0,0.5)'
+                        }}
+                    >
+
                         <div className="modal-dialog modal-dialog-centered">
+
                             <div className="modal-content border-0 shadow rounded-4">
 
+
                                 <div className="modal-header border-bottom-0 pb-0">
-                                    <h5 className="modal-title text-dark fw-medium">Actualizar stock</h5>
-                                    <button type="button" className="btn-close shadow-none" onClick={handleCerrarModal}></button>
-                                </div>
 
-                                <div className="modal-body pt-3">
-                                    <div className="bg-light rounded-3 p-3 mb-4" style={{ border: '1px solid #f8fafc' }}>
-                                        <h4 className="h6 text-dark mb-0 fw-normal">{productoSeleccionado.nombre}</h4>
-                                        <p className="text-secondary font-monospace small mb-2">{productoSeleccionado.codigo}</p>
-                                        <p className="text-secondary small mb-0">Stock actual: <span className="text-dark fw-medium">{productoSeleccionado.stockActual}</span></p>
-                                        <p className="text-secondary small mb-0">Stock mínimo: <span className="text-dark fw-medium">{productoSeleccionado.stockMinimo}</span></p>
-                                    </div>
+                                    <h5 className="modal-title">
 
-                                    <label htmlFor="modal-input-stock" className="form-label fw-medium text-dark">Nuevo stock</label>
-                                    <input
-                                        type="number"
-                                        className="form-control shadow-none rounded-3"
-                                        id="modal-input-stock"
-                                        min="0"
-                                        value={nuevoStock}
-                                        onChange={(e) => setNuevoStock(e.target.value)}
-                                        onKeyDown={(e) => e.key === 'Enter' && handleGuardarStock()} // Guarda al presionar Enter
+                                        Actualizar stock
+
+                                    </h5>
+
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        onClick={
+                                            handleCerrarModal
+                                        }
                                     />
+
                                 </div>
 
-                                <div className="modal-footer border-top-0 pt-0">
-                                    <div className="row w-100 g-2 m-0">
-                                        <div className="col-6 p-0 pe-1">
-                                            <button type="button" className="btn btn-outline-secondary w-100 rounded-3 fw-medium" onClick={handleCerrarModal}>Cancelar</button>
-                                        </div>
-                                        <div className="col-6 p-0 ps-1">
-                                            <button type="button" className="btn w-100 rounded-3 fw-medium text-white shadow-sm" style={{ backgroundColor: '#d97706' }} onClick={handleGuardarStock}>Actualizar</button>
-                                        </div>
+
+                                <div className="modal-body">
+
+                                    <div className="bg-light rounded-3 p-3 mb-4">
+
+                                        <h4 className="h6">
+
+                                            {
+                                                productoSeleccionado.nombre
+                                            }
+
+                                        </h4>
+
+                                        <p className="text-secondary small mb-1">
+
+                                            {
+                                                productoSeleccionado.codigo
+                                            }
+
+                                        </p>
+
+                                        <p className="small mb-1">
+
+                                            Stock actual:{' '}
+
+                                            <strong>
+                                                {
+                                                    productoSeleccionado.stockActual
+                                                }
+                                            </strong>
+
+                                        </p>
+
+                                        <p className="small mb-0">
+
+                                            Stock mínimo:{' '}
+
+                                            <strong>
+                                                {
+                                                    productoSeleccionado.stockMinimo
+                                                }
+                                            </strong>
+
+                                        </p>
+
                                     </div>
+
+
+                                    <label
+                                        htmlFor="nuevo-stock"
+                                        className="form-label"
+                                    >
+                                        Nuevo stock
+                                    </label>
+
+                                    <input
+                                        id="nuevo-stock"
+                                        type="number"
+                                        min="0"
+                                        className="form-control"
+                                        value={nuevoStock}
+                                        onChange={
+                                            e =>
+                                                setNuevoStock(
+                                                    e.target.value
+                                                )
+                                        }
+                                    />
+
+                                </div>
+
+
+                                <div className="modal-footer">
+
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline-secondary"
+                                        onClick={
+                                            handleCerrarModal
+                                        }
+                                    >
+                                        Cancelar
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        className="btn btn-warning"
+                                        disabled={
+                                            guardando
+                                        }
+                                        onClick={
+                                            handleGuardarStock
+                                        }
+                                    >
+
+                                        {
+                                            guardando
+                                                ? 'Guardando...'
+                                                : 'Actualizar'
+                                        }
+
+                                    </button>
+
                                 </div>
 
                             </div>
+
                         </div>
+
                     </div>
+
                 </>
+
             )}
 
         </div>
