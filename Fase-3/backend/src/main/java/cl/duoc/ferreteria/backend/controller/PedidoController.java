@@ -33,4 +33,12 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoService.obtenerTodos());
     }
 
+    @Operation(summary = "Obtener los pedidos de un cliente logeado")
+    @GetMapping("/mis-pedidos")
+    public ResponseEntity<List<PedidoResponseDTO>> listarMisPedidos() {
+        return ResponseEntity.ok(pedidoService.obtenerMisPedidos());
+    }
+
+
+
 }

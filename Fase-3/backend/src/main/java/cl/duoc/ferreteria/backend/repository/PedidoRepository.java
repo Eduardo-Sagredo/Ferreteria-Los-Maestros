@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
 
     List<Pedido> findAllByOrderByFechaDesc();
+
+    List<Pedido> findByClienteNombreIgnoreCaseOrderByFechaDesc(String clienteNombre);
 }

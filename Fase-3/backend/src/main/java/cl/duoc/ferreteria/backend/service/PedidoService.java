@@ -75,14 +75,14 @@ public class PedidoService {
     }
 
     private String resolverNombreCliente(String nombreEnviado) {
-        if (nombreEnviado != null && !nombreEnviado.isBlank()) {
-            return nombreEnviado;
-        }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
             return userRepository.findByCorreo(auth.getName())
-                    .map(u -> u.getNombre() + " " + u.getApellidos())
+                    .map(u -> (u.getNombre() + " " + u.getApellidos()).trim())
                     .orElse(auth.getName());
+        }
+        if (nombreEnviado != null && !nombreEnviado.isBlank()) {
+            return nombreEnviado.trim();
         }
         return "Cliente Invitado";
     }
@@ -93,4 +93,18 @@ public class PedidoService {
                 .collect(Collectors.toList());
     }
 
+    public List<PedidoResponseDTO> obtenerMisPedidos() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getName())) {
+            return List.of();
+        }
+
+        String nombreCliente = userRepository.findByCorreo(auth.getName())
+                .map(u -> (u.getNombre() + " " + u.getApellidos()).trim())
+                .orElse(auth.getName());
+
+        return pedidoRepository.findByClienteNombreIgnoreCaseOrderByFechaDesc(nombreCliente).stream()
+                .map(pedidoMapper::toResponseDTO)
+                .collect(Collectors.toList());
+    }
 }
