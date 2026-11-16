@@ -93,9 +93,8 @@ public class SecurityConfig {
                         )
 
                         // Pedidos
-                        .requestMatchers(
-                                "/api/pedidos/**"
-                        ).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/pedidos").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/pedidos/**").hasRole("ADMIN")
 
                         // Todo lo demás requiere login
                         .anyRequest().authenticated()
