@@ -46,26 +46,34 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // Login y registro públicos
+                        // ========================================
+                        // LOGIN Y REGISTRO - ACCESO PUBLICO
+                        // ========================================
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/error"
                         ).permitAll()
 
-                        // Swagger público
+                        // ========================================
+                        // SWAGGER - ACCESO PUBLICO
+                        // ========================================
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
 
-                        // Productos - lectura pública
+                        // ========================================
+                        // PRODUCTOS - LECTURA PUBLICA
+                        // ========================================
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/productos/**"
                         ).permitAll()
 
-                        // Productos - crear
+                        // ========================================
+                        // PRODUCTOS - CREAR
+                        // ========================================
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/productos/**"
@@ -74,7 +82,9 @@ public class SecurityConfig {
                                 "ROLE_VENDEDOR"
                         )
 
-                        // Productos - actualizar
+                        // ========================================
+                        // PRODUCTOS - ACTUALIZAR
+                        // ========================================
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/productos/**"
@@ -83,7 +93,9 @@ public class SecurityConfig {
                                 "ROLE_VENDEDOR"
                         )
 
-                        // Productos - eliminar
+                        // ========================================
+                        // PRODUCTOS - ELIMINAR
+                        // ========================================
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/productos/**"
@@ -92,15 +104,80 @@ public class SecurityConfig {
                                 "ROLE_VENDEDOR"
                         )
 
-                        // Pedidos
+                        // ========================================
+                        // PEDIDOS - REGISTRAR COMPRAS
+                        // Cliente y administrador
+                        // ========================================
                         .requestMatchers(
-                                "/api/pedidos/**"
-                        ).permitAll()
+                                HttpMethod.POST,
+                                "/api/v1/pedidos"
+                        ).hasAnyAuthority(
+                                "ROLE_CLIENTE",
+                                "ROLE_ADMIN"
+                        )
 
-                        // Todo lo demás requiere login
+                        // ========================================
+                        // PEDIDOS - CONSULTAR
+                        // Administrador y vendedor
+                        // ========================================
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/v1/pedidos",
+                                "/api/v1/pedidos/**"
+                        ).hasAnyAuthority(
+                                "ROLE_ADMIN",
+                                "ROLE_VENDEDOR"
+                        )
+
+                        // ========================================
+                        // PEDIDOS - CAMBIAR ESTADOS
+                        // Solo administrador
+                        // ========================================
+                        .requestMatchers(
+                                HttpMethod.PATCH,
+                                "/api/v1/pedidos/**"
+                        ).hasAuthority(
+                                "ROLE_ADMIN"
+                        )
+
+                        // ========================================
+                        // PEDIDOS - ACTUALIZAR
+                        // Solo administrador
+                        // ========================================
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/v1/pedidos/**"
+                        ).hasAuthority(
+                                "ROLE_ADMIN"
+                        )
+
+                        // ========================================
+                        // PEDIDOS - ELIMINAR
+                        // Solo administrador
+                        // ========================================
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/v1/pedidos/**"
+                        ).hasAuthority(
+                                "ROLE_ADMIN"
+                        )
+
+                        // ========================================
+                        // PEDIDOS - BLOQUEAR OTROS ACCESOS
+                        // ========================================
+                        .requestMatchers(
+                                "/api/v1/pedidos",
+                                "/api/v1/pedidos/**",
+                                "/api/pedidos/**"
+                        ).denyAll()
+
+                        // ========================================
+                        // OTRAS RUTAS - REQUIEREN LOGIN
+                        // ========================================
                         .anyRequest().authenticated()
                 );
 
+        // Filtro de autenticacion JWT
         http.addFilterBefore(
                 jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
@@ -109,11 +186,17 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // ========================================
+    // ENCRIPTACION DE CONTRASENAS
+    // ========================================
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // ========================================
+    // ADMINISTRADOR DE AUTENTICACION
+    // ========================================
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationProvider authenticationProvider) {
@@ -123,6 +206,9 @@ public class SecurityConfig {
         );
     }
 
+    // ========================================
+    // PROVEEDOR DE AUTENTICACION
+    // ========================================
     @Bean
     public AuthenticationProvider authenticationProvider(
             UsuarioService usuarioService) {

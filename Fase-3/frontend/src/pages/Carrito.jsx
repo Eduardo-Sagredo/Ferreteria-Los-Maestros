@@ -1,127 +1,114 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import MockDB from '../services/MockDB.js'
+import productoService from '../api/productoService.js'
+import { crearPedido } from '../api/pedidoService.js'
 
 function Carrito() {
-  const [carrito, setCarrito] =
-    useState([])
 
-  const [productos, setProductos] =
-    useState([])
+  // ESTADOS DEL COMPONENTE
 
-  const [metodoPago, setMetodoPago] =
-    useState('')
+  const [carrito, setCarrito] = useState([])
+  const [productos, setProductos] = useState([])
+  const [metodoPago, setMetodoPago] = useState('')
+  const [mensaje, setMensaje] = useState('')
+  const [mensajeError, setMensajeError] = useState(false)
+  const [cargando, setCargando] = useState(true)
+  const [procesando, setProcesando] = useState(false)
 
-  const [mensaje, setMensaje] =
-    useState('')
-
-  const [mensajeError, setMensajeError] =
-    useState(false)
+  // CARGAR PRODUCTOS DESDE SPRING BOOT
 
   useEffect(() => {
 
-    const productosGuardados =
-      MockDB.getTabla('productos')
+    async function cargarProductos() {
 
-    const carritoGuardado =
-      MockDB.getCarrito()
+      try {
 
-    /*
-       QUITAR PRODUCTOS
-       QUE YA NO EXISTEN
-    */
-    const carritoValido =
-      carritoGuardado.filter(
-        (item) =>
-          productosGuardados.some(
+        setCargando(true)
+
+        const productosBackend = await productoService.obtenerTodos()
+
+        if (!Array.isArray(productosBackend)) {
+          throw new Error('Formato de productos no válido')
+        }
+
+        const carritoGuardado = MockDB.getCarrito() || []
+
+        const carritoValido = carritoGuardado.filter((item) =>
+          productosBackend.some(
             (producto) =>
-              producto.id ===
-              item.id
+              Number(producto.id) === Number(item.id)
           )
-      )
+        )
 
-    if (
-      carritoValido.length !==
-      carritoGuardado.length
-    ) {
+        if (carritoValido.length !== carritoGuardado.length) {
+          MockDB.guardarCarrito(carritoValido)
+        }
 
-      MockDB.guardarCarrito(
-        carritoValido
-      )
+        setProductos(productosBackend)
+        setCarrito(carritoValido)
+
+      } catch (error) {
+
+        console.error('Error al cargar productos:', error)
+
+        mostrarMensaje(
+          'No fue posible cargar los productos desde el servidor.',
+          true
+        )
+
+      } finally {
+
+        setCargando(false)
+
+      }
     }
 
-    setProductos(
-      productosGuardados
-    )
-
-    setCarrito(
-      carritoValido
-    )
+    cargarProductos()
 
   }, [])
 
-  /*
-     MOSTRAR MENSAJE
-  */
-  function mostrarMensaje(
-    texto,
-    esError
-  ) {
+  // MOSTRAR MENSAJES
 
+  function mostrarMensaje(texto, esError = false) {
     setMensaje(texto)
-
-    setMensajeError(
-      esError
-    )
+    setMensajeError(esError)
   }
 
-  /*
-     BUSCAR PRODUCTO
-  */
+  // BUSCAR PRODUCTO
+
   function obtenerProducto(id) {
 
     return productos.find(
-      (producto) =>
-        producto.id === id
+      (producto) => Number(producto.id) === Number(id)
     )
+
   }
 
-  /*
-     ACTUALIZAR CARRITO
-  */
-  function actualizarCarrito(
-    nuevoCarrito
-  ) {
+  // ACTUALIZAR CARRITO
 
-    setCarrito(
-      nuevoCarrito
-    )
+  function actualizarCarrito(nuevoCarrito) {
 
-    MockDB.guardarCarrito(
-      nuevoCarrito
-    )
+    setCarrito(nuevoCarrito)
+
+    MockDB.guardarCarrito(nuevoCarrito)
+
   }
 
-  /*
-     CAMBIAR CANTIDAD
-  */
-  function cambiarCantidad(
-    idProducto,
-    nuevaCantidad
-  ) {
+  // CAMBIAR CANTIDAD
 
-    const producto =
-      obtenerProducto(
-        idProducto
-      )
+  function cambiarCantidad(idProducto, nuevaCantidad) {
+
+    const producto = obtenerProducto(idProducto)
 
     if (!producto) {
+      mostrarMensaje('Producto no encontrado.', true)
       return
     }
 
-    if (
-      producto.stockActual <= 0
-    ) {
+    const stockDisponible = Number(producto.stockActual)
+
+    if (stockDisponible <= 0) {
 
       mostrarMensaje(
         'Este producto ya no tiene stock disponible.',
@@ -131,10 +118,9 @@ function Carrito() {
       return
     }
 
-    let cantidad =
-      Number(nuevaCantidad)
+    let cantidad = Number(nuevaCantidad)
 
-    if (cantidad < 1) {
+    if (!Number.isInteger(cantidad) || cantidad < 1) {
 
       cantidad = 1
 
@@ -142,149 +128,262 @@ function Carrito() {
         'La cantidad mínima es 1.',
         true
       )
-    }
 
-    if (
-      cantidad >
-      producto.stockActual
-    ) {
+    } else if (cantidad > stockDisponible) {
 
-      cantidad =
-        producto.stockActual
+      cantidad = stockDisponible
 
       mostrarMensaje(
         'La cantidad no puede superar el stock disponible.',
         true
       )
+
+    } else {
+
+      setMensaje('')
+
     }
 
-    const carritoActualizado =
-      carrito.map(
-        (item) => {
+    const carritoActualizado = carrito.map((item) => {
 
-          if (
-            item.id === idProducto
-          ) {
+      if (Number(item.id) === Number(idProducto)) {
 
-            return {
-              ...item,
-              cantidad:
-                cantidad
-            }
-          }
-
-          return item
+        return {
+          ...item,
+          cantidad
         }
-      )
 
-    actualizarCarrito(
-      carritoActualizado
-    )
+      }
+
+      return item
+
+    })
+
+    actualizarCarrito(carritoActualizado)
+
   }
 
-  /*
-     ELIMINAR DEL CARRITO
-  */
-  function eliminarProducto(
-    idProducto
-  ) {
+  // ELIMINAR PRODUCTO
 
-    const carritoActualizado =
-      carrito.filter(
-        (item) =>
-          item.id !==
-          idProducto
-      )
+  function eliminarProducto(idProducto) {
 
-    actualizarCarrito(
-      carritoActualizado
+    const carritoActualizado = carrito.filter(
+      (item) => Number(item.id) !== Number(idProducto)
     )
+
+    actualizarCarrito(carritoActualizado)
 
     mostrarMensaje(
       'Producto eliminado del carrito.',
       false
     )
+
   }
 
-  /*
-     REALIZAR COMPRA
-  */
-  function realizarCompra() {
+  // REALIZAR COMPRA MEDIANTE API REST
 
-    const resultado =
-      MockDB.realizarCompra(
-        metodoPago
+  async function realizarCompra() {
+
+    if (procesando) return
+
+    // VALIDAR MÉTODO DE PAGO
+
+    if (!metodoPago) {
+
+      mostrarMensaje(
+        'Selecciona un método de pago.',
+        true
       )
 
-    mostrarMensaje(
-      resultado.mensaje,
-      !resultado.exito
-    )
+      return
 
-    if (resultado.exito) {
+    }
 
-      setCarrito(
-        MockDB.getCarrito()
+    // VALIDAR CARRITO
+
+    if (carrito.length === 0) {
+
+      mostrarMensaje(
+        'El carrito está vacío.',
+        true
       )
 
-      setProductos(
-        MockDB.getTabla(
-          'productos'
+      return
+
+    }
+
+    // VALIDAR SESIÓN
+
+    const token = localStorage.getItem('token')
+
+    if (!token) {
+
+      mostrarMensaje(
+        'Debes iniciar sesión para realizar una compra.',
+        true
+      )
+
+      return
+
+    }
+
+    // VALIDAR STOCK Y CANTIDADES
+
+    for (const item of carrito) {
+
+      const producto = obtenerProducto(item.id)
+
+      if (!producto) {
+
+        mostrarMensaje(
+          'Uno de los productos ya no está disponible.',
+          true
         )
-      )
+
+        return
+
+      }
+
+      const cantidad = Number(item.cantidad)
+      const stock = Number(producto.stockActual)
+
+      if (!Number.isInteger(cantidad) || cantidad < 1) {
+
+        mostrarMensaje(
+          'La cantidad de productos debe ser mayor a cero.',
+          true
+        )
+
+        return
+
+      }
+
+      if (cantidad > stock) {
+
+        mostrarMensaje(
+          `No hay stock suficiente para ${producto.nombre}. Stock disponible: ${stock}.`,
+          true
+        )
+
+        return
+
+      }
+    }
+
+    // PREPARAR DATOS PARA SPRING BOOT
+
+    const productosPedido = carrito.map((item) => ({
+      productoId: Number(item.id),
+      cantidad: Number(item.cantidad)
+    }))
+
+    // ENVIAR PEDIDO AL BACKEND
+
+    try {
+
+      setProcesando(true)
+      setMensaje('')
+
+      const pedidoCreado = await crearPedido(productosPedido)
+
+      // LIMPIAR CARRITO DESPUÉS DEL ÉXITO
+
+      actualizarCarrito([])
 
       setMetodoPago('')
-    } else {
 
-      /*
-         RECARGAR STOCK
-         ACTUAL
-      */
-      setProductos(
-        MockDB.getTabla(
-          'productos'
-        )
+      mostrarMensaje(
+        `¡Pedido #${pedidoCreado.id} registrado correctamente! El pago no ha sido procesado.`,
+        false
       )
+
+      // ACTUALIZAR PRODUCTOS Y STOCK
+
+      try {
+
+        const productosActualizados =
+          await productoService.obtenerTodos()
+
+        if (Array.isArray(productosActualizados)) {
+          setProductos(productosActualizados)
+        }
+
+      } catch (error) {
+
+        console.error(
+          'No fue posible actualizar el catálogo:',
+          error
+        )
+
+      }
+
+    } catch (error) {
+
+      console.error('Error al crear pedido:', error)
+
+      const mensajeServidor =
+        error.response?.data?.mensaje ||
+        error.response?.data?.detail ||
+        error.response?.data?.message
+
+      if (error.response?.status === 401) {
+
+        mostrarMensaje(
+          'Tu sesión no es válida. Vuelve a iniciar sesión.',
+          true
+        )
+
+      } else if (error.response?.status === 403) {
+
+        mostrarMensaje(
+          'No tienes permisos para realizar esta compra.',
+          true
+        )
+
+      } else {
+
+        mostrarMensaje(
+          mensajeServidor ||
+          'No fue posible registrar el pedido. Verifica la conexión y el stock disponible.',
+          true
+        )
+
+      }
+
+    } finally {
+
+      setProcesando(false)
+
     }
   }
 
-  /*
-     TOTAL DE UNIDADES
-  */
-  const cantidadTotal =
-    carrito.reduce(
-      (total, item) =>
-        total +
-        item.cantidad,
-      0
+  // CALCULAR TOTAL DE UNIDADES
+
+  const cantidadTotal = carrito.reduce(
+    (total, item) =>
+      total + Number(item.cantidad),
+    0
+  )
+
+  // CALCULAR TOTAL DEL CARRITO
+
+  const totalCarrito = carrito.reduce((total, item) => {
+
+    const producto = obtenerProducto(item.id)
+
+    if (!producto) return total
+
+    return (
+      total +
+      Number(producto.precio) * Number(item.cantidad)
     )
 
-  /*
-     TOTAL EN DINERO
-  */
-  const totalCarrito =
-    carrito.reduce(
-      (total, item) => {
+  }, 0)
 
-        const producto =
-          obtenerProducto(
-            item.id
-          )
-
-        if (!producto) {
-          return total
-        }
-
-        return (
-          total +
-          producto.precio *
-          item.cantidad
-        )
-      },
-      0
-    )
+  // INTERFAZ DEL CARRITO
 
   return (
+
     <main className="carrito-section">
 
       <div className="container py-5">
@@ -301,6 +400,7 @@ function Carrito() {
 
         </div>
 
+        {/* MENSAJES */}
 
         {mensaje !== '' && (
 
@@ -311,13 +411,37 @@ function Carrito() {
                 : 'alert alert-success mb-3'
             }
           >
+
             {mensaje}
+
           </div>
 
         )}
 
+        {/* CARGANDO PRODUCTOS */}
 
-        {carrito.length === 0 ? (
+        {cargando ? (
+
+          <div className="text-center py-5">
+
+            <div
+              className="spinner-border text-warning"
+              role="status"
+            >
+              <span className="visually-hidden">
+                Cargando...
+              </span>
+            </div>
+
+            <p className="mt-3">
+              Cargando carrito de compras...
+            </p>
+
+          </div>
+
+        ) : carrito.length === 0 ? (
+
+          // CARRITO VACÍO
 
           <div className="carrito-vacio text-center py-5">
 
@@ -342,154 +466,140 @@ function Carrito() {
 
         ) : (
 
+          // CARRITO CON PRODUCTOS
+
           <div className="row g-4">
 
             <div className="col-12 col-lg-8">
 
-              {carrito.map(
-                (item) => {
+              {carrito.map((item) => {
 
-                  const producto =
-                    obtenerProducto(
-                      item.id
-                    )
+                const producto = obtenerProducto(item.id)
 
-                  if (!producto) {
-                    return null
-                  }
+                if (!producto) return null
 
-                  const subtotal =
-                    producto.precio *
-                    item.cantidad
+                const subtotal =
+                  Number(producto.precio) * Number(item.cantidad)
 
-                  return (
+                return (
 
-                    <div
-                      className="carrito-item"
-                      key={item.id}
-                    >
+                  <div
+                    className="carrito-item"
+                    key={item.id}
+                  >
 
-                      <div className="row g-3 align-items-center">
+                    <div className="row g-3 align-items-center">
 
-                        <div className="col-4 col-md-2 text-center">
+                      {/* IMAGEN */}
 
-                          <img
-                            src={
-                              producto.imagen
-                            }
-                            alt={
-                              producto.nombre
-                            }
-                            className="carrito-imagen"
-                          />
+                      <div className="col-4 col-md-2 text-center">
 
-                        </div>
+                        <img
+                          src={producto.imagen}
+                          alt={producto.nombre}
+                          className="carrito-imagen"
+                        />
 
+                      </div>
 
-                        <div className="col-8 col-md-4">
+                      {/* INFORMACIÓN DEL PRODUCTO */}
 
-                          <h2 className="carrito-producto-nombre">
-                            {producto.nombre}
-                          </h2>
+                      <div className="col-8 col-md-4">
 
-                          <p className="mb-1">
+                        <h2 className="carrito-producto-nombre">
+                          {producto.nombre}
+                        </h2>
 
-                            $
-                            {producto.precio.toLocaleString(
-                              'es-CL'
-                            )}{' '}
-                            c/u
+                        <p className="mb-1">
 
-                          </p>
+                          ${Number(producto.precio).toLocaleString('es-CL')} c/u
 
-                          <small>
+                        </p>
 
-                            Stock disponible:{' '}
-                            {producto.stockActual}
+                        <small>
 
-                          </small>
+                          Stock disponible: {producto.stockActual}
 
-                        </div>
+                        </small>
 
+                      </div>
 
-                        <div className="col-6 col-md-2">
+                      {/* CANTIDAD */}
 
-                          <label
-                            htmlFor={`cantidad-${producto.id}`}
-                            className="form-label"
-                          >
-                            Cantidad
-                          </label>
+                      <div className="col-6 col-md-2">
 
-                          <input
-                            type="number"
-                            id={`cantidad-${producto.id}`}
-                            className="form-control"
-                            value={
-                              item.cantidad
-                            }
-                            min="1"
-                            max={
-                              producto.stockActual
-                            }
-                            onChange={
-                              (evento) =>
-                                cambiarCantidad(
-                                  producto.id,
-                                  evento.target.value
-                                )
-                            }
-                          />
+                        <label
+                          htmlFor={`cantidad-${producto.id}`}
+                          className="form-label"
+                        >
+                          Cantidad
+                        </label>
 
-                        </div>
+                        <input
+                          type="number"
+                          id={`cantidad-${producto.id}`}
+                          className="form-control"
+                          value={item.cantidad}
+                          min="1"
+                          max={producto.stockActual}
+                          disabled={procesando}
+                          onChange={(evento) =>
+                            cambiarCantidad(
+                              producto.id,
+                              evento.target.value
+                            )
+                          }
+                        />
 
+                      </div>
 
-                        <div className="col-6 col-md-2">
+                      {/* SUBTOTAL */}
 
-                          <p className="fw-bold mb-1">
-                            Subtotal
-                          </p>
+                      <div className="col-6 col-md-2">
 
-                          <p className="mb-0">
+                        <p className="fw-bold mb-1">
+                          Subtotal
+                        </p>
 
-                            $
-                            {subtotal.toLocaleString(
-                              'es-CL'
-                            )}
+                        <p className="mb-0">
 
-                          </p>
+                          ${subtotal.toLocaleString('es-CL')}
 
-                        </div>
+                        </p>
 
+                      </div>
 
-                        <div className="col-12 col-md-2 text-md-end">
+                      {/* ELIMINAR PRODUCTO */}
 
-                          <button
-                            className="btn btn-outline-danger"
-                            onClick={
-                              () =>
-                                eliminarProducto(
-                                  producto.id
-                                )
-                            }
-                          >
+                      <div className="col-12 col-md-2 text-md-end">
 
-                            <i className="bi bi-trash"></i>{' '}
-                            Eliminar
+                        <button
+                          type="button"
+                          className="btn btn-outline-danger"
+                          disabled={procesando}
+                          onClick={() =>
+                            eliminarProducto(producto.id)
+                          }
+                        >
 
-                          </button>
+                          <i className="bi bi-trash"></i>{' '}
+                          Eliminar
 
-                        </div>
+                        </button>
 
                       </div>
 
                     </div>
-                  )
-                }
-              )}
+
+                  </div>
+
+                )
+
+              })}
 
             </div>
 
+            {/* RESUMEN DE COMPRA */}
 
             <div className="col-12 col-lg-4">
 
@@ -498,6 +608,8 @@ function Carrito() {
                 <h2>
                   Resumen
                 </h2>
+
+                {/* TOTAL DE UNIDADES */}
 
                 <div className="resumen-linea">
 
@@ -513,6 +625,7 @@ function Carrito() {
 
                 <hr />
 
+                {/* TOTAL A PAGAR */}
 
                 <div className="resumen-total">
 
@@ -522,10 +635,7 @@ function Carrito() {
 
                   <strong>
 
-                    $
-                    {totalCarrito.toLocaleString(
-                      'es-CL'
-                    )}
+                    ${totalCarrito.toLocaleString('es-CL')}
 
                   </strong>
 
@@ -533,11 +643,11 @@ function Carrito() {
 
                 <hr />
 
+                {/* MÉTODO DE PAGO */}
 
                 <p className="fw-bold mb-3">
                   Método de pago
                 </p>
-
 
                 <div className="form-check mb-2">
 
@@ -547,15 +657,10 @@ function Carrito() {
                     name="metodoPago"
                     id="debito"
                     value="debito"
-                    checked={
-                      metodoPago ===
-                      'debito'
-                    }
-                    onChange={
-                      (evento) =>
-                        setMetodoPago(
-                          evento.target.value
-                        )
+                    checked={metodoPago === 'debito'}
+                    disabled={procesando}
+                    onChange={(evento) =>
+                      setMetodoPago(evento.target.value)
                     }
                   />
 
@@ -571,7 +676,6 @@ function Carrito() {
 
                 </div>
 
-
                 <div className="form-check mb-4">
 
                   <input
@@ -580,15 +684,10 @@ function Carrito() {
                     name="metodoPago"
                     id="credito"
                     value="credito"
-                    checked={
-                      metodoPago ===
-                      'credito'
-                    }
-                    onChange={
-                      (evento) =>
-                        setMetodoPago(
-                          evento.target.value
-                        )
+                    checked={metodoPago === 'credito'}
+                    disabled={procesando}
+                    onChange={(evento) =>
+                      setMetodoPago(evento.target.value)
                     }
                   />
 
@@ -604,25 +703,38 @@ function Carrito() {
 
                 </div>
 
+                <p className="small text-muted">
+                  La selección es referencial. El sistema registra
+                  el pedido, pero no realiza un cobro.
+                </p>
+
+                {/* BOTÓN DE COMPRA */}
 
                 <button
+                  type="button"
                   className="btn btn-success w-100 mb-2"
-                  onClick={
-                    realizarCompra
-                  }
+                  onClick={realizarCompra}
+                  disabled={procesando}
                 >
 
                   <i className="bi bi-bag-check"></i>{' '}
-                  Realizar compra
+
+                  {procesando
+                    ? 'Registrando pedido...'
+                    : 'Registrar pedido'
+                  }
 
                 </button>
 
+                {/* SEGUIR COMPRANDO */}
 
                 <Link
                   to="/productos"
                   className="btn btn-warning w-100"
                 >
+
                   Seguir comprando
+
                 </Link>
 
               </div>
@@ -636,6 +748,7 @@ function Carrito() {
       </div>
 
     </main>
+
   )
 }
 

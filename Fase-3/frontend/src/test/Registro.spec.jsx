@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import Registro from '../pages/Registro.jsx'
+import api from '../api/axiosConfig.js'
 
 describe('Pruebas del registro de usuario', function () {
 
@@ -8,11 +9,47 @@ describe('Pruebas del registro de usuario', function () {
     localStorage.clear()
   })
 
+  // COMPLETAR FORMULARIO DE REGISTRO
 
-  /*
-     PRUEBA 1
-  */
-  it('debe registrar un usuario correctamente', function () {
+  function completarFormulario(correo = 'prueba@gmail.com') {
+
+    fireEvent.change(
+      screen.getByLabelText('RUT'),
+      { target: { value: '12345678K' } }
+    )
+
+    fireEvent.change(
+      screen.getByLabelText('Nombre'),
+      { target: { value: 'Manuel' } }
+    )
+
+    fireEvent.change(
+      screen.getByLabelText('Apellidos'),
+      { target: { value: 'Flores Rojas' } }
+    )
+
+    fireEvent.change(
+      screen.getByLabelText(/Correo electrónico/i),
+      { target: { value: correo } }
+    )
+
+    fireEvent.change(
+      screen.getByLabelText(/Contraseña/i),
+      { target: { value: '123456' } }
+    )
+  }
+
+  // PRUEBA 1: REGISTRO CORRECTO
+
+  it('debe registrar un usuario correctamente', async function () {
+
+    spyOn(api, 'post').and.returnValue(
+      Promise.resolve({
+        data: {
+          mensaje: 'Usuario registrado correctamente'
+        }
+      })
+    )
 
     render(
       <MemoryRouter>
@@ -20,178 +57,40 @@ describe('Pruebas del registro de usuario', function () {
       </MemoryRouter>
     )
 
-    fireEvent.change(
-      screen.getByLabelText('RUT'),
-      {
-        target: {
-          value: '12345678K'
-        }
-      }
-    )
-
-    fireEvent.change(
-      screen.getByLabelText('Nombre'),
-      {
-        target: {
-          value: 'Manuel'
-        }
-      }
-    )
-
-    fireEvent.change(
-      screen.getByLabelText('Apellidos'),
-      {
-        target: {
-          value: 'Flores Rojas'
-        }
-      }
-    )
-
-    fireEvent.change(
-      screen.getByLabelText('Correo electrónico'),
-      {
-        target: {
-          value: 'prueba@gmail.com'
-        }
-      }
-    )
-
-    fireEvent.change(
-      screen.getByLabelText('Contraseña'),
-      {
-        target: {
-          value: '123456'
-        }
-      }
-    )
+    completarFormulario()
 
     fireEvent.click(
-      screen.getByRole(
-        'button',
-        {
-          name: 'Registrarse'
-        }
-      )
+      screen.getByRole('button', { name: /Registrarse/i })
     )
 
-    expect(
-      screen.getByText(
-        'Registro realizado correctamente.'
-      )
-    ).toBeTruthy()
+    await screen.findByText(/Registro realizado correctamente/i)
 
-    const usuarios =
-      JSON.parse(
-        localStorage.getItem('usuarios')
-      )
-
-    expect(usuarios.length).toBe(1)
-
-    expect(
-      usuarios[0].correo
-    ).toBe('prueba@gmail.com')
-
-    expect(
-      usuarios[0].nombre
-    ).toBe('Manuel')
-
-  })
-
-
-  /*
-     PRUEBA 2
-  */
-  it('no debe registrar dos usuarios con el mismo correo', function () {
-
-    const usuarioExistente = [
+    expect(api.post).toHaveBeenCalledWith(
+      '/auth/register',
       {
-        rut: '11111111K',
-        nombre: 'Usuario',
-        apellidos: 'Existente',
+        rut: '12345678K',
+        nombre: 'Manuel',
+        apellidos: 'Flores Rojas',
         correo: 'prueba@gmail.com',
         contrasena: '123456'
       }
-    ]
-
-    localStorage.setItem(
-      'usuarios',
-      JSON.stringify(usuarioExistente)
     )
-
-    render(
-      <MemoryRouter>
-        <Registro />
-      </MemoryRouter>
-    )
-
-    fireEvent.change(
-      screen.getByLabelText('RUT'),
-      {
-        target: {
-          value: '12345678K'
-        }
-      }
-    )
-
-    fireEvent.change(
-      screen.getByLabelText('Nombre'),
-      {
-        target: {
-          value: 'Manuel'
-        }
-      }
-    )
-
-    fireEvent.change(
-      screen.getByLabelText('Apellidos'),
-      {
-        target: {
-          value: 'Flores Rojas'
-        }
-      }
-    )
-
-    fireEvent.change(
-      screen.getByLabelText('Correo electrónico'),
-      {
-        target: {
-          value: 'prueba@gmail.com'
-        }
-      }
-    )
-
-    fireEvent.change(
-      screen.getByLabelText('Contraseña'),
-      {
-        target: {
-          value: '123456'
-        }
-      }
-    )
-
-    fireEvent.click(
-      screen.getByRole(
-        'button',
-        {
-          name: 'Registrarse'
-        }
-      )
-    )
-
-    const usuarios =
-      JSON.parse(
-        localStorage.getItem('usuarios')
-      )
-
-    expect(usuarios.length).toBe(1)
-
   })
 
+  // PRUEBA 2: CORREO YA REGISTRADO
 
-  /*
-     PRUEBA 3
-  */
-  it('no debe registrar un correo con dominio no permitido', function () {
+  it('no debe registrar dos usuarios con el mismo correo', async function () {
+
+    spyOn(api, 'post').and.returnValue(
+      Promise.reject({
+        response: {
+          status: 409,
+          data: {
+            mensaje: 'El correo o RUT ya se encuentra registrado.'
+          }
+        }
+      })
+    )
 
     render(
       <MemoryRouter>
@@ -199,70 +98,40 @@ describe('Pruebas del registro de usuario', function () {
       </MemoryRouter>
     )
 
-    fireEvent.change(
-      screen.getByLabelText('RUT'),
-      {
-        target: {
-          value: '12345678K'
-        }
-      }
-    )
-
-    fireEvent.change(
-      screen.getByLabelText('Nombre'),
-      {
-        target: {
-          value: 'Manuel'
-        }
-      }
-    )
-
-    fireEvent.change(
-      screen.getByLabelText('Apellidos'),
-      {
-        target: {
-          value: 'Flores Rojas'
-        }
-      }
-    )
-
-    fireEvent.change(
-      screen.getByLabelText('Correo electrónico'),
-      {
-        target: {
-          value: 'prueba@hotmail.com'
-        }
-      }
-    )
-
-    fireEvent.change(
-      screen.getByLabelText('Contraseña'),
-      {
-        target: {
-          value: '123456'
-        }
-      }
-    )
+    completarFormulario()
 
     fireEvent.click(
-      screen.getByRole(
-        'button',
-        {
-          name: 'Registrarse'
-        }
-      )
+      screen.getByRole('button', { name: /Registrarse/i })
+    )
+
+    await screen.findByText(/ya se encuentra registrado/i)
+
+    expect(api.post).toHaveBeenCalled()
+  })
+
+  // PRUEBA 3: DOMINIO DE CORREO NO PERMITIDO
+
+  it('no debe registrar un correo con dominio no permitido', function () {
+
+    spyOn(api, 'post')
+
+    render(
+      <MemoryRouter>
+        <Registro />
+      </MemoryRouter>
+    )
+
+    completarFormulario('prueba@hotmail.com')
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /Registrarse/i })
     )
 
     expect(
-      screen.getByText(
-        'Solo se permiten correos @duoc.cl, @profesor.duoc.cl o @gmail.com.'
-      )
+      screen.getByText(/Solo se permiten correos/i)
     ).toBeTruthy()
 
-    expect(
-      localStorage.getItem('usuarios')
-    ).toBeNull()
-
+    expect(api.post).not.toHaveBeenCalled()
   })
 
 })
