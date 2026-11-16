@@ -1,8 +1,7 @@
 import {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 import MockDB from '../services/MockDB.js'
-
-const API_URL = 'http://localhost:8080/api'
+import api from '../api/axiosConfig.js'
 
 function Carrito() {
     const [carrito, setCarrito] = useState([])
@@ -12,15 +11,9 @@ function Carrito() {
     const [mensajeError, setMensajeError] = useState(false)
     const [procesando, setProcesando] = useState(false)
 
-
     async function obtenerProductosBackend() {
-        const response = await fetch(`${API_URL}/productos`)
-        if (!response.ok) {
-            throw new Error('No se pudieron cargar los productos desde el servidor.')
-        }
-        const data = await response.json()
+        const { data } = await api.get('/productos')
 
-        // Normaliza stockActual por si el backend envía el campo como "stock"
         return data.map((p) => ({
             ...p,
             stockActual: p.stockActual ?? p.stock ?? 0
@@ -33,9 +26,6 @@ function Carrito() {
                 const productosBackend = await obtenerProductosBackend()
                 const carritoGuardado = MockDB.getCarrito()
 
-                /*
-                   QUITAR PRODUCTOS QUE YA NO EXISTEN EN BD
-                */
                 const carritoValido = carritoGuardado.filter((item) =>
                     productosBackend.some(
                         (producto) => Number(producto.id) === Number(item.id)
@@ -60,34 +50,22 @@ function Carrito() {
         inicializarCarrito()
     }, [])
 
-    /*
-       MOSTRAR MENSAJE
-    */
     function mostrarMensaje(texto, esError) {
         setMensaje(texto)
         setMensajeError(esError)
     }
 
-    /*
-       BUSCAR PRODUCTO
-    */
     function obtenerProducto(id) {
         return productos.find(
             (producto) => Number(producto.id) === Number(id)
         )
     }
 
-    /*
-       ACTUALIZAR CARRITO
-    */
     function actualizarCarrito(nuevoCarrito) {
         setCarrito(nuevoCarrito)
         MockDB.guardarCarrito(nuevoCarrito)
     }
 
-    /*
-       CAMBIAR CANTIDAD
-    */
     function cambiarCantidad(idProducto, nuevaCantidad) {
         const producto = obtenerProducto(idProducto)
 
@@ -128,9 +106,6 @@ function Carrito() {
         actualizarCarrito(carritoActualizado)
     }
 
-    /*
-       ELIMINAR DEL CARRITO
-    */
     function eliminarProducto(idProducto) {
         const carritoActualizado = carrito.filter(
             (item) => Number(item.id) !== Number(idProducto)
@@ -139,7 +114,6 @@ function Carrito() {
         actualizarCarrito(carritoActualizado)
         mostrarMensaje('Producto eliminado del carrito.', false)
     }
-
 
     async function realizarCompra() {
         if (carrito.length === 0) {
@@ -156,7 +130,6 @@ function Carrito() {
         setMensaje('')
 
         try {
-            const token = localStorage.getItem('token')
             const usuarioGuardado = JSON.parse(
                 localStorage.getItem('usuario') || 'null'
             )
@@ -174,35 +147,11 @@ function Carrito() {
                 }))
             }
 
-            const headers = {
-                'Content-Type': 'application/json'
-            }
-
-            if (token) {
-                headers['Authorization'] = `Bearer ${token}`
-            }
-
-            const response = await fetch(`${API_URL}/pedidos`, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify(payload)
-            })
-
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => null)
-                throw new Error(
-                    errorData?.message ||
-                    'No se pudo completar la compra. Verifica el stock disponible.'
-                )
-            }
-
-            const pedidoCreado = await response.json()
-
+            const { data: pedidoCreado } = await api.post('/pedidos', payload)
 
             MockDB.guardarCarrito([])
             setCarrito([])
             setMetodoPago('')
-
 
             const productosActualizados = await obtenerProductosBackend()
             setProductos(productosActualizados)
@@ -213,9 +162,12 @@ function Carrito() {
             )
         } catch (error) {
             console.error('Error al procesar compra:', error)
-            mostrarMensaje(error.message, true)
+            const errorMsg =
+                error.response?.data?.message ||
+                error.message ||
+                'No se pudo completar la compra. Verifica el stock disponible.'
+            mostrarMensaje(errorMsg, true)
 
-            // Recargar stock actual en caso de conflicto de inventario
             try {
                 const productosActualizados = await obtenerProductosBackend()
                 setProductos(productosActualizados)
@@ -227,12 +179,10 @@ function Carrito() {
         }
     }
 
-
     const cantidadTotal = carrito.reduce(
         (total, item) => total + item.cantidad,
         0
     )
-
 
     const totalCarrito = carrito.reduce((total, item) => {
         const producto = obtenerProducto(item.id)
