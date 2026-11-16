@@ -104,6 +104,11 @@ function Navbar() {
       'usuarioActivo'
     )
 
+    localStorage.removeItem('token');
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('user');
+    localStorage.removeItem('rol');
+
     setSesionIniciada(false)
 
     navigate('/')
