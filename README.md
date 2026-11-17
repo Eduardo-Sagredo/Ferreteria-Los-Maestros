@@ -166,8 +166,116 @@ El proyecto incluye 30 casos de prueba unitarios ejecutados de forma automatizad
 
 ---
 
+## Fase 3 — Integración FullStack con Spring Boot, Oracle y Seguridad JWT
+
+En esta etapa, la aplicación desarrollada en React se conecta con un backend en Spring Boot y una base de datos Oracle. Se reemplaza parte de la información simulada de la fase anterior por servicios API REST, incorporando autenticación JWT y operaciones de gestión de productos, usuarios y pedidos.
+
+---
+
+## Tecnologías Utilizadas
+
+- **Frontend**: React 19, Vite 8, React Router DOM 7, Bootstrap 5 y CSS3.
+- **Backend**: Java 21, Spring Boot, Maven, Spring Web y Spring Data JPA.
+- **Base de Datos**: Oracle Database, Hibernate y Flyway para las migraciones.
+- **Comunicación**: Axios, API REST y respuestas en formato JSON.
+- **Seguridad**: Spring Security, tokens JWT, roles de usuario y cifrado BCrypt.
+- **Documentación API**: Swagger UI y OpenAPI.
+- **Pruebas**: Jasmine y Karma en frontend; JUnit en backend.
+- **Control de Versiones y Despliegue**: GitHub, Vercel y AWS EC2.
+
+---
+
+## Arquitectura e Integración
+
+La aplicación utiliza una arquitectura separada en tres capas:
+
+1. **Frontend (React)**: Presenta las vistas, formularios, catálogo, carrito y opciones según la sesión del usuario.
+2. **Backend (Spring Boot)**: Expone endpoints REST, procesa solicitudes y aplica la lógica de negocio.
+3. **Base de Datos (Oracle)**: Almacena la información de productos, usuarios, roles y pedidos mediante JPA.
+
+La comunicación se realiza desde React hacia Spring Boot mediante Axios. Las operaciones protegidas envían el token JWT en la cabecera `Authorization`.
+
+---
+
+## Manejo del Estado y Persistencia
+
+- Los productos, usuarios y pedidos se consultan o registran mediante los servicios REST del backend, según el módulo.
+- El carrito conserva temporalmente sus artículos en el navegador y consulta el stock disponible al realizar la compra.
+- El inicio de sesión almacena el token y la información del usuario para mantener la sesión al recargar la página.
+- El proyecto conserva `AppContext` y `MockDB` para funciones locales; algunas vistas administrativas y reportes todavía utilizan datos simulados.
+
+---
+
+## Características Principales
+
+- **Catálogo y Detalle de Productos**: Consulta desde la API de productos, precios, categorías y existencias disponibles en Oracle.
+- **Carrito y Pedidos**: Permite agregar productos, modificar cantidades, calcular totales y enviar pedidos al backend para registrar la compra y descontar stock.
+- **Inicio de Sesión y Registro**: Validación de credenciales y registro de usuarios mediante endpoints de autenticación.
+- **Autenticación JWT**: Generación de token al iniciar sesión e incorporación del token en las peticiones protegidas.
+- **Gestión de Productos**: Operaciones de creación, consulta, actualización y eliminación mediante API REST.
+- **Gestión de Usuarios**: Consulta, edición y eliminación de cuentas desde el módulo de administración, conectado al backend.
+- **Documentación de Endpoints**: Consulta y prueba de los servicios disponibles mediante Swagger UI.
+
+### Módulos de Administración e Inventario
+
+- Panel de administrador con accesos a productos, usuarios, inventario, pedidos y reportes.
+- Gestión del catálogo y de los niveles de stock mediante operaciones del backend.
+- Vista de vendedor para consultar inventario y revisar disponibilidad de artículos.
+- Interfaz de reportes e indicadores, con componentes que aún conservan información local simulada.
+
+---
+
+## Perfiles de Usuario
+
+1. **Administrador**: Accede a las pantallas de gestión de productos, usuarios, pedidos, inventario y reportes.
+2. **Vendedor / Empleado**: Accede a la vista de inventario y a las funciones de productos habilitadas en su interfaz.
+3. **Cliente**: Puede consultar el catálogo, agregar productos al carrito, registrarse, iniciar sesión y realizar pedidos.
+
+El frontend utiliza rutas protegidas para mostrar vistas según el rol; el backend incorpora Spring Security para gestionar la autenticación y autorización de las solicitudes.
+
+---
+
+## Estructura del Sitio
+
+| **Página o sección** | **Propósito** |
+| -------------------- | ------------- |
+| **/** | Página principal con productos destacados y categorías. |
+| **/productos** y **/producto/:id** | Catálogo y detalle de productos consultados desde la API. |
+| **/carrito** | Resumen de compra, cantidades y registro del pedido. |
+| **/login** y **/registro** | Inicio de sesión y registro de clientes. |
+| **/mis-pedidos** | Consulta de pedidos asociados a la sesión del cliente. |
+| **/admin** | Panel principal de administración. |
+| **/admin/gestionProductos** | Consulta y mantenimiento de productos. |
+| **/admin/gestionUsuarios** | Administración de cuentas de usuario. |
+| **/admin/gestionPedidos** | Revisión y consulta de pedidos. |
+| **/admin/gestionReportes** | Vista de estadísticas y reportes. |
+| **/vendedor** | Consulta de inventario para el personal de venta. |
+
+---
+
+## Servicios API REST
+
+| **Módulo** | **Endpoints principales** | **Funcionalidad** |
+| ---------- | ------------------------- | ----------------- |
+| **Autenticación** | `POST /api/auth/login`, `POST /api/auth/register` | Iniciar sesión y registrar clientes. |
+| **Productos** | `GET`, `POST`, `PUT`, `DELETE` en `/api/productos` | Consultar y administrar el catálogo. |
+| **Usuarios** | `GET`, `POST`, `PUT`, `DELETE` en `/api/usuarios` | Consultar y administrar usuarios. |
+| **Pedidos** | `GET`, `POST` en `/api/pedidos`, `GET /api/pedidos/mis-pedidos` | Registrar y consultar pedidos. |
+
+El backend incluye documentación interactiva en **Swagger UI** (`/swagger-ui/index.html`).
+
+---
+
+## Pruebas y Verificación
+
+La Fase 3 conserva las pruebas frontend con **Jasmine y Karma** e incluye pruebas de backend con **JUnit**. Se incorporan además endpoints documentados para realizar verificaciones manuales de integración mediante Swagger.
+
+La ejecución integrada requiere configurar la conexión a Oracle y las variables de entorno del backend. Las pruebas unitarias existentes no sustituyen las verificaciones de seguridad, integración y funcionamiento completo.
+
+---
+
 ## Equipo de Desarrollo
 
-* Daniel Pinto
-* Benjamín Catalán
-* Eduardo Sagredo
+- Daniel Pinto
+- Benjamín Catalán
+- Eduardo Sagredo
